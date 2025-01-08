@@ -9,14 +9,15 @@ const apollo_server_express_1 = require("apollo-server-express");
 const express_1 = __importDefault(require("express"));
 const type_graphql_1 = require("type-graphql");
 const mikro_orm_config_1 = __importDefault(require("./mikro-orm.config"));
-const jobPost_1 = require("./resolvers/jobPost");
+const JobPost_1 = require("./resolvers/JobPost");
+const user_1 = require("./resolvers/user");
 const main = async () => {
     const orm = await core_1.MikroORM.init(mikro_orm_config_1.default);
     orm.getMigrator().up();
     const app = express_1.default();
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await type_graphql_1.buildSchema({
-            resolvers: [jobPost_1.JobPostResolver],
+            resolvers: [JobPost_1.JobPostResolver, user_1.UserResolver],
             validate: false,
         }),
         context: () => ({ em: orm.em }),

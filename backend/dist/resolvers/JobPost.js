@@ -22,6 +22,30 @@ let JobPostResolver = class JobPostResolver {
     jobPost(id, { em }) {
         return em.findOne(JobPost_1.JobPost, { id });
     }
+    async createJobPost(title, description, { em }) {
+        const jobPost = em.create(JobPost_1.JobPost, { title, description });
+        await em.persistAndFlush(jobPost);
+        return jobPost;
+    }
+    async updateJobPost(id, title, description, { em }) {
+        const jobPost = await em.findOne(JobPost_1.JobPost, { id });
+        if (!jobPost) {
+            return null;
+        }
+        if (title) {
+            jobPost.title = title;
+            await em.persistAndFlush(jobPost);
+        }
+        if (description) {
+            jobPost.description = description;
+            await em.persistAndFlush(jobPost);
+        }
+        return jobPost;
+    }
+    async deleteJobPost(id, { em }) {
+        await em.nativeDelete(JobPost_1.JobPost, { id });
+        return true;
+    }
 };
 __decorate([
     type_graphql_1.Query(() => [JobPost_1.JobPost]),
@@ -32,14 +56,41 @@ __decorate([
 ], JobPostResolver.prototype, "jobPosts", null);
 __decorate([
     type_graphql_1.Query(() => JobPost_1.JobPost, { nullable: true }),
-    __param(0, type_graphql_1.Arg('id', () => type_graphql_1.Int)),
+    __param(0, type_graphql_1.Arg('id')),
     __param(1, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], JobPostResolver.prototype, "jobPost", null);
+__decorate([
+    type_graphql_1.Mutation(() => JobPost_1.JobPost),
+    __param(0, type_graphql_1.Arg('title')),
+    __param(1, type_graphql_1.Arg('description')),
+    __param(2, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
+], JobPostResolver.prototype, "createJobPost", null);
+__decorate([
+    type_graphql_1.Mutation(() => JobPost_1.JobPost, { nullable: true }),
+    __param(0, type_graphql_1.Arg('id')),
+    __param(1, type_graphql_1.Arg('title', () => String, { nullable: true })),
+    __param(2, type_graphql_1.Arg('description', () => String, { nullable: true })),
+    __param(3, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String, String, Object]),
+    __metadata("design:returntype", Promise)
+], JobPostResolver.prototype, "updateJobPost", null);
+__decorate([
+    type_graphql_1.Mutation(() => Boolean),
+    __param(0, type_graphql_1.Arg('id')),
+    __param(1, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], JobPostResolver.prototype, "deleteJobPost", null);
 JobPostResolver = __decorate([
     type_graphql_1.Resolver()
 ], JobPostResolver);
 exports.JobPostResolver = JobPostResolver;
-//# sourceMappingURL=jobPost.js.map
+//# sourceMappingURL=JobPost.js.map

@@ -3,18 +3,17 @@ import { Field, ObjectType } from 'type-graphql';
 
 @ObjectType()
 @Entity()
-export class JobPost {
+export class User {
   @Field()
   @PrimaryKey()
   id!: number;
 
   @Field(() => String)
-  @Property({ type: 'text' })
-  title!: string;
+  @Property({ type: 'text', unique: true })
+  username!: string;
 
-  @Field(() => String)
   @Property({ type: 'text' })
-  description?: string;
+  password!: string;
 
   @Field(() => String)
   @Property({ type: 'date' })
