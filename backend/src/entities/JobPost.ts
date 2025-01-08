@@ -1,6 +1,6 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ObjectType } from 'type-graphql';
-
+//test push
 @ObjectType()
 @Entity()
 export class JobPost {
