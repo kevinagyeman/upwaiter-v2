@@ -19,6 +19,9 @@ let JobPostResolver = class JobPostResolver {
     jobPosts({ em }) {
         return em.find(JobPost_1.JobPost, {});
     }
+    jobPost(id, { em }) {
+        return em.findOne(JobPost_1.JobPost, { id });
+    }
 };
 __decorate([
     type_graphql_1.Query(() => [JobPost_1.JobPost]),
@@ -27,8 +30,16 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], JobPostResolver.prototype, "jobPosts", null);
+__decorate([
+    type_graphql_1.Query(() => JobPost_1.JobPost, { nullable: true }),
+    __param(0, type_graphql_1.Arg('id', () => type_graphql_1.Int)),
+    __param(1, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], JobPostResolver.prototype, "jobPost", null);
 JobPostResolver = __decorate([
     type_graphql_1.Resolver()
 ], JobPostResolver);
 exports.JobPostResolver = JobPostResolver;
-//# sourceMappingURL=JobPost.js.map
+//# sourceMappingURL=jobPost.js.map
