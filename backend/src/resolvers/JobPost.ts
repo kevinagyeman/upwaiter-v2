@@ -1,6 +1,6 @@
-import { JobPost } from 'src/entities/JobPost';
-import { MyContext } from 'src/types';
 import { Resolver, Query, Ctx } from 'type-graphql';
+import { JobPost } from '../entities/JobPost';
+import { MyContext } from '../types';
 
 @Resolver()
 export class JobPostResolver {

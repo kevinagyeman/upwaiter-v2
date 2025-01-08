@@ -31,4 +31,4 @@ JobPostResolver = __decorate([
     type_graphql_1.Resolver()
 ], JobPostResolver);
 exports.JobPostResolver = JobPostResolver;
-//# sourceMappingURL=JobPost.js.map
+//# sourceMappingURL=job-post.js.map

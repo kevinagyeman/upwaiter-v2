@@ -4,7 +4,7 @@ import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import { buildSchema } from 'type-graphql';
 import microConfig from './mikro-orm.config';
-import { JobPostResolver } from './resolvers/JobPost';
+import { JobPostResolver } from './resolvers/jobPost';
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig);
