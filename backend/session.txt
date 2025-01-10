@@ -1,0 +1,26 @@
+HOW SESSION WORK
+
+req.session.userId = user.id; storing data in session
+
+{userId: 1 } -> send that to redis
+
+1
+session:uhdweidhiweh -> {userId: 1}
+
+2
+express session will set a cookie on my browser wuiehfuiwehfiuwehfiu
+
+
+3
+when user makes a request
+wuiehfuiwehfiuwehfiu -> sent to the server
+
+4
+decrypt the cookie by the redis secret
+wuiehfuiwehfiuwehfiu -> session:uhdweidhiweh
+
+5
+make a request to redis
+session:uhdweidhiweh -> {userId: 1}
+
+req.session = {userId: 1}
