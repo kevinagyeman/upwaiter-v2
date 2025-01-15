@@ -11,6 +11,24 @@ import {
 function makeClient() {
   const httpLink = new HttpLink({
     uri: 'http://localhost:4000/graphql',
+
+    fetchOptions: {
+      credentials: 'include',
+    },
+  });
+
+  const cache = new NextSSRInMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          login: {
+            merge(existing, incoming) {
+              return incoming; // Usa direttamente i dati restituiti dalla mutazione
+            },
+          },
+        },
+      },
+    },
   });
 
   return new NextSSRApolloClient({
