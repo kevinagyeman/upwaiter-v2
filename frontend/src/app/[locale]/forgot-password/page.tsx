@@ -14,35 +14,28 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Link } from '@/i18n/routing';
-
-const REGISTER_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(options: { email: $email, password: $password }) {
-      errors {
-        message
-      }
-      user {
-        id
-        email
-      }
-    }
+import { set } from 'date-fns';
+const FORGOT_PASSWORD_MUTATION = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email)
   }
 `;
 
-export default function Login() {
-  const [mutateFunction, { data, loading, error }] =
-    useMutation(REGISTER_MUTATION);
+export default function ForgotPassword() {
+  const [completed, setCompleted] = useState(false);
+  const [mutateFunction, { data, loading, error }] = useMutation(
+    FORGOT_PASSWORD_MUTATION
+  );
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    mutateFunction({
+    await mutateFunction({
       variables: {
-        email: email,
-        password: password,
+        email,
       },
     });
+    setCompleted(true);
   }
 
   return (
@@ -53,8 +46,8 @@ export default function Login() {
       >
         <Card>
           <CardHeader>
-            <CardTitle>Login</CardTitle>
-            <CardDescription>Accedi al tuo account</CardDescription>
+            <CardTitle>Password Dimenticata</CardTitle>
+            <CardDescription>Inserisci la tua email</CardDescription>
           </CardHeader>
           <CardContent>
             <Label>Email</Label>
@@ -63,19 +56,14 @@ export default function Login() {
               placeholder='Email'
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Label>Cambia password</Label>
-            <Input
-              type='password'
-              placeholder='Password'
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Link href='/forgot-password'>Password dimenticata?</Link>
           </CardContent>
           <CardFooter className='flex gap-4'>
             <Button type='submit' className='w-full'>
-              Login
+              Invia Email
             </Button>
-            <Button variant='ghost'>Registrati</Button>
+            {completed && (
+              <>Se la mail esiste ti abbiamo inviato una email al tuo account</>
+            )}
           </CardFooter>
         </Card>
       </form>

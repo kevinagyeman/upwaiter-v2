@@ -1,1 +1,1 @@
-{"version":3,"file":"costants.js","sourceRoot":"","sources":["../src/costants.ts"],"names":[],"mappings":";;;AAAa,QAAA,QAAQ,GAAG,OAAO,CAAC,GAAG,CAAC,QAAQ,KAAK,YAAY,CAAC;AACjD,QAAA,WAAW,GAAG,KAAK,CAAC;AACpB,QAAA,sBAAsB,GAAG,kBAAkB,CAAC"}
+{"version":3,"file":"costants.js","sourceRoot":"","sources":["../src/costants.ts"],"names":[],"mappings":";;;AAAa,QAAA,QAAQ,GAAG,OAAO,CAAC,GAAG,CAAC,QAAQ,KAAK,YAAY,CAAC;AACjD,QAAA,WAAW,GAAG,KAAK,CAAC;AACpB,QAAA,sBAAsB,GAAG,kBAAkB,CAAC;AAC5C,QAAA,yBAAyB,GAAG,oBAAoB,CAAC"}

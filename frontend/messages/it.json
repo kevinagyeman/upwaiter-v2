@@ -1,6 +1,8 @@
 {
-  "homePage": {
-    "title": "ciao mondo",
-    "about": "testo ita"
+  "navbar": {
+    "home": "Homepage",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Registrati"
   }
 }

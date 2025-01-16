@@ -73,7 +73,8 @@ let UserResolver = class UserResolver {
                 ],
             };
         }
-        const userId = await redis.get(costants_1.FORGOT_PASSWORD_PREFIX + token);
+        const key = costants_1.FORGOT_PASSWORD_PREFIX + token;
+        const userId = await redis.get(key);
         if (!userId) {
             return {
                 errors: [
@@ -97,10 +98,11 @@ let UserResolver = class UserResolver {
         }
         user.password = await argon2_1.default.hash(newPassword);
         em.persistAndFlush(user);
+        redis.del(key);
         req.session.userId = user.id;
         return { user };
     }
-    async forgtotPassword(email, { em, redis }) {
+    async forgotPassword(email, { em, redis }) {
         const user = await em.findOne(User_1.User, { email });
         if (!user) {
             return true;
@@ -231,7 +233,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
-], UserResolver.prototype, "forgtotPassword", null);
+], UserResolver.prototype, "forgotPassword", null);
 __decorate([
     type_graphql_1.Query(() => [User_1.User]),
     __param(0, type_graphql_1.Ctx()),

@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { gql, useMutation } from '@apollo/client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +8,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import Link from 'next/link';
-import { useEffect } from 'react';
-import { gql, useMutation } from '@apollo/client';
 
 const LOGOUT_MUTATION = gql`
   mutation Logout {
@@ -18,7 +15,7 @@ const LOGOUT_MUTATION = gql`
   }
 `;
 
-export default function IconUser() {
+export default function IconUser({ user }: any) {
   const [mutateFunction] = useMutation(LOGOUT_MUTATION);
 
   return (
@@ -34,25 +31,17 @@ export default function IconUser() {
               height={32}
             />
           )} */}
-          <div className='h-8 w-8 rounded-full'></div>
+          <div className='h-8 w-8 rounded-full bg-green-200'></div>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent className='w-56'>
           <DropdownMenuGroup>
-            {status === 'authenticated' ? (
-              <DropdownMenuItem
-                onClick={() => mutateFunction()}
-                className='cursor-pointer'
-              >
-                Logout
-              </DropdownMenuItem>
-            ) : (
-              <DropdownMenuItem className='cursor-pointer' asChild>
-                <Link href='/login' rel='canonical' prefetch={true}>
-                  Login
-                </Link>
-              </DropdownMenuItem>
-            )}
+            <DropdownMenuItem
+              onClick={() => mutateFunction()}
+              className='cursor-pointer'
+            >
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

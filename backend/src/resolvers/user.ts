@@ -60,7 +60,8 @@ export class UserResolver {
       };
     }
 
-    const userId = await redis.get(FORGOT_PASSWORD_PREFIX + token);
+    const key = FORGOT_PASSWORD_PREFIX + token;
+    const userId = await redis.get(key);
     if (!userId) {
       return {
         errors: [
@@ -88,6 +89,8 @@ export class UserResolver {
     user.password = await argon2.hash(newPassword);
     em.persistAndFlush(user);
 
+    redis.del(key);
+
     //log user after passsword change
     req.session.userId = user.id;
 
@@ -95,7 +98,7 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  async forgtotPassword(
+  async forgotPassword(
     @Arg('email') email: string,
     @Ctx() { em, redis }: MyContext
   ) {

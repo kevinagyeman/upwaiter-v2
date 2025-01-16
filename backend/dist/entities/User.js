@@ -16,6 +16,7 @@ let User = class User {
     constructor() {
         this.createdAt = new Date();
         this.updatedAt = new Date();
+        this.verified = false;
     }
 };
 __decorate([
@@ -42,6 +43,11 @@ __decorate([
     core_1.Property({ type: 'date', onUpdate: () => new Date() }),
     __metadata("design:type", Object)
 ], User.prototype, "updatedAt", void 0);
+__decorate([
+    type_graphql_1.Field(() => Boolean),
+    core_1.Property({ type: 'boolean', default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "verified", void 0);
 User = __decorate([
     type_graphql_1.ObjectType(),
     core_1.Entity()

@@ -1,4 +1,5 @@
 'use client';
+
 import { Link } from '@/i18n/routing';
 import { gql, useMutation, useQuery, useSuspenseQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
@@ -13,31 +14,28 @@ import IconUser from './icon-user';
 const ME_QUERY = gql`
   query {
     me {
-      username
+      email
     }
   }
 `;
 
 const Navbar = () => {
   const { error, data } = useQuery(ME_QUERY);
-  const user = data?.me?.username;
+  const user = data?.me?.email;
   const t = useTranslations('navbar');
 
   const navigation = [
     { name: `${t('home')}`, href: '/' },
-    { name: `${t('about')}`, href: '/about' },
-    { name: `${t('contacts')}`, href: '/contact' },
+
     ...(user
-      ? [
-          { name: `${t('dashboard')}`, href: '/admin/dashboard' },
-          { name: `Add new project`, href: '/admin/dashboard/project-add' },
-          {
-            name: `Edit information`,
-            href: '/admin/dashboard/information-edit',
-          },
-        ]
-      : []),
+      ? []
+      : [
+          { name: `${t('login')}`, href: '/login' },
+          { name: `${t('register')}`, href: '/register' },
+        ]),
   ];
+
+  console.log(user);
 
   return (
     <>
@@ -63,8 +61,11 @@ const Navbar = () => {
                 </div>
                 <div className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-start'>
                   <div className='flex flex-shrink-0 items-center'>
-                    <Link href='/'>fff</Link>
+                    <Link href='/'>
+                      <Logo />
+                    </Link>
                   </div>
+                  {/* Desktop menu, show/hide based on menu state. */}
                   <div className='hidden sm:ml-6 sm:block w-full'>
                     <div className='flex space-x-4'>
                       {navigation.map((item) => (
@@ -84,8 +85,10 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
+
             <Disclosure.Panel className='sm:hidden'>
               <div className='space-y-1 px-2 pb-3 pt-2'>
+                {/* Mobile menu, show/hide based on menu state. */}
                 {navigation.map((item, index: number) => (
                   <Link
                     href={item.href}
@@ -107,3 +110,34 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+const Logo = () => {
+  return (
+    <div className='flex items-center gap-4'>
+      <svg
+        id='upwaiter_logo'
+        className='h-5 w-auto fill-black dark:fill-white'
+        data-name='upwaiter_logo'
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 0 30 17.32'
+      >
+        <defs></defs>
+        <title>icona-up</title>
+        <circle className='cls-1' cx='27.68' cy='15' r='2.32' />
+        <circle className='cls-1' cx='27.68' cy='8.66' r='2.32' />
+        <circle className='cls-1' cx='27.68' cy='2.32' r='2.32' />
+        <circle className='cls-1' cx='21.34' cy='11.83' r='2.32' />
+        <circle className='cls-1' cx='21.34' cy='5.49' r='2.32' />
+        <circle className='cls-1' cx='2.32' cy='2.32' r='2.32' />
+        <circle className='cls-1' cx='2.32' cy='8.66' r='2.32' />
+        <circle className='cls-1' cx='2.32' cy='15' r='2.32' />
+        <circle className='cls-1' cx='8.66' cy='5.49' r='2.32' />
+        <circle className='cls-1' cx='8.66' cy='11.83' r='2.32' />
+        <circle className='cls-1' cx='15' cy='8.66' r='2.32' />
+      </svg>
+      <span className='text-2xl font-extrabold hidden sm:block'>
+        Upwaiter<span className='text-green-500'>.com</span>
+      </span>
+    </div>
+  );
+};

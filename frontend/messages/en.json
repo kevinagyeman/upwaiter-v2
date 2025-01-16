@@ -1,6 +1,8 @@
 {
-  "homePage": {
-    "title": "Hello world!",
-    "about": "Go to the about page"
+  "navbar": {
+    "home": "Homepage",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Sign up"
   }
 }
