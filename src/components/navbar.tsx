@@ -1,17 +1,16 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { Button } from './ui/button';
-import ThemeChanger from './theme-changer';
+import { useUserStore } from '@/store/user';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { UserButton, useUser } from '@stackframe/stack';
 import { useTranslations } from 'next-intl';
-import LanguageSelector from './language-selector';
+import Link from 'next/link';
 import IconUser from './icon-user';
-import { auth } from '../firebase';
-import { useUserStore } from '@/store/user';
-import { UserButton } from '@stackframe/stack';
-import { Link } from '@/i18n/routing';
+import LanguageSelector from './language-selector';
+import ThemeChanger from './theme-changer';
+import { Button } from './ui/button';
+import { log } from 'console';
 
 const Navbar = () => {
   const t = useTranslations('navbar');
@@ -28,8 +27,6 @@ const Navbar = () => {
           { name: `${t('register')}`, href: '/register' },
         ]),
   ];
-
-  console.log(user);
 
   return (
     <>
@@ -109,6 +106,9 @@ export default Navbar;
 
 const Logo = () => {
   const user = useUserStore((state) => state.user);
+  const user2 = useUser();
+
+  console.log('user', user2);
 
   return (
     <div className='flex items-center gap-4'>
@@ -135,8 +135,7 @@ const Logo = () => {
       </svg>
       <span className='text-2xl font-extrabold hidden sm:block'>
         Upwaiter<span className='text-green-500'>.com</span>
-        <span>{user?.email}</span>
-        <span>{auth.currentUser?.email}</span>
+        <span>{user2 ? ` (${user2.clientReadOnlyMetadata})` : ''}</span>
       </span>
     </div>
   );

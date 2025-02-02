@@ -7,6 +7,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { stackServerApp } from '../../stack';
 import '../globals.css';
+import { Suspense } from 'react';
 
 export default async function LocaleLayout({
   children,
@@ -36,8 +37,10 @@ export default async function LocaleLayout({
           >
             <StackProvider app={stackServerApp} lang={locale}>
               <StackTheme>
-                <Navbar />
-                {children}
+                <Suspense fallback={'caricamento'}>
+                  <Navbar />
+                  {children}
+                </Suspense>
               </StackTheme>
             </StackProvider>
           </ThemeProvider>
