@@ -1,6 +1,5 @@
 'use client';
 
-import { gql, useMutation } from '@apollo/client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,12 +9,14 @@ import {
 } from './ui/dropdown-menu';
 import { auth } from '../firebase';
 import { signOut } from '@firebase/auth';
+import { useUserStore } from '@/store/user';
 
 export default function IconUser() {
+  const clearUser = useUserStore((state) => state.clearUser);
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      console.log('User signed out');
+      clearUser();
     } catch (error) {
       console.error('Error signing out:', error);
     }

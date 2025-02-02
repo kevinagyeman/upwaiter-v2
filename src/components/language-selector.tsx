@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { usePathname, useRouter } from '@/navigation';
+import { usePathname, useRouter } from '@/i18n/routing';
 
 export default function LanguageSelector() {
   const router = useRouter();
@@ -39,8 +39,8 @@ export default function LanguageSelector() {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value='it'>IT</SelectItem>
-            <SelectItem value='en'>EN</SelectItem>
+            <SelectItem value='it-IT'>IT</SelectItem>
+            <SelectItem value='en-US'>EN</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

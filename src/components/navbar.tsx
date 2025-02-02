@@ -1,7 +1,5 @@
 'use client';
 
-import { Link } from '@/i18n/routing';
-import { gql, useMutation, useQuery, useSuspenseQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
 import { Button } from './ui/button';
 import ThemeChanger from './theme-changer';
@@ -10,15 +8,28 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import LanguageSelector from './language-selector';
 import IconUser from './icon-user';
+import { auth } from '../firebase';
+import { useUserStore } from '@/store/user';
+import { UserButton } from '@stackframe/stack';
+import { Link } from '@/i18n/routing';
 
 const Navbar = () => {
   const t = useTranslations('navbar');
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const user = useUserStore((state) => state.user);
 
   const navigation = [
     { name: `${t('home')}`, href: '/' },
-    { name: `${t('login')}`, href: '/login' },
-    { name: `${t('register')}`, href: '/register' },
+
+    ...(isAuthenticated
+      ? [{ name: `link loggato`, href: '/' }]
+      : [
+          { name: `${t('login')}`, href: '/login' },
+          { name: `${t('register')}`, href: '/register' },
+        ]),
   ];
+
+  console.log(user);
 
   return (
     <>
@@ -64,7 +75,9 @@ const Navbar = () => {
                     <ThemeChanger />
                   </div>
                   <LanguageSelector />
-                  <IconUser />
+                  {isAuthenticated && <IconUser />}
+                  {/* <IconUser /> */}
+                  <UserButton />
                 </div>
               </div>
             </div>
@@ -95,6 +108,8 @@ const Navbar = () => {
 export default Navbar;
 
 const Logo = () => {
+  const user = useUserStore((state) => state.user);
+
   return (
     <div className='flex items-center gap-4'>
       <svg
@@ -120,6 +135,8 @@ const Logo = () => {
       </svg>
       <span className='text-2xl font-extrabold hidden sm:block'>
         Upwaiter<span className='text-green-500'>.com</span>
+        <span>{user?.email}</span>
+        <span>{auth.currentUser?.email}</span>
       </span>
     </div>
   );

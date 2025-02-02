@@ -13,7 +13,7 @@ import {
 } from 'firebase/firestore';
 import { FirebaseStorage, getStorage } from 'firebase/storage';
 
-const firebaseConfig = {
+const firebaseConfig: FirebaseOptions = {
   apiKey: 'AIzaSyDpvvp5VM8VT7G1m-KX80RB9b2cGO4WJgs',
   authDomain: 'upwaiter.firebaseapp.com',
   projectId: 'upwaiter',
