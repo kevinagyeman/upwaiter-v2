@@ -5,13 +5,33 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Link } from '@/i18n/routing';
+import { createCompany } from '@/services/company.services';
+import { createWaiter } from '@/services/waiter.services';
+import { useUserStore } from '@/store/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useStackApp } from '@stackframe/stack';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 export default function Register() {
   const app = useStackApp();
+  const router = useRouter();
+  const setUser = useUserStore((state) => state.setUser);
+  const clearUser = useUserStore((state) => state.clearUser);
+  // const queryClient = useQueryClient();
+
+  // const mutation = useMutation({
+  //   mutationFn: createCompany,
+  //   onSuccess: () => {
+  //     console.log('Azienda creata con successo!');
+  //     queryClient.invalidateQueries({ queryKey: ['companies'] });
+  //   },
+  //   onError: (error) => {
+  //     console.error('Errore nella creazione:', error);
+  //   },
+  // });
 
   const registerFormSchema = z
     .object({
@@ -57,19 +77,46 @@ export default function Register() {
 
       const user = await app.getUser();
       if (user) {
-        await user.update({
-          clientMetadata: {
-            role: data.role,
-            ...(data.role === 'company' && {
-              companyName: data.companyName,
-              vatNumber: data.vatNumber,
-            }),
-          },
-        });
+        if (data.role === 'company' && data.companyName && data.vatNumber) {
+          await user.update({
+            clientMetadata: {
+              role: data.role,
+              companyTableId: user.id,
+            },
+          });
+          await createCompany({
+            id: user.id,
+            name: data.companyName,
+            email: data.email,
+            vatNumber: data.vatNumber,
+          });
+        }
+
+        if (data.role === 'waiter') {
+          await user.update({
+            clientMetadata: {
+              role: data.role,
+              waiterTableId: user.id,
+            },
+          });
+          await createWaiter({
+            id: user.id,
+            email: data.email,
+          });
+        }
+        router.push('/');
+        // setUser(user);
       }
     } catch (error) {
-      console.error('Errore durante la registrazione:', error);
-      alert('Errore durante la registrazione. Riprova.');
+      const user = await app.getUser();
+      if (user) {
+        console.log(
+          "Errore durante la registrazione, eliminazione dell'utente:",
+          error
+        );
+        await user.delete(); // Assicurati che il metodo `delete` esista nell'oggetto `user`
+      }
+      console.log('Errore durante la registrazione:', error);
     }
   };
 
@@ -80,10 +127,10 @@ export default function Register() {
         className='space-y-4 max-w-sm w-full'
       >
         <div>
+          <a href={app.urls.signOut}>logout</a>
           <h1 className=' text-2xl font-semibold'>Register</h1>
           <p className='text-muted-foreground'>Accedi al tuo account</p>
         </div>
-
         <div className='space-y-2'>
           <div>
             <Label>Email</Label>

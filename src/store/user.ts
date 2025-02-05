@@ -1,11 +1,11 @@
-import { User } from '@/types/user';
+import { CurrentUser } from '@stackframe/stack';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface UserState {
-  user: User | null;
+  user: CurrentUser | null;
   isAuthenticated: boolean;
-  setUser: (user: any) => void;
+  setUser: (user: CurrentUser) => void;
   clearUser: () => void;
 }
 

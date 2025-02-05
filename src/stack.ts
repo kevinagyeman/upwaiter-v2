@@ -7,6 +7,5 @@ export const stackServerApp = new StackServerApp({
     signIn: '/login',
     signUp: '/register',
     accountSettings: '/account-settings',
-    forgotPassword: '/forgot-password',
   },
 });

@@ -3,24 +3,22 @@
 import { useUserStore } from '@/store/user';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { UserButton, useUser } from '@stackframe/stack';
+import { UserButton } from '@stackframe/stack';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import IconUser from './icon-user';
 import LanguageSelector from './language-selector';
 import ThemeChanger from './theme-changer';
 import { Button } from './ui/button';
-import { log } from 'console';
 
 const Navbar = () => {
   const t = useTranslations('navbar');
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
   const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.clearUser);
 
   const navigation = [
     { name: `${t('home')}`, href: '/' },
 
-    ...(isAuthenticated
+    ...(user
       ? [{ name: `link loggato`, href: '/' }]
       : [
           { name: `${t('login')}`, href: '/login' },
@@ -30,6 +28,12 @@ const Navbar = () => {
 
   return (
     <>
+      {user && !user.primaryEmailVerified && (
+        <div className='bg-red-500 h-8 flex items-center justify-center'>
+          Email non verificata, abbiamo inviato una email di verifica al tuo
+          indirizzo
+        </div>
+      )}
       <Disclosure
         as='nav'
         className='sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm'
@@ -69,10 +73,11 @@ const Navbar = () => {
                 </div>
                 <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
                   <div className='hidden sm:block'>
+                    {user && <>{user.primaryEmail}</>}
                     <ThemeChanger />
                   </div>
                   <LanguageSelector />
-                  {isAuthenticated && <IconUser />}
+
                   {/* <IconUser /> */}
                   <UserButton />
                 </div>
@@ -105,11 +110,6 @@ const Navbar = () => {
 export default Navbar;
 
 const Logo = () => {
-  const user = useUserStore((state) => state.user);
-  const user2 = useUser();
-
-  console.log('user', user2);
-
   return (
     <div className='flex items-center gap-4'>
       <svg
@@ -135,7 +135,6 @@ const Logo = () => {
       </svg>
       <span className='text-2xl font-extrabold hidden sm:block'>
         Upwaiter<span className='text-green-500'>.com</span>
-        <span>{user2 ? ` (${user2.clientReadOnlyMetadata})` : ''}</span>
       </span>
     </div>
   );

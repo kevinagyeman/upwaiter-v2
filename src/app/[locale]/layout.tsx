@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation';
 import { stackServerApp } from '../../stack';
 import '../globals.css';
 import { Suspense } from 'react';
+import ReactQueryProvider from '@/utils/providers/react-query-provider';
 
 export default async function LocaleLayout({
   children,
@@ -20,9 +21,6 @@ export default async function LocaleLayout({
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
-
-  // Providing all messages to the client
-  // side is the easiest way to get started
   const messages = await getMessages();
 
   return (
@@ -38,8 +36,10 @@ export default async function LocaleLayout({
             <StackProvider app={stackServerApp} lang={locale}>
               <StackTheme>
                 <Suspense fallback={'caricamento'}>
-                  <Navbar />
-                  {children}
+                  <ReactQueryProvider>
+                    <Navbar />
+                    {children}
+                  </ReactQueryProvider>
                 </Suspense>
               </StackTheme>
             </StackProvider>
