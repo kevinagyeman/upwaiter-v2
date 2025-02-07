@@ -8,18 +8,71 @@ datasource db {
 }
 
 model Company {
-  id String @id @default(uuid())
-  name String @map("name")
-  email String @unique @map("email")
-  vatNumber String @unique @map("vat_number") 
+  id            String   @id @default(uuid())
+  name          String   @map("name")
+  email         String   @unique @map("email")
+  vatNumber     String   @unique @map("vat_number") 
+  country       String?  @map("country")        // Aggiunto campo opzionale
+  region        String?  @map("region")         // Aggiunto campo opzionale
+  province      String?  @map("province")       // Aggiunto campo opzionale
+  contactNumber String?  @map("contact_number") // Aggiunto campo opzionale
+  streetAddress String?  @map("street_address")// Aggiunto campo opzionale
+  website       String?  @map("website")        // Aggiunto campo opzionale
+  about         String?  @map("about")          // Aggiunto campo opzionale
+  jobs          JobPost[]
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @default(now()) @map("updated_at")
+
   @@map("companies")
 }
 
-
 model Waiter {
-  id String @id @default(uuid())
-  firstName String? @map("first_name")
-  lastName String? @map("last_name")
-  email String @unique @map("email") 
+  id              String   @id @default(uuid())
+  firstName      String?  @map("first_name")
+  lastName       String?  @map("last_name")
+  email          String   @unique @map("email")
+  country        String?  @map("country")          // Aggiunto campo opzionale
+  region         String?  @map("region")           // Aggiunto campo opzionale
+  province       String?  @map("province")         // Aggiunto campo opzionale
+  streetAddress  String?  @map("street_address")   // Aggiunto campo opzionale
+  contactNumber  String?  @map("contact_number")   // Aggiunto campo opzionale
+  dateOfBirth    DateTime? @map("date_of_birth")   // Aggiunto campo opzionale
+  resume         String?  @map("resume")           // Aggiunto campo opzionale
+  about          String?  @map("about")            // Aggiunto campo opzionale
+  yearsOfExperience Int?  @map("years_of_experience") // Aggiunto campo opzionale
+  firstLanguage  String?  @map("first_language")   // Aggiunto campo opzionale
+  secondLanguage String?  @map("second_language")  // Aggiunto campo opzionale
+  thirdLanguage  String?  @map("third_language")   // Aggiunto campo opzionale
+  applications   Application[]
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @default(now()) @map("updated_at")
+
   @@map("waiters")
 }
+
+model JobPost {
+  id          String       @id @default(uuid())
+  title       String       @map("title")
+  description String       @map("description")
+  company     Company      @relation(fields: [companyId], references: [id])
+  companyId   String       @map("company_id")
+  applications Application[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
+
+  @@map("job_posts")
+}
+
+model Application {
+  id        String   @id @default(uuid())
+  waiter    Waiter   @relation(fields: [waiterId], references: [id])
+  waiterId  String   @map("waiter_id")
+  jobPost   JobPost  @relation(fields: [jobPostId], references: [id])
+  jobPostId String   @map("job_post_id")
+  status    String   @default("pending") @map("status")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @default(now()) @map("updated_at")
+
+  @@map("applications")
+}
+

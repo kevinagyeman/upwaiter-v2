@@ -41,15 +41,7 @@ export default function Login() {
       await app.signInWithCredential({
         email: data.email,
         password: data.password,
-        noRedirect: true,
       });
-      const user = await app.getUser();
-      if (user) {
-        setUser(user);
-        router.push('/');
-      } else {
-        alert('Errore durante il login');
-      }
     } catch (error) {
       console.log('Errore durante il login:', error);
     }

@@ -3,7 +3,7 @@
 import { useUserStore } from '@/store/user';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { UserButton } from '@stackframe/stack';
+import { UserButton, useUser } from '@stackframe/stack';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import LanguageSelector from './language-selector';
@@ -12,8 +12,9 @@ import { Button } from './ui/button';
 
 const Navbar = () => {
   const t = useTranslations('navbar');
-  const user = useUserStore((state) => state.user);
-  const clearUser = useUserStore((state) => state.clearUser);
+  // const user = useUserStore((state) => state.user);
+  // const clearUser = useUserStore((state) => state.clearUser);
+  const user = useUser();
 
   const navigation = [
     { name: `${t('home')}`, href: '/' },
@@ -29,9 +30,16 @@ const Navbar = () => {
   return (
     <>
       {user && !user.primaryEmailVerified && (
-        <div className='bg-red-500 h-8 flex items-center justify-center'>
+        <div className='p-2 flex items-center justify-center bg-slate-600'>
           Email non verificata, abbiamo inviato una email di verifica al tuo
           indirizzo
+          <Button
+            onClick={async () => await user.sendVerificationEmail()}
+            size={'sm'}
+            variant={'outline'}
+          >
+            Invia di nuovo email di verifica
+          </Button>
         </div>
       )}
       <Disclosure

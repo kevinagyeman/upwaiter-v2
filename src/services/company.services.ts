@@ -30,13 +30,28 @@ export async function getCompanyById(id: string) {
   return await response.json();
 }
 
-export async function createCompany(company: Company) {
+export async function createCompany(company: Partial<Company>) {
   const response = await fetch(API_PATH, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(company),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Errore API: ${response.status}`);
+  }
+  return await response.json();
+}
+
+export async function updateCompany(id: string, updates: Partial<Company>) {
+  const response = await fetch(API_PATH, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id, ...updates }),
   });
 
   if (!response.ok) {

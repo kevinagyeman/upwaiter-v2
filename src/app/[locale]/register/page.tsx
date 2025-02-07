@@ -105,7 +105,6 @@ export default function Register() {
           });
         }
         router.push('/');
-        // setUser(user);
       }
     } catch (error) {
       const user = await app.getUser();
@@ -114,7 +113,7 @@ export default function Register() {
           "Errore durante la registrazione, eliminazione dell'utente:",
           error
         );
-        await user.delete(); // Assicurati che il metodo `delete` esista nell'oggetto `user`
+        await user.delete();
       }
       console.log('Errore durante la registrazione:', error);
     }

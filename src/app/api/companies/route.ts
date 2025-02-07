@@ -37,3 +37,24 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }
+
+export async function PATCH(req: Request) {
+  try {
+    const data: Partial<Company> = await req.json();
+    const { id, ...updates } = data;
+
+    if (!id) {
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+    }
+
+    const company = await prisma.company.update({
+      where: { id },
+      data: updates,
+    });
+
+    return NextResponse.json(company, { status: 200 });
+  } catch (error) {
+    console.error('Errore nel database:', error);
+    return NextResponse.json({ error: error }, { status: 500 });
+  }
+}
