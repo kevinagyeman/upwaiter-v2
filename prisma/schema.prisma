@@ -43,6 +43,7 @@ model Waiter {
   firstLanguage  String?  @map("first_language")   // Aggiunto campo opzionale
   secondLanguage String?  @map("second_language")  // Aggiunto campo opzionale
   thirdLanguage  String?  @map("third_language")   // Aggiunto campo opzionale
+  isAvailableToWork  Boolean  @default(true) @map("is_available_to_work")   // Aggiunto campo opzionale
   applications   Application[]
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @default(now()) @map("updated_at")
@@ -59,6 +60,9 @@ model JobPost {
   applications Application[]
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
+  country        String?  @map("country")          // Aggiunto campo opzionale
+  region         String?  @map("region")           // Aggiunto campo opzionale
+  province       String?  @map("province")         // Aggiunto campo opzionale
 
   @@map("job_posts")
 }
@@ -74,5 +78,6 @@ model Application {
   updatedAt DateTime @updatedAt @default(now()) @map("updated_at")
 
   @@map("applications")
+  @@unique([waiterId, jobPostId])
 }
 

@@ -2,5 +2,9 @@ import { StackHandler } from '@stackframe/stack';
 import { stackServerApp } from '@/stack';
 
 export default function Handler(props: unknown) {
-  return <StackHandler fullPage app={stackServerApp} routeProps={props} />;
+  return (
+    <div className='flex flex-col items-center'>
+      <StackHandler fullPage={false} app={stackServerApp} routeProps={props} />
+    </div>
+  );
 }

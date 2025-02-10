@@ -12,20 +12,30 @@ import { Button } from './ui/button';
 
 const Navbar = () => {
   const t = useTranslations('navbar');
-  // const user = useUserStore((state) => state.user);
-  // const clearUser = useUserStore((state) => state.clearUser);
   const user = useUser();
 
-  const navigation = [
-    { name: `${t('home')}`, href: '/' },
+  let navigation = [];
 
-    ...(user
-      ? [{ name: `link loggato`, href: '/' }]
-      : [
-          { name: `${t('login')}`, href: '/login' },
-          { name: `${t('register')}`, href: '/register' },
-        ]),
-  ];
+  if (user?.clientMetadata?.role === 'waiter') {
+    navigation = [
+      { name: `Annunci`, href: '/waiter/jobposts' },
+      { name: `Il mio curriculum`, href: '/waiter/my-resume' },
+      { name: `Le mie candidature`, href: '/waiter/my-applications' },
+    ];
+  } else if (user?.clientMetadata?.role === 'company') {
+    navigation = [
+      { name: `I miei annunci`, href: '/company/my-jobposts' },
+      { name: `Profilo azienda`, href: '/company/profile' },
+      { name: `Crea un annuncio`, href: '/company/create-jobpost' },
+      { name: `elenco camerieri`, href: '/company/waiters' },
+    ];
+  } else {
+    navigation = [
+      { name: `${t('home')}`, href: '/' },
+      { name: `${t('login')}`, href: '/login' },
+      { name: `${t('register')}`, href: '/register' },
+    ];
+  }
 
   return (
     <>

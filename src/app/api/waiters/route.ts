@@ -39,3 +39,25 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }
+
+export async function PATCH(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    const data: Partial<Waiter> = await req.json();
+
+    if (!id) {
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+    }
+
+    const updatedWaiter = await prisma.waiter.update({
+      where: { id },
+      data,
+    });
+
+    return NextResponse.json(updatedWaiter, { status: 200 });
+  } catch (error) {
+    console.error('Errore nel database:', error);
+    return NextResponse.json({ error: error }, { status: 500 });
+  }
+}

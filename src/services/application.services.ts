@@ -1,4 +1,4 @@
-async function createApplication(waiterId: string, jobPostId: string) {
+export async function createApplication(waiterId: string, jobPostId: string) {
   const response = await fetch('/api/applications', {
     method: 'POST',
     headers: {
@@ -11,19 +11,19 @@ async function createApplication(waiterId: string, jobPostId: string) {
   console.log(data);
 }
 
-async function getApplications() {
+export async function getApplications() {
   const response = await fetch('/api/applications');
   const data = await response.json();
   console.log(data);
 }
 
-async function getApplicationById(id: string) {
+export async function getApplicationById(id: string) {
   const response = await fetch(`/api/applications?id=${id}`);
   const data = await response.json();
   console.log(data);
 }
 
-async function updateApplicationStatus(id: string, status: string) {
+export async function updateApplicationStatus(id: string, status: string) {
   const response = await fetch('/api/applications', {
     method: 'PATCH',
     headers: {
@@ -36,7 +36,7 @@ async function updateApplicationStatus(id: string, status: string) {
   console.log(data);
 }
 
-async function deleteApplication(id: string) {
+export async function deleteApplication(id: string) {
   const response = await fetch(`/api/applications?id=${id}`, {
     method: 'DELETE',
   });
@@ -47,6 +47,20 @@ async function deleteApplication(id: string) {
 
 export async function getApplicationsForJobPost(jobPostId: string) {
   const response = await fetch(`/api/applications?jobPostId=${jobPostId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Errore API: ${response.status}`);
+  }
+  return await response.json();
+}
+
+export async function getApplicationsForWaiter(waiterId: string) {
+  const response = await fetch(`/api/applications?waiterId=${waiterId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

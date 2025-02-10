@@ -1,42 +1,36 @@
 'use client';
 
-import FormError from '@/components/form-error';
 import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Link } from '@/i18n/routing';
-import { useUserStore } from '@/store/user';
+import { loginFormSchema, LoginFormSchema } from '@/schemas/login-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useStackApp } from '@stackframe/stack';
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 export default function Login() {
   const app = useStackApp();
-  const setUser = useUserStore((state) => state.setUser);
-  const clearUser = useUserStore((state) => state.clearUser);
   const router = useRouter();
 
-  const loginFormSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6),
-  });
-
-  type LoginFormSchema = z.infer<typeof loginFormSchema>;
-
-  const {
-    register,
-    handleSubmit,
-    setError,
-    setValue,
-    watch,
-    formState: { errors, isSubmitting, isValid },
-  } = useForm<LoginFormSchema>({
+  const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
-  const loginForm: SubmitHandler<LoginFormSchema> = async (data) => {
+  const loginUser: SubmitHandler<LoginFormSchema> = async (data) => {
     try {
       await app.signInWithCredential({
         email: data.email,
@@ -49,41 +43,63 @@ export default function Login() {
 
   return (
     <div className='flex flex-col items-center'>
-      <form
-        onSubmit={handleSubmit(loginForm)}
-        className='space-y-4 max-w-sm w-full'
-      >
-        <div>
-          <h1 className=' text-2xl font-semibold'>Login</h1>
-          <p className='text-muted-foreground'>Accedi al tuo account</p>
-        </div>
-        <div className='space-y-2'>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(loginUser)}
+          className='space-y-2  max-w-sm w-full'
+        >
           <div>
-            <Label>Email</Label>
-            <Input {...register('email')} role='email' placeholder='Email' />
-            {errors.email && <FormError>{errors.email.message}</FormError>}
+            <h1 className=' text-2xl font-semibold'>Login</h1>
+            <p className='text-muted-foreground'>Accedi al tuo account</p>
           </div>
-          <div>
-            <Label>Scegli una password</Label>
-            <Input
-              {...register('password')}
-              role='password'
-              placeholder='Password'
-            />
-            {errors.password && (
-              <FormError>{errors.password.message}</FormError>
+          <FormField
+            control={form.control}
+            name='email'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{field.name}</FormLabel>
+                <FormControl>
+                  <Input placeholder={field.name} {...field} type='email' />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          </div>
-        </div>
-
-        <Button role='submit' disabled={isSubmitting} className='w-full'>
-          {isSubmitting ? 'Loading...' : 'Login'}
-        </Button>
-        <Button variant='ghost' role='button' asChild className='w-full'>
-          <Link href='/login'>Register</Link>
-        </Button>
-        {errors.root && <FormError>{errors.root.message}</FormError>}
-      </form>
+          />
+          <FormField
+            control={form.control}
+            name='password'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{field.name}</FormLabel>
+                <FormControl>
+                  <Input placeholder={field.name} {...field} type='password' />
+                </FormControl>
+                <a
+                  href='/handler/forgot-password'
+                  className='text-xs float-right mt-2'
+                >
+                  Password dimenticata
+                </a>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            role='submit'
+            disabled={form.formState.isSubmitting}
+            className='w-full'
+          >
+            {form.formState.isSubmitting ? (
+              <Loader2 className='animate-spin' />
+            ) : (
+              'Login'
+            )}
+          </Button>
+          <Button variant='ghost' role='button' asChild className='w-full'>
+            <Link href='/login'>Register</Link>
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 }

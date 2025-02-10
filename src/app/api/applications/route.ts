@@ -47,17 +47,26 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const jobPostId = searchParams.get('jobPostId');
+    const waiterId = searchParams.get('waiterId'); // Ottiene il waiterId dai parametri
+    const jobPostId = searchParams.get('jobPostId'); // Opzionale
 
-    if (jobPostId) {
-      const applications = await prisma.application.findMany({
-        where: { jobPostId },
-      });
-
-      return NextResponse.json(applications, { status: 200 });
+    if (!waiterId) {
+      return NextResponse.json(
+        { error: 'Unauthorized: waiterId is required' },
+        { status: 403 }
+      );
     }
 
-    const applications = await prisma.application.findMany();
+    const whereClause: any = { waiterId };
+
+    if (jobPostId) {
+      whereClause.jobPostId = jobPostId;
+    }
+
+    const applications = await prisma.application.findMany({
+      where: whereClause,
+    });
+
     return NextResponse.json(applications, { status: 200 });
   } catch (error) {
     console.error('Errore nel database:', error);

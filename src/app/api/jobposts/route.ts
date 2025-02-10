@@ -39,49 +39,89 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const companyId = searchParams.get('companyId'); // Prendere l'ID dell'azienda dal parametro della query
+    const jobId = searchParams.get('id');
+    const companyId = searchParams.get('companyId');
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
 
-    let jobPosts;
-
-    if (companyId) {
-      // Recuperare i job posts associati all'azienda con le applications
-      jobPosts = await prisma.jobPost.findMany({
-        where: { companyId }, // Filtrare i job posts per companyId
+    if (jobId) {
+      const jobPost = await prisma.jobPost.findUnique({
+        where: { id: jobId },
         include: {
-          applications: {
-            select: {
-              id: true,
-              status: true,
-              waiterId: true, // Manteniamo waiterId solo se si filtra per azienda
-              createdAt: true,
-            },
-          },
+          company: { select: { name: true } },
         },
       });
 
-      if (jobPosts.length === 0) {
+      if (!jobPost) {
         return NextResponse.json(
-          { error: 'No job posts found for this company' },
+          { error: 'Job post not found' },
           { status: 404 }
         );
       }
-    } else {
-      jobPosts = await prisma.jobPost.findMany();
-      // Se non viene fornito un companyId, recuperare tutti i job posts disponibili senza waiterId
-      // jobPosts = await prisma.jobPost.findMany({
-      //   include: {
-      //     applications: {
-      //       select: {
-      //         id: true,
-      //         status: true,
-      //         createdAt: true,
-      //       },
-      //     },
-      //   },
-      // });
+
+      const applicationsCount = await prisma.application.count({
+        where: { jobPostId: jobPost.id },
+      });
+
+      return NextResponse.json(
+        { ...jobPost, applicationsCount },
+        { status: 200 }
+      );
     }
 
-    return NextResponse.json(jobPosts, { status: 200 });
+    // Offset e paginazione
+    const skip = (page - 1) * limit;
+    let jobPosts;
+    let totalCount;
+
+    if (companyId) {
+      totalCount = await prisma.jobPost.count({ where: { companyId } });
+
+      jobPosts = await prisma.jobPost.findMany({
+        where: { companyId },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          applications: {
+            select: { id: true, status: true, waiterId: true, createdAt: true },
+          },
+        },
+        skip,
+        take: limit,
+      });
+
+      jobPosts = jobPosts.map((jobPost) => ({
+        ...jobPost,
+        applicationsCount: jobPost.applications.length,
+      }));
+    } else {
+      totalCount = await prisma.jobPost.count();
+
+      jobPosts = await prisma.jobPost.findMany({
+        // select: { id: true, title: true, description: true, ddd: true },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      });
+
+      jobPosts = await Promise.all(
+        jobPosts.map(async (jobPost) => {
+          const applicationsCount = await prisma.application.count({
+            where: { jobPostId: jobPost.id },
+          });
+          return { ...jobPost, applicationsCount };
+        })
+      );
+    }
+
+    return NextResponse.json(
+      {
+        jobPosts,
+        totalPages: Math.ceil(totalCount / limit),
+        currentPage: page,
+        totalCount,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Errore nel database:', error);
     return NextResponse.json(
@@ -106,6 +146,55 @@ export async function PATCH(req: Request) {
     });
 
     return NextResponse.json(jobPost, { status: 200 });
+  } catch (error) {
+    console.error('Errore nel database:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const jobId = searchParams.get('id');
+    const companyId = searchParams.get('companyId');
+
+    if (!jobId || !companyId) {
+      return NextResponse.json(
+        { error: 'Job ID and Company ID are required' },
+        { status: 400 }
+      );
+    }
+
+    // Verifica se il job post esiste e se appartiene alla company
+    const jobPost = await prisma.jobPost.findUnique({
+      where: { id: jobId },
+      select: { companyId: true },
+    });
+
+    if (!jobPost) {
+      return NextResponse.json(
+        { error: 'Job post not found' },
+        { status: 404 }
+      );
+    }
+
+    if (jobPost.companyId !== companyId) {
+      return NextResponse.json(
+        { error: 'Unauthorized: You can only delete your own job posts' },
+        { status: 403 }
+      );
+    }
+
+    // Cancella il job post
+    await prisma.jobPost.delete({ where: { id: jobId } });
+
+    return NextResponse.json(
+      { message: 'Job post deleted successfully' },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Errore nel database:', error);
     return NextResponse.json(

@@ -11,19 +11,21 @@ import { stackServerApp } from '@/stack';
 import { JobPost } from '@prisma/client';
 import { getTranslations } from 'next-intl/server';
 
-export default async function Page() {
+export default async function MyJobPosts() {
   const t = await getTranslations('navbar');
   const app = stackServerApp;
   const user = await app.getUser();
   let jobPosts: any;
 
-  let myjobPosts;
-  console.log('ciao', jobPosts);
-
   jobPosts = await getJobPosts(1, 5);
 
   if (user?.id) {
-    myjobPosts = await getJobPostsByCompanyId(user.id);
+    jobPosts = await getJobPostsByCompanyId(user.id);
   }
-  return <>homepage</>;
+  return (
+    <>
+      {jobPosts && <CompanyJobPosts jobPosts={jobPosts.jobPosts} />}
+      <PaginationElement />
+    </>
+  );
 }

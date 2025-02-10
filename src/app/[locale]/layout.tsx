@@ -38,7 +38,7 @@ export default async function LocaleLayout({
                 <Suspense fallback={'caricamento'}>
                   <ReactQueryProvider>
                     <Navbar />
-                    {children}
+                    <div className='mt-5'>{children}</div>
                   </ReactQueryProvider>
                 </Suspense>
               </StackTheme>

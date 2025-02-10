@@ -1,6 +1,6 @@
 import { Company } from '@prisma/client';
 
-const API_PATH = '/api/companies';
+const API_PATH = process.env.NEXT_PUBLIC_API_BASE_URL + '/api/companies';
 
 export async function getCompanies() {
   const response = await fetch(API_PATH, {

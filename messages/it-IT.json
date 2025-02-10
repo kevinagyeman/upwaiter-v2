@@ -3,6 +3,7 @@
     "home": "Pagina principale",
     "login": "Login",
     "logout": "Logout",
-    "register": "Registrati"
+    "register": "Registrati",
+    "dashboard": "Pannello di controllo"
   }
 }
