@@ -39,26 +39,13 @@ const Navbar = () => {
 
   return (
     <>
-      {user && !user.primaryEmailVerified && (
-        <div className='p-2 flex items-center justify-center bg-slate-600'>
-          Email non verificata, abbiamo inviato una email di verifica al tuo
-          indirizzo
-          <Button
-            onClick={async () => await user.sendVerificationEmail()}
-            size={'sm'}
-            variant={'outline'}
-          >
-            Invia di nuovo email di verifica
-          </Button>
-        </div>
-      )}
       <Disclosure
         as='nav'
         className='sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm'
       >
         {({ open }: any) => (
           <>
-            <div className='mx-auto container px-2 sm:px-6 lg:px-8'>
+            <div className='mx-auto container'>
               <div className='relative flex h-16 items-center justify-between'>
                 <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
                   <Disclosure.Button className='relative inline-flex items-center justify-center rounded-md p-2 text-black hover:text-black   dark:text-white  dark:hover:text-white '>
@@ -91,6 +78,15 @@ const Navbar = () => {
                 </div>
                 <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
                   <div className='hidden sm:block'>
+                    {user && !user.primaryEmailVerified && (
+                      <Button
+                        onClick={async () => await user.sendVerificationEmail()}
+                        size={'sm'}
+                        variant={'link'}
+                      >
+                        verifica account
+                      </Button>
+                    )}
                     {user && <>{user.primaryEmail}</>}
                     <ThemeChanger />
                   </div>

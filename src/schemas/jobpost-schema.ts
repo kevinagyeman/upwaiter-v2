@@ -7,9 +7,6 @@ export const jobPostFormSchema = z.object({
   description: z
     .string()
     .min(1, { message: 'La descrizione deve avere almeno 10 caratteri' }),
-  country: z.string().default('Italia'),
-  region: z.string(),
-  province: z.string(),
 });
 
 export type JobPostFormSchema = z.infer<typeof jobPostFormSchema>;

@@ -41,6 +41,9 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const jobId = searchParams.get('id');
     const companyId = searchParams.get('companyId');
+    const country = searchParams.get('country');
+    const canton = searchParams.get('canton');
+    const municipality = searchParams.get('municipality');
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '10', 10);
 
@@ -49,6 +52,9 @@ export async function GET(req: Request) {
         where: { id: jobId },
         include: {
           company: { select: { name: true } },
+          location: {
+            select: { country: true, canton: true, municipality: true },
+          }, // Include dettagli della location
         },
       });
 
@@ -69,49 +75,39 @@ export async function GET(req: Request) {
       );
     }
 
+    // Costruzione della condizione di filtraggio
+    const where: any = {};
+    if (companyId) where.companyId = companyId;
+    if (country || canton || municipality) {
+      where.location = {};
+      if (country) where.location.country = country;
+      if (canton) where.location.canton = canton;
+      if (municipality) where.location.municipality = municipality;
+    }
+
     // Offset e paginazione
     const skip = (page - 1) * limit;
-    let jobPosts;
-    let totalCount;
+    const totalCount = await prisma.jobPost.count({ where });
 
-    if (companyId) {
-      totalCount = await prisma.jobPost.count({ where: { companyId } });
-
-      jobPosts = await prisma.jobPost.findMany({
-        where: { companyId },
-        orderBy: { createdAt: 'desc' },
-        include: {
-          applications: {
-            select: { id: true, status: true, waiterId: true, createdAt: true },
-          },
+    let jobPosts = await prisma.jobPost.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        applications: {
+          select: { id: true, status: true, waiterId: true, createdAt: true },
         },
-        skip,
-        take: limit,
-      });
+        location: {
+          select: { country: true, canton: true, municipality: true },
+        }, // Includi location nei risultati
+      },
+      skip,
+      take: limit,
+    });
 
-      jobPosts = jobPosts.map((jobPost) => ({
-        ...jobPost,
-        applicationsCount: jobPost.applications.length,
-      }));
-    } else {
-      totalCount = await prisma.jobPost.count();
-
-      jobPosts = await prisma.jobPost.findMany({
-        // select: { id: true, title: true, description: true, ddd: true },
-        orderBy: { createdAt: 'desc' },
-        skip,
-        take: limit,
-      });
-
-      jobPosts = await Promise.all(
-        jobPosts.map(async (jobPost) => {
-          const applicationsCount = await prisma.application.count({
-            where: { jobPostId: jobPost.id },
-          });
-          return { ...jobPost, applicationsCount };
-        })
-      );
-    }
+    jobPosts = jobPosts.map((jobPost) => ({
+      ...jobPost,
+      applicationsCount: jobPost.applications.length,
+    }));
 
     return NextResponse.json(
       {

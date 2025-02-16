@@ -12,13 +12,12 @@ model Company {
   name          String   @map("name")
   email         String   @unique @map("email")
   vatNumber     String   @unique @map("vat_number") 
-  country       String?  @map("country")        // Aggiunto campo opzionale
-  region        String?  @map("region")         // Aggiunto campo opzionale
-  province      String?  @map("province")       // Aggiunto campo opzionale
-  contactNumber String?  @map("contact_number") // Aggiunto campo opzionale
-  streetAddress String?  @map("street_address")// Aggiunto campo opzionale
-  website       String?  @map("website")        // Aggiunto campo opzionale
-  about         String?  @map("about")          // Aggiunto campo opzionale
+  locationId    String?   @map("location_id") @unique
+  location      Location? @relation(fields: [locationId], references: [id])
+  contactNumber String?  @map("contact_number")
+  streetAddress String?  @map("street_address")
+  website       String?  @map("website")
+  about         String?  @map("about")
   jobs          JobPost[]
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @default(now()) @map("updated_at")
@@ -27,26 +26,25 @@ model Company {
 }
 
 model Waiter {
-  id              String   @id @default(uuid())
-  firstName      String?  @map("first_name")
-  lastName       String?  @map("last_name")
-  email          String   @unique @map("email")
-  country        String?  @map("country")          // Aggiunto campo opzionale
-  region         String?  @map("region")           // Aggiunto campo opzionale
-  province       String?  @map("province")         // Aggiunto campo opzionale
-  streetAddress  String?  @map("street_address")   // Aggiunto campo opzionale
-  contactNumber  String?  @map("contact_number")   // Aggiunto campo opzionale
-  dateOfBirth    DateTime? @map("date_of_birth")   // Aggiunto campo opzionale
-  resume         String?  @map("resume")           // Aggiunto campo opzionale
-  about          String?  @map("about")            // Aggiunto campo opzionale
-  yearsOfExperience Int?  @map("years_of_experience") // Aggiunto campo opzionale
-  firstLanguage  String?  @map("first_language")   // Aggiunto campo opzionale
-  secondLanguage String?  @map("second_language")  // Aggiunto campo opzionale
-  thirdLanguage  String?  @map("third_language")   // Aggiunto campo opzionale
-  isAvailableToWork  Boolean  @default(true) @map("is_available_to_work")   // Aggiunto campo opzionale
-  applications   Application[]
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @default(now()) @map("updated_at")
+  id               String   @id @default(uuid())
+  firstName       String?  @map("first_name")
+  lastName        String?  @map("last_name")
+  email           String   @unique @map("email")
+  locationId      String?  @map("location_id")     // Aggiunto campo opzionale per collegare la location
+  location        Location? @relation(fields: [locationId], references: [id])  // Relazione con Location
+  streetAddress   String?  @map("street_address")
+  contactNumber   String?  @map("contact_number")
+  dateOfBirth     DateTime? @map("date_of_birth")
+  resume          String?  @map("resume")
+  about           String?  @map("about")
+  yearsOfExperience Int?   @map("years_of_experience")
+  firstLanguage   String?  @map("first_language")
+  secondLanguage  String?  @map("second_language")
+  thirdLanguage   String?  @map("third_language")
+  isAvailableToWork Boolean @default(true) @map("is_available_to_work")
+  applications    Application[]
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @default(now()) @map("updated_at")
 
   @@map("waiters")
 }
@@ -59,13 +57,16 @@ model JobPost {
   companyId   String       @map("company_id")
   applications Application[]
   createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
-  country        String?  @map("country")          // Aggiunto campo opzionale
-  region         String?  @map("region")           // Aggiunto campo opzionale
-  province       String?  @map("province")         // Aggiunto campo opzionale
+  updatedAt   DateTime     @updatedAt @default(now()) @map("updated_at")
+  locationId  String?      @map("location_id")   // Aggiunto campo opzionale per collegare la location
+  location    Location?    @relation(fields: [locationId], references: [id])  // Relazione con Location
+  country     String?      @map("country")        // Opzionale: se necessario, puoi mantenerlo come fallback
+  region      String?      @map("region")         // Opzionale: se necessario, puoi mantenerlo come fallback
+  province    String?      @map("province")       // Opzionale: se necessario, puoi mantenerlo come fallback
 
   @@map("job_posts")
 }
+
 
 model Application {
   id        String   @id @default(uuid())
@@ -81,3 +82,26 @@ model Application {
   @@unique([waiterId, jobPostId])
 }
 
+model Location {
+  id            String   @id @default(uuid())
+  country       String   @map("country")
+  isoCode       String   @map("iso_code")
+  state         String?  @map("state")
+  region        String?  @map("region")
+  province      String?  @map("province")
+  county        String?  @map("county")
+  canton        String?  @map("canton")
+  district      String?  @map("district")
+  municipality  String?  @map("municipality")
+  city          String?  @map("city")
+  neighborhood  String?  @map("neighborhood")
+  postalCode    String?  @map("postal_code")
+  latitude      Float?   @map("latitude")
+  longitude     Float?   @map("longitude")
+
+  companies     Company[]
+  waiters Waiter[]
+  job_posts JobPost[]
+  
+  @@map("locations")
+}

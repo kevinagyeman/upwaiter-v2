@@ -10,6 +10,7 @@ import {
 import { stackServerApp } from '@/stack';
 import { JobPost } from '@prisma/client';
 import { getTranslations } from 'next-intl/server';
+import LocationForm from '../../components/location-form';
 
 export default async function Page() {
   const t = await getTranslations('navbar');
@@ -25,5 +26,5 @@ export default async function Page() {
   if (user?.id) {
     myjobPosts = await getJobPostsByCompanyId(user.id);
   }
-  return <>homepage</>;
+  return <>HOME PAGE</>;
 }

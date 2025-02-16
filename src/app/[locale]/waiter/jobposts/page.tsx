@@ -1,29 +1,14 @@
 import JobPosts from '@/components/jobposts';
-import PaginationElement from '@/components/pagination-element';
 import { getJobPosts } from '@/services/jobpost.services';
 
 export default async function Page({ searchParams }: any) {
-  const currentPage = Number(searchParams?.page) || 1;
+  const currentPage = 1;
   const itemsPerPage = 10;
-  const { jobPosts, totalPages }: any = await getJobPosts(
-    currentPage,
-    itemsPerPage
-  );
-
-  const paginationUrls = {
-    previous: currentPage > 1 ? `?page=${currentPage - 1}` : null,
-    next: currentPage < totalPages ? `?page=${currentPage + 1}` : null,
-    pages: Array.from({ length: totalPages }, (_, i) => `?page=${i + 1}`),
-  };
+  const jobPosts: any = await getJobPosts(currentPage, itemsPerPage);
 
   return (
-    <>
-      <JobPosts jobPosts={jobPosts} />
-      <PaginationElement
-        currentPage={currentPage}
-        totalPages={totalPages}
-        paginationUrls={paginationUrls}
-      />
-    </>
+    <div className='mx-auto container max-w-md'>
+      <JobPosts initialJobPosts={jobPosts} />
+    </div>
   );
 }
