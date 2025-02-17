@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { usePathname, useRouter } from '@/i18n/routing';
+import { supportedLocales, usePathname, useRouter } from '@/i18n/routing';
 
 export default function LanguageSelector() {
   const router = useRouter();
@@ -39,8 +39,11 @@ export default function LanguageSelector() {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value='it-IT'>IT</SelectItem>
-            <SelectItem value='en-US'>EN</SelectItem>
+            {supportedLocales.map((locale: string, index: number) => (
+              <SelectItem value={locale} key={index} className='cursor-pointer'>
+                {locale.slice(-2)}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>

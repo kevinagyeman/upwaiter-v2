@@ -3,6 +3,10 @@ import { Button } from '@/components/ui/button';
 import { getJobPosts } from '@/services/jobpost.services';
 
 export default async function Page() {
+  const currentPage = 1;
+  const itemsPerPage = 10;
+  const { jobPosts } = await getJobPosts(currentPage, itemsPerPage);
+
   return (
     <div className='mx-auto container flex justify-between'>
       <div className='mt-2 flex flex-col gap-4'>
@@ -24,7 +28,7 @@ export default async function Page() {
         </Button>
       </div>
       <div className='max-w-lg'>
-        <JobPosts />
+        <JobPosts initialJobPosts={jobPosts} />
       </div>
       <div className='mt-2 flex flex-col gap-4 items-end'>
         <h4 className='text-2xl font-bold'>Sei una azienda?</h4>

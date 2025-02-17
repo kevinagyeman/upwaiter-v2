@@ -13,14 +13,18 @@ import { Input } from '@/components/ui/input';
 import { Link } from '@/i18n/routing';
 import { loginFormSchema, LoginFormSchema } from '@/schemas/login-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useStackApp } from '@stackframe/stack';
+import { useStackApp, useUser } from '@stackframe/stack';
+import { set } from 'date-fns';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 export default function Login() {
   const app = useStackApp();
   const router = useRouter();
+  const user = useUser();
+  const [loginError, setLoginError] = useState(null);
 
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
@@ -32,10 +36,13 @@ export default function Login() {
 
   const loginUser: SubmitHandler<LoginFormSchema> = async (data) => {
     try {
-      await app.signInWithCredential({
+      const login: any = await app.signInWithCredential({
         email: data.email,
         password: data.password,
       });
+      if (login.error) {
+        setLoginError(login.error.humanReadableMessage);
+      }
     } catch (error) {
       console.log('Errore durante il login:', error);
     }
@@ -84,6 +91,7 @@ export default function Login() {
               </FormItem>
             )}
           />
+          {loginError && <p className='text-red-500'>{loginError}</p>}
           <Button
             role='submit'
             disabled={form.formState.isSubmitting}
@@ -95,8 +103,8 @@ export default function Login() {
               'Login'
             )}
           </Button>
-          <Button variant='ghost' role='button' asChild className='w-full'>
-            <Link href='/login'>Register</Link>
+          <Button variant='outline' role='button' asChild className='w-full'>
+            <Link href='/register'>Register</Link>
           </Button>
         </form>
       </Form>

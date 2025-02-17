@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRef } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { JobPost } from '@prisma/client';
 import {
   Carousel,
@@ -10,88 +10,68 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { Send, Share, SlidersHorizontal, Users } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { LinkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
+import { useUser } from '@stackframe/stack';
+import JobPostFooter from './jobpost-footer';
+import JobPostHeader from './jobpost-header';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { getJobPosts } from '@/services/jobpost.services';
+import { Skeleton } from './ui/skeleton';
 
-export default function JobPosts({
-  initialJobPosts,
-}: {
-  initialJobPosts: JobPost[];
-}) {
-  const [jobPosts, setJobPosts] = useState<JobPost[]>(initialJobPosts || []);
-  const [page, setPage] = useState(2); // Inizia da 2 perché la prima pagina è già caricata
-  const [loading, setLoading] = useState(false);
-  const observer = useRef<IntersectionObserver | null>(null);
-  const router = useRouter();
+export default function JobPosts() {
+  const user = useUser();
   const searchParams = useSearchParams();
-  const jobIdFromURL = searchParams.get('jobId'); // Legge il jobId dall'URL
+  const router = useRouter();
 
-  // Trova l'indice del job corrente nel carosello
-  const initialIndex = jobPosts.findIndex((job) => job.id === jobIdFromURL);
+  const canton = searchParams.get('canton') ?? undefined;
+  const observer = useRef<IntersectionObserver | null>(null);
 
-  const fetchMoreJobs = async () => {
-    if (loading) return;
-    setLoading(true);
-
-    try {
-      const res = await fetch(`/api/jobposts?page=${page}&limit=10`);
-      const data = await res.json();
-
-      if (data.jobPosts.length > 0) {
-        setJobPosts((prev) => [...prev, ...data.jobPosts]);
-        setPage((prev) => prev + 1);
-      }
-    } catch (error) {
-      console.error('Errore nel caricamento:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!jobPosts.length) return;
-
-    observer.current?.disconnect();
-    const lastJobRef = document.querySelector('.job-card:last-child');
-    if (!lastJobRef) return;
-
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        fetchMoreJobs();
-      }
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ['jobPosts', canton],
+      queryFn: ({ pageParam = 1 }) => getJobPosts(pageParam, 10, { canton }),
+      getNextPageParam: (lastPage, allPages) =>
+        lastPage.jobPosts.length > 0 ? allPages.length + 1 : undefined,
+      initialPageParam: 1,
     });
 
-    observer.current.observe(lastJobRef);
-  }, [jobPosts]);
+  const jobPosts = data?.pages.flatMap((page) => page.jobPosts) || [];
 
-  useEffect(() => {
-    if (initialIndex !== -1) {
-      // Scorri fino al job corrispondente se esiste
-      document.querySelectorAll('.job-card')[initialIndex]?.scrollIntoView({
-        behavior: 'smooth',
-      });
-    }
-  }, [jobPosts]); // Aspetta che i job vengano caricati
+  const lastJobRef = (node: HTMLDivElement | null) => {
+    if (isFetchingNextPage || !hasNextPage) return;
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) fetchNextPage();
+    });
+
+    if (node) observer.current.observe(node);
+  };
+
+  const resetFilters = () => {
+    router.push('/');
+  };
 
   return (
-    <div className='p-4 h-[calc(100dvh-4rem-1px)]'>
-      <Carousel orientation='vertical' className='w-full'>
+    <div className='p-4 h-[calc(100dvh-4rem-1px)] bg-gradient-to-b dark:from-black dark:to-gray-800 from-white to-gray-100'>
+      <Carousel
+        orientation='vertical'
+        className='w-full'
+        plugins={[WheelGesturesPlugin()]}
+      >
         <CarouselContent className='h-[calc(100dvh-5rem-1px)]'>
           {jobPosts.map((job: JobPost, index: number) => (
-            <CarouselItem key={index} className='job-card' data-id={job.id}>
+            <CarouselItem
+              key={job.id}
+              className='job-card'
+              data-id={job.id}
+              ref={index === jobPosts.length - 1 ? lastJobRef : null} // Assegna il ref all'ultimo elemento
+            >
               <div className='h-full flex flex-col gap-y-4'>
-                <div className='flex items-center gap-x-4'>
-                  <div className='flex items-center gap-x-4 flex-1'>
-                    <div className='h-10 w-10 rounded-full bg-gray-700'></div>
-                    <p className='text-muted-foreground'>Ristorante Armani</p>
-                  </div>
-                  <Button size='icon' variant={'secondary'}>
-                    <SlidersHorizontal />
-                  </Button>
-                </div>
+                <JobPostHeader />
                 <div className='flex-1 space-y-4'>
                   <Badge className='w-fit' variant={'secondary'}>
                     Zurich
@@ -102,44 +82,51 @@ export default function JobPosts({
                   </p>
                 </div>
                 <Button asChild className='text-2xl' size={'lg'}>
-                  <Link href={`/waiter/jobposts?jobId=${job.id}`}>
+                  <Link
+                    href={user ? `/jobpost/${job.id}` : '/register'}
+                    prefetch={true}
+                  >
                     Invia candidatura
                   </Link>
                 </Button>
                 <div className='flex gap-x-3'>
-                  <div className='flex items-center gap-x-3 flex-1'>
-                    <Users />
-                    <span className='text-xl'>33</span>
-                  </div>
-                  <Button
-                    size='icon'
-                    variant={'outline'}
-                    className='rounded-full'
-                  >
-                    <Send />
-                  </Button>
-                  <Button
-                    size='icon'
-                    variant={'outline'}
-                    className='rounded-full'
-                  >
-                    <LinkIcon />
-                  </Button>
-                  <Button
-                    size='icon'
-                    variant={'outline'}
-                    className='rounded-full'
-                  >
-                    <Share />
-                  </Button>
+                  <JobPostFooter />
                   <CarouselPrevious />
                   <CarouselNext />
                 </div>
               </div>
             </CarouselItem>
           ))}
+
+          {isLoading && (
+            <CarouselItem className='flex flex-col items-center justify-center text-center gap-y-6'>
+              <div className='flex space-x-4'>
+                <Skeleton className='h-10 w-10 rounded-full' />
+                <div className='space-y-2'>
+                  <Skeleton />
+                  <Skeleton />
+                </div>
+              </div>
+            </CarouselItem>
+          )}
+
+          {!hasNextPage && (
+            <CarouselItem className='flex flex-col items-center justify-center text-center gap-y-6'>
+              <h2 className='text-3xl font-bold'>
+                Gli annunci per questa ricerca sono finiti.
+              </h2>
+              <p className='text-muted-foreground text-lg'>
+                Prova a rimuovere i filtri per vedere più annunci.
+              </p>
+              <Button onClick={resetFilters} className='text-xl'>
+                Torna a tutti gli annunci
+              </Button>
+            </CarouselItem>
+          )}
         </CarouselContent>
       </Carousel>
+
+      {isFetchingNextPage && <p>Caricamento in corso...</p>}
     </div>
   );
 }

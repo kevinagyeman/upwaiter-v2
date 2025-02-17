@@ -18,7 +18,7 @@ const Navbar = () => {
 
   if (user?.clientMetadata?.role === 'waiter') {
     navigation = [
-      { name: `Annunci`, href: '/waiter/jobposts' },
+      { name: `Annunci`, href: '/jobposts' },
       { name: `Il mio curriculum`, href: '/waiter/my-resume' },
       { name: `Le mie candidature`, href: '/waiter/my-applications' },
     ];

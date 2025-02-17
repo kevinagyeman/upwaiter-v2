@@ -7,7 +7,7 @@ export async function getJobPosts(
   page: number = 1,
   limit: number = 10,
   filters?: { country?: string; canton?: string; municipality?: string }
-): Promise<JobPost[]> {
+): Promise<{ jobPosts: JobPost[] }> {
   const queryParams = new URLSearchParams({
     page: page.toString(),
     limit: limit.toString(),
@@ -21,10 +21,12 @@ export async function getJobPosts(
   const response = await fetch(`${API_PATH}?${queryParams.toString()}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
+    cache: 'no-store', // Evita la cache per avere dati aggiornati
   });
 
   if (!response.ok) {
-    console.log(`Errore API: ${response.status}`);
+    console.error(`Errore API: ${response.status}`);
+    return { jobPosts: [] };
   }
 
   return await response.json();
