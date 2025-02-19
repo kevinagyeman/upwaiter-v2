@@ -1,13 +1,12 @@
-import { getWaiters } from '@/services/waiter.services';
-import { getTranslations } from 'next-intl/server';
-import React from 'react';
+import WaitersList from '@/components/waiters-list';
+import WaiterCard from '@/components/waiters-list';
+import { getWaiters } from '@/services/waiter-service';
 
 export default async function Waiters() {
-  const t = await getTranslations('navbar');
   const waiters = await getWaiters();
   return (
-    <>
-      <pre>{JSON.stringify(waiters, null, 2)}</pre>
-    </>
+    <div className='mx-auto container'>
+      <WaitersList waitersList={waiters} />
+    </div>
   );
 }

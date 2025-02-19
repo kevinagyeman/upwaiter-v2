@@ -60,9 +60,6 @@ model JobPost {
   updatedAt   DateTime     @updatedAt @default(now()) @map("updated_at")
   locationId  String?      @map("location_id")   // Aggiunto campo opzionale per collegare la location
   location    Location?    @relation(fields: [locationId], references: [id])  // Relazione con Location
-  country     String?      @map("country")        // Opzionale: se necessario, puoi mantenerlo come fallback
-  region      String?      @map("region")         // Opzionale: se necessario, puoi mantenerlo come fallback
-  province    String?      @map("province")       // Opzionale: se necessario, puoi mantenerlo come fallback
 
   @@map("job_posts")
 }

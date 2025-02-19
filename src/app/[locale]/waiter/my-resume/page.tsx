@@ -12,17 +12,19 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { waiterFormSchema, WaiterFormSchema } from '@/schemas/waiter-schema';
-import { getWaiterById, updateWaiter } from '@/services/waiter.services';
+import { getWaiterById, updateWaiter } from '@/services/waiter-service';
+import { useUserStore } from '@/store/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useStackApp, useUser } from '@stackframe/stack';
 import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 export default function MyResume() {
   const app = useStackApp();
   const user = useUser();
-  const [waiterData, setWaiterData] = useState<WaiterFormSchema>();
+  const [_, setWaiterData] = useState<WaiterFormSchema>();
 
   useEffect(() => {
     getWaiterData();
@@ -38,11 +40,12 @@ export default function MyResume() {
 
   const form = useForm<WaiterFormSchema>({
     resolver: zodResolver(waiterFormSchema),
-    defaultValues: undefined,
   });
 
   const updateWaiterData: SubmitHandler<WaiterFormSchema> = async (data) => {
     try {
+      console.log(data);
+
       if (user) {
         const parsedData = {
           ...data,
@@ -51,7 +54,7 @@ export default function MyResume() {
             : undefined,
         };
 
-        await updateWaiter(user.id, parsedData);
+        // await updateWaiter(user.id, parsedData);
       }
     } catch (error) {
       console.log('Errore durante la creazione del jobpost:', error);
@@ -60,6 +63,11 @@ export default function MyResume() {
 
   return (
     <div className='flex flex-col items-center'>
+      <Button asChild>
+        <Link href={`/waiter/${user?.id}`} prefetch>
+          anteprima profilo
+        </Link>
+      </Button>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(updateWaiterData)}
@@ -138,7 +146,7 @@ export default function MyResume() {
           />
           <Button
             role='submit'
-            disabled={form.formState.isSubmitting}
+            disabled={form.formState.isSubmitting || !form.formState.isValid}
             className='w-full'
           >
             {form.formState.isSubmitting ? (

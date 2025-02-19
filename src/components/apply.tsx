@@ -1,6 +1,6 @@
 'use client';
 
-import { createApplication } from '@/services/application.services';
+import { createApplication } from '@/services/application-service';
 import { useStackApp } from '@stackframe/stack';
 import React from 'react';
 

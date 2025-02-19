@@ -1,6 +1,6 @@
 'use client';
 
-import { getWaiterById } from '@/services/waiter.services';
+import { getWaiterById } from '@/services/waiter-service';
 import { useUser } from '@stackframe/stack';
 import { useEffect, useState } from 'react';
 

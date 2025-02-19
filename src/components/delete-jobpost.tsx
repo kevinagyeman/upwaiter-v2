@@ -1,7 +1,7 @@
 'use client';
 
-import { createApplication } from '@/services/application.services';
-import { deleteJobPost } from '@/services/jobpost.services';
+import { createApplication } from '@/services/application-service';
+import { deleteJobPost } from '@/services/job-post-service';
 import { useStackApp } from '@stackframe/stack';
 import { useRouter } from 'next/navigation';
 import React from 'react';

@@ -1,0 +1,51 @@
+import { axiosInstance } from '@/lib/axios-instance';
+import { Waiter } from '@prisma/client';
+
+const API_PATH = 'waiters';
+
+async function handleApiCall<T>(
+  apiCall: Promise<{ data: T }>,
+  errorMessage: string
+): Promise<any> {
+  try {
+    const { data } = await apiCall;
+    return data;
+  } catch (error) {
+    console.error(`${errorMessage}:`, error);
+    return undefined;
+  }
+}
+
+export const getWaiters = () =>
+  handleApiCall(
+    axiosInstance.get(API_PATH),
+    'Errore nel recupero dei camerieri'
+  );
+
+export const getWaiterById = (id: string) =>
+  handleApiCall(
+    axiosInstance.get(API_PATH, { params: { id } }),
+    'Errore nel recupero del cameriere'
+  );
+
+export async function createWaiter(waiter: Partial<Waiter>) {
+  const dataToCreate = Object.fromEntries(
+    Object.entries(waiter).filter(([_, value]) => value != null)
+  );
+
+  return handleApiCall(
+    axiosInstance.post(API_PATH, dataToCreate),
+    'Errore nella creazione del cameriere'
+  );
+}
+
+export async function updateWaiter(id: string, updates: Partial<Waiter>) {
+  const dataToUpdate = Object.fromEntries(
+    Object.entries(updates).filter(([_, value]) => value != null)
+  );
+
+  return handleApiCall(
+    axiosInstance.patch(`${API_PATH}?id=${id}`, dataToUpdate),
+    "Errore nell'aggiornamento del cameriere"
+  );
+}

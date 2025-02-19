@@ -26,13 +26,20 @@ export async function GET(req: Request) {
     if (id) {
       const waiter = await prisma.waiter.findUnique({
         where: { id },
+        include: {
+          location: true,
+        },
       });
       return waiter
         ? NextResponse.json(waiter, { status: 200 })
         : NextResponse.json({ error: 'waiter not found' }, { status: 404 });
     }
 
-    const companies = await prisma.waiter.findMany();
+    const companies = await prisma.waiter.findMany({
+      include: {
+        location: true,
+      },
+    });
     return NextResponse.json(companies, { status: 200 });
   } catch (error) {
     console.error('Errore nel database:', error);

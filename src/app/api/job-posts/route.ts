@@ -54,7 +54,7 @@ export async function GET(req: Request) {
           company: { select: { name: true } },
           location: {
             select: { country: true, canton: true, municipality: true },
-          }, // Include dettagli della location
+          },
         },
       });
 
@@ -75,7 +75,6 @@ export async function GET(req: Request) {
       );
     }
 
-    // Costruzione della condizione di filtraggio
     const where: any = {};
     if (companyId) where.companyId = companyId;
     if (country || canton || municipality) {
@@ -94,7 +93,9 @@ export async function GET(req: Request) {
       orderBy: { createdAt: 'desc' },
       include: {
         applications: {
-          select: { id: true, status: true, waiterId: true, createdAt: true },
+          include: {
+            waiter: true,
+          },
         },
         location: {
           select: { country: true, canton: true, municipality: true },

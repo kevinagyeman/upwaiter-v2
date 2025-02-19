@@ -1,39 +1,35 @@
 'use client';
 
-import { getApplicationsForWaiter } from '@/services/application.services';
-import { useStackApp } from '@stackframe/stack';
-import { useEffect, useState } from 'react';
+import { getApplicationsForWaiter } from '@/services/application-service';
+import { useUser } from '@stackframe/stack';
+import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 
-export default function Page() {
-  const app = useStackApp();
-  const user = app.useUser();
-  const [applications, setApplications] = useState(null);
-  const [error, setError] = useState(null);
+export default function MyApplications() {
+  const user = useUser();
 
-  useEffect(() => {
-    if (user) {
-      getApplicationsForWaiter(user.id)
-        .then((data) => {
-          setApplications(data);
-        })
-        .catch((err) => {
-          setError(err.message);
-        });
-    }
-  }, [user]);
+  const { data: applications, isLoading } = useQuery({
+    queryKey: ['applications', user?.id],
+    queryFn: () => getApplicationsForWaiter(user!.id),
+    enabled: !!user?.id,
+  });
 
-  if (error) {
-    return <div>Errore: {error}</div>;
+  if (isLoading) {
+    return 'attendi';
   }
 
   return (
-    <div>
-      <h1>Applications</h1>
-      <pre>
-        {applications
-          ? JSON.stringify(applications, null, 2)
-          : 'Caricamento...'}{' '}
-      </pre>
+    <div className='container mx-auto'>
+      <h1 className='text-2xl font-bold mb-4'>Applications</h1>
+      <div className='flex flex-col gap-4'>
+        {applications?.map((application: any, index: number) => (
+          <div className='' key={index}>
+            <h1>{application.jobPost.title}</h1>
+            <p>{application.status}</p>
+            <Link href={`/job-post/${application.jobPostId}`}>Dettagli</Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

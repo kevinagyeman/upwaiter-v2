@@ -16,8 +16,8 @@ import {
   registerFormSchema,
   RegisterFormSchema,
 } from '@/schemas/register-schema';
-import { createCompany } from '@/services/company.services';
-import { createWaiter } from '@/services/waiter.services';
+import { createCompany } from '@/services/company-service';
+import { createWaiter } from '@/services/waiter-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useStackApp } from '@stackframe/stack';
 import { Loader2 } from 'lucide-react';

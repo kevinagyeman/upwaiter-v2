@@ -1,22 +1,11 @@
 import { z } from 'zod';
 
 export const waiterFormSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, { message: 'Il nome deve avere almeno 2 caratteri' })
-    .optional(),
-  lastName: z
-    .string()
-    .min(2, { message: 'Il cognome deve avere almeno 2 caratteri' })
-    .optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
   email: z.string().email({ message: "Inserisci un'email valida" }).optional(),
   streetAddress: z.string().optional(),
-  contactNumber: z
-    .string()
-    .regex(/^\+?\d{7,15}$/, {
-      message: 'Inserisci un numero di telefono valido',
-    })
-    .optional(),
+  contactNumber: z.string().optional(),
   dateOfBirth: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, {

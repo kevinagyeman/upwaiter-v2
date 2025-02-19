@@ -47,24 +47,35 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const waiterId = searchParams.get('waiterId'); // Ottiene il waiterId dai parametri
-    const jobPostId = searchParams.get('jobPostId'); // Opzionale
+    const waiterId = searchParams.get('waiterId');
+    const jobPostId = searchParams.get('jobPostId');
 
     if (!waiterId) {
       return NextResponse.json(
-        { error: 'Unauthorized: waiterId is required' },
-        { status: 403 }
+        { error: 'waiterId is required' },
+        { status: 400 }
       );
     }
 
-    const whereClause: any = { waiterId };
-
     if (jobPostId) {
-      whereClause.jobPostId = jobPostId;
+      // Se viene fornito anche jobPostId, verifica se esiste una candidatura per quel lavoro
+      const applicationExists = await prisma.application.findFirst({
+        where: {
+          waiterId,
+          jobPostId,
+        },
+      });
+
+      return NextResponse.json(
+        { applied: !!applicationExists }, // True se esiste una candidatura, altrimenti false
+        { status: 200 }
+      );
     }
 
+    // Se jobPostId non è fornito, restituisci tutte le candidature del cameriere
     const applications = await prisma.application.findMany({
-      where: whereClause,
+      where: { waiterId },
+      include: { jobPost: true },
     });
 
     return NextResponse.json(applications, { status: 200 });

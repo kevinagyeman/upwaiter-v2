@@ -9,6 +9,7 @@ import Link from 'next/link';
 import LanguageSelector from './language-selector';
 import ThemeChanger from './theme-changer';
 import { Button } from './ui/button';
+import VerifyAccountModal from './verify-account-modal';
 
 const Navbar = () => {
   const t = useTranslations('navbar');
@@ -18,15 +19,15 @@ const Navbar = () => {
 
   if (user?.clientMetadata?.role === 'waiter') {
     navigation = [
-      { name: `Annunci`, href: '/jobposts' },
+      { name: `Annunci`, href: '/job-posts' },
       { name: `Il mio curriculum`, href: '/waiter/my-resume' },
       { name: `Le mie candidature`, href: '/waiter/my-applications' },
     ];
   } else if (user?.clientMetadata?.role === 'company') {
     navigation = [
-      { name: `I miei annunci`, href: '/company/my-jobposts' },
+      { name: `I miei annunci`, href: '/company/my-job-posts' },
       { name: `Profilo azienda`, href: '/company/profile' },
-      { name: `Crea un annuncio`, href: '/company/create-jobpost' },
+      { name: `Crea un annuncio`, href: '/company/create-job-post' },
       { name: `elenco camerieri`, href: '/company/waiters' },
     ];
   } else {
@@ -39,6 +40,7 @@ const Navbar = () => {
 
   return (
     <>
+      <VerifyAccountModal />
       <Disclosure
         as='nav'
         className='sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm'

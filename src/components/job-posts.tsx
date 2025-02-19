@@ -15,10 +15,10 @@ import { Button } from './ui/button';
 import Link from 'next/link';
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
 import { useUser } from '@stackframe/stack';
-import JobPostFooter from './jobpost-footer';
-import JobPostHeader from './jobpost-header';
+import JobPostFooter from './job-post-footer';
+import JobPostHeader from './job-post-header';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getJobPosts } from '@/services/jobpost.services';
+import { getJobPosts } from '@/services/job-post-service';
 import { Skeleton } from './ui/skeleton';
 
 export default function JobPosts() {
@@ -63,7 +63,7 @@ export default function JobPosts() {
         plugins={[WheelGesturesPlugin()]}
       >
         <CarouselContent className='h-[calc(100dvh-5rem-1px)]'>
-          {jobPosts.map((job: JobPost, index: number) => (
+          {jobPosts.map((job: any, index: number) => (
             <CarouselItem
               key={job.id}
               className='job-card'
@@ -73,9 +73,23 @@ export default function JobPosts() {
               <div className='h-full flex flex-col gap-y-4'>
                 <JobPostHeader />
                 <div className='flex-1 space-y-4'>
-                  <Badge className='w-fit' variant={'secondary'}>
-                    Zurich
-                  </Badge>
+                  <div className='flex flex-wrap gap-4'>
+                    {job?.location?.country && (
+                      <Badge className='w-fit' variant={'secondary'}>
+                        {job.location.country}
+                      </Badge>
+                    )}
+                    {job?.location?.canton && (
+                      <Badge className='w-fit' variant={'secondary'}>
+                        {job.location.canton}
+                      </Badge>
+                    )}
+                    {job?.location?.municipality && (
+                      <Badge className='w-fit' variant={'secondary'}>
+                        {job.location.municipality}
+                      </Badge>
+                    )}
+                  </div>
                   <h1 className='text-5xl font-bold'>{job.title}</h1>
                   <p className='text-muted-foreground text-2xl'>
                     {job.description}
@@ -83,7 +97,7 @@ export default function JobPosts() {
                 </div>
                 <Button asChild className='text-2xl' size={'lg'}>
                   <Link
-                    href={user ? `/jobpost/${job.id}` : '/register'}
+                    href={user ? `/job-post/${job.id}` : '/register'}
                     prefetch={true}
                   >
                     Invia candidatura

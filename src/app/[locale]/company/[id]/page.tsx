@@ -1,13 +1,15 @@
-import { getCompanyById } from '@/services/company.services';
+import CompanyDetail from '@/components/company-detail';
+import { getCompanyById } from '@/services/company-service';
+import { Company } from '@prisma/client';
 
-export default async function Company({ params }: { params: { id: string } }) {
-  const company = await getCompanyById(params.id);
+export default async function Page({ params }: { params: { id: string } }) {
+  const company: Company = await getCompanyById(params.id);
 
-  if (company.id) {
+  if (company?.id) {
     return (
-      <>
-        <pre>{JSON.stringify(company, null, 2)}</pre>
-      </>
+      <div className='mx-auto container'>
+        <CompanyDetail company={company} />
+      </div>
     );
   } else {
     return 'non abbiamo trovato questa azienda';

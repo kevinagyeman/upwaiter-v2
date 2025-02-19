@@ -12,18 +12,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { Link } from '@/i18n/routing';
 import { loginFormSchema, LoginFormSchema } from '@/schemas/login-schema';
+import { useUserStore } from '@/store/user';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useStackApp, useUser } from '@stackframe/stack';
-import { set } from 'date-fns';
+import { useStackApp } from '@stackframe/stack';
 import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 export default function Login() {
   const app = useStackApp();
-  const router = useRouter();
-  const user = useUser();
   const [loginError, setLoginError] = useState(null);
 
   const form = useForm<LoginFormSchema>({
@@ -40,6 +37,7 @@ export default function Login() {
         email: data.email,
         password: data.password,
       });
+
       if (login.error) {
         setLoginError(login.error.humanReadableMessage);
       }

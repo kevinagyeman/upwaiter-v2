@@ -1,6 +1,6 @@
-import JobPosts from '@/components/jobposts';
+import JobPosts from '@/components/job-posts';
 import { Button } from '@/components/ui/button';
-import { getJobPosts } from '@/services/jobpost.services';
+import { getJobPosts } from '@/services/job-post-service';
 
 export default async function Page() {
   const currentPage = 1;
@@ -28,7 +28,7 @@ export default async function Page() {
         </Button>
       </div>
       <div className='max-w-lg'>
-        <JobPosts initialJobPosts={jobPosts} />
+        <JobPosts />
       </div>
       <div className='mt-2 flex flex-col gap-4 items-end'>
         <h4 className='text-2xl font-bold'>Sei una azienda?</h4>

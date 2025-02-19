@@ -12,9 +12,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { jobPostFormSchema, JobPostFormSchema } from '@/schemas/jobpost-schema';
-import { createJobPost } from '@/services/jobpost.services';
-import { createLocation } from '@/services/location.services';
+import {
+  jobPostFormSchema,
+  JobPostFormSchema,
+} from '@/schemas/job-post-schema';
+import { createJobPost } from '@/services/job-post-service';
+import { createLocation } from '@/services/location-service';
 import { isLocationValid, useLocationStore } from '@/store/location';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useStackApp } from '@stackframe/stack';
@@ -42,7 +45,7 @@ export default function CreateJobPost() {
         let locationId: string | undefined;
 
         if (location) {
-          const createdLocation = await createLocation(location);
+          const createdLocation: any = await createLocation(location);
           locationId = createdLocation.id;
         }
         await createJobPost({

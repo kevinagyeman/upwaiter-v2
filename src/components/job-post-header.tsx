@@ -1,6 +1,4 @@
-import React from 'react';
-import { JobPost } from '@prisma/client';
-import { SlidersHorizontal } from 'lucide-react';
+import { JobPostsFilter } from './job-posts-filter';
 import { Button } from './ui/button';
 
 export default function JobPostHeader() {
@@ -10,9 +8,7 @@ export default function JobPostHeader() {
         <div className='h-10 w-10 rounded-full bg-gray-700'></div>
         <p className='text-muted-foreground'>Ristorante Armani</p>
       </div>
-      <Button variant={'secondary'}>
-        Filtra <SlidersHorizontal />
-      </Button>
+      <JobPostsFilter />
       <Button variant={'link'}>Sono una azienda</Button>
     </div>
   );

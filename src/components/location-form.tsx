@@ -18,7 +18,7 @@ import {
   getCantons,
   getDistrictsInCanton,
   getMunicipalitiesInDistrict,
-} from '@/services/location.services';
+} from '@/services/location-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useStackApp } from '@stackframe/stack';
 import { Loader2 } from 'lucide-react';
