@@ -32,18 +32,20 @@ export function JobPostsFilter() {
           Filtra <SlidersHorizontal />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className='flex flex-col gap-4 max-w-md min-w-sm'>
         <SheetHeader>
-          <SheetTitle>Filta gli annunci</SheetTitle>
-          <SheetDescription>
-            Make changes to your profile here. Click save when you're done.
-          </SheetDescription>
+          <SheetTitle>Filrta gli annunci</SheetTitle>
+          <SheetDescription>Filtra gli annunci</SheetDescription>
         </SheetHeader>
         <LocationForm />
-        <Button onClick={filter}>Cerca annunci</Button>
-        <Button onClick={() => router.push('/')} variant={'ghost'}>
-          Reset Filter
-        </Button>
+        <div className='flex gap-4'>
+          <Button onClick={filter} className='flex-1'>
+            Cerca annunci
+          </Button>
+          <Button onClick={() => router.push('/')} variant={'secondary'}>
+            Cancella filtri
+          </Button>
+        </div>
       </SheetContent>
     </Sheet>
   );

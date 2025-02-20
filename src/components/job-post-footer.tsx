@@ -22,9 +22,6 @@ export default function JobPostFooter({ jobPost }: JobPostFooterProps) {
       <Button size='icon' variant={'outline'} className='rounded-full'>
         <LinkIcon />
       </Button>
-      <Button size='icon' variant={'outline'} className='rounded-full'>
-        <Share />
-      </Button>
     </div>
   );
 }

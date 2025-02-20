@@ -1,8 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { JobPost } from '@prisma/client';
 import {
   Carousel,
   CarouselContent,
@@ -10,15 +7,17 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import Link from 'next/link';
-import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
+import { getJobPosts } from '@/services/job-post-service';
 import { useUser } from '@stackframe/stack';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useRef } from 'react';
 import JobPostFooter from './job-post-footer';
 import JobPostHeader from './job-post-header';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { getJobPosts } from '@/services/job-post-service';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
 
 export default function JobPosts() {
@@ -55,14 +54,15 @@ export default function JobPosts() {
     router.push('/');
   };
 
+  // bg-gradient-to-b dark:from-black dark:to-gray-950 from-white to-gray-100
   return (
-    <div className='p-4 h-[calc(100dvh-4rem-1px)] bg-gradient-to-b dark:from-black dark:to-gray-800 from-white to-gray-100'>
+    <>
       <Carousel
         orientation='vertical'
         className='w-full'
         plugins={[WheelGesturesPlugin()]}
       >
-        <CarouselContent className='h-[calc(100dvh-5rem-1px)]'>
+        <CarouselContent className='h-[calc(100dvh-4rem-1px)]'>
           {jobPosts.map((job: any, index: number) => (
             <CarouselItem
               key={job.id}
@@ -70,9 +70,9 @@ export default function JobPosts() {
               data-id={job.id}
               ref={index === jobPosts.length - 1 ? lastJobRef : null} // Assegna il ref all'ultimo elemento
             >
-              <div className='h-full flex flex-col gap-y-4'>
+              <div className='h-full flex flex-col gap-y-4 p-4 bg-gradient-to-b dark:from-black dark:to-gray-950 from-white to-gray-100 rounded-2xl border'>
                 <JobPostHeader />
-                <div className='flex-1 space-y-4'>
+                <div className='flex-1 space-y-4 mt-4'>
                   <div className='flex flex-wrap gap-4'>
                     {job?.location?.country && (
                       <Badge className='w-fit' variant={'secondary'}>
@@ -112,17 +112,7 @@ export default function JobPosts() {
             </CarouselItem>
           ))}
 
-          {isLoading && (
-            <CarouselItem className='flex flex-col items-center justify-center text-center gap-y-6'>
-              <div className='flex space-x-4'>
-                <Skeleton className='h-10 w-10 rounded-full' />
-                <div className='space-y-2'>
-                  <Skeleton />
-                  <Skeleton />
-                </div>
-              </div>
-            </CarouselItem>
-          )}
+          {isLoading && <SkeletonJobPosts />}
 
           {!hasNextPage && (
             <CarouselItem className='flex flex-col items-center justify-center text-center gap-y-6'>
@@ -141,6 +131,30 @@ export default function JobPosts() {
       </Carousel>
 
       {isFetchingNextPage && <p>Caricamento in corso...</p>}
-    </div>
+    </>
   );
 }
+
+const SkeletonJobPosts = () => {
+  return (
+    <CarouselItem className='flex flex-col gap-4 justify-between'>
+      <div className='flex gap-4'>
+        <Skeleton className='h-20 w-20 rounded-full' />
+        <div className='flex flex-col gap-4 flex-1'>
+          <Skeleton className='h-full w-full rounded-full' />
+          <Skeleton className='h-full w-full rounded-full' />
+        </div>
+      </div>
+      <div className='flex flex-col gap-4'>
+        <Skeleton className='h-10 rounded-3xl' />
+        <Skeleton className='h-10 w-4/5 rounded-3xl' />
+        <Skeleton className='h-10 w-3/5 rounded-3xl' />
+        <Skeleton className='h-10 w-4/5 rounded-3xl' />
+        <Skeleton className='h-10 w-2/5 rounded-3xl' />
+      </div>
+      <div>
+        <Skeleton className='h-20 rounded-3xl' />
+      </div>
+    </CarouselItem>
+  );
+};

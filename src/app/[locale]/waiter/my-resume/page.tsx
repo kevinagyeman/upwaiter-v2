@@ -24,7 +24,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 export default function MyResume() {
   const app = useStackApp();
   const user = useUser();
-  const [_, setWaiterData] = useState<WaiterFormSchema>();
 
   useEffect(() => {
     getWaiterData();
@@ -32,14 +31,27 @@ export default function MyResume() {
 
   const getWaiterData = async () => {
     if (user) {
-      const waiter = await getWaiterById(user.id);
-      setWaiterData(waiter);
-      form.reset(waiter);
+      const waiter: WaiterFormSchema = await getWaiterById(user.id);
+
+      form.reset({
+        firstName: waiter.firstName,
+        lastName: waiter.lastName,
+        email: waiter.email,
+        contactNumber: waiter.contactNumber,
+        about: waiter.about,
+      });
     }
   };
 
   const form = useForm<WaiterFormSchema>({
     resolver: zodResolver(waiterFormSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      contactNumber: '',
+      about: '',
+    },
   });
 
   const updateWaiterData: SubmitHandler<WaiterFormSchema> = async (data) => {

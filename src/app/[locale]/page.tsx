@@ -13,7 +13,7 @@ export default async function Page() {
   return (
     <>
       <div className='mx-auto container flex justify-between'>
-        <div className='mt-2 flex flex-col gap-4'>
+        <div className='hidden lg:flex flex-col gap-4 mt-2'>
           <h4 className='text-2xl font-bold'>I più cercati</h4>
           <Button variant={'secondary'} className='w-fit'>
             Zurich
@@ -34,7 +34,7 @@ export default async function Page() {
         <div className='max-w-lg'>
           <JobPosts />
         </div>
-        <div className='mt-2 flex flex-col gap-4 items-end'>
+        <div className='hidden lg:flex flex-col gap-4 mt-2 items-end'>
           <h4 className='text-2xl font-bold'>Sei una azienda?</h4>
           <Button variant={'secondary'} className='w-fit'>
             Scopri di più
