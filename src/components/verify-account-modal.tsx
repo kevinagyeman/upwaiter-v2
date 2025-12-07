@@ -1,27 +1,26 @@
 "use client";
 
 import { useUser } from "@stackframe/stack";
-import { Copy } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 import {
 	Dialog,
-	DialogClose,
 	DialogContent,
 	DialogDescription,
-	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "./ui/dialog";
 
 export default function VerifyAccountModal() {
 	const user = useUser();
+	const pathname = usePathname();
 	const [isEmailSended, setIsEmailSended] = useState(false);
 	const [countdown, setCountdown] = useState(30);
-	const isUserVerified = user && !user?.primaryEmailVerified ? true : false;
+
+	const isOnVerificationPage = pathname === "/handler/email-verification";
+	const isUserUnverified = user && !user?.primaryEmailVerified;
+	const shouldShowModal = isUserUnverified && !isOnVerificationPage;
 
 	const sendEmail = async () => {
 		try {
@@ -40,6 +39,17 @@ export default function VerifyAccountModal() {
 		}
 	};
 
+	// Refresh user data periodically to check if email was verified
+	useEffect(() => {
+		if (!shouldShowModal) return;
+
+		const refreshInterval = setInterval(async () => {
+			await user?.update();
+		}, 3000); // Check every 3 seconds
+
+		return () => clearInterval(refreshInterval);
+	}, [shouldShowModal, user]);
+
 	useEffect(() => {
 		let timer: NodeJS.Timeout;
 		if (isEmailSended) {
@@ -48,8 +58,8 @@ export default function VerifyAccountModal() {
 				setCountdown((prev) => {
 					if (prev <= 1) {
 						clearInterval(timer);
-						setIsEmailSended(false); // Rende di nuovo visibile il pulsante
-						return 30; // Reset del countdown
+						setIsEmailSended(false);
+						return 30;
 					}
 					return prev - 1;
 				});
@@ -60,7 +70,7 @@ export default function VerifyAccountModal() {
 	}, [isEmailSended]);
 
 	return (
-		<Dialog open={isUserVerified}>
+		<Dialog open={shouldShowModal}>
 			<DialogContent className="max-w-md">
 				<DialogHeader>
 					<DialogTitle>Il tuo account non è verificato</DialogTitle>

@@ -13,17 +13,27 @@
 		"indentStyle": "tab"
 	},
 	"linter": {
-		"enabled": true,
 		"rules": {
-			"recommended": true,
-			"style": {
-				"useNodejsImportProtocol": "off"
-			},
 			"correctness": {
-				"useParseIntRadix": "off"
+				"noUnusedImports": "off",
+				"useExhaustiveDependencies": "off",
+				"noUnusedVariables": "off"
 			},
-			"complexity": {
-				"noUselessSwitchCase": "off"
+			"suspicious": {
+				"noArrayIndexKey": "off"
+			},
+			"a11y": {
+				"recommended": true,
+				"noLabelWithoutControl": "off"
+			}
+		}
+	},
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"organizeImports": "off",
+				"recommended": true
 			}
 		}
 	},
@@ -36,14 +46,6 @@
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "double"
-		}
-	},
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
 		}
 	}
 }

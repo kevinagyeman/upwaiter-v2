@@ -3,9 +3,8 @@
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { UserButton, useUser } from "@stackframe/stack";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useUserStore } from "@/store/user";
+import Link from "next/link";
 import LanguageSelector from "./language-selector";
 import ThemeChanger from "./theme-changer";
 import { Button } from "./ui/button";
@@ -19,7 +18,6 @@ const Navbar = () => {
 
 	if (user?.clientMetadata?.role === "waiter") {
 		navigation = [
-			{ name: `Annunci`, href: "/job-posts" },
 			{ name: `Il mio curriculum`, href: "/waiter/my-resume" },
 			{ name: `Le mie candidature`, href: "/waiter/my-applications" },
 		];

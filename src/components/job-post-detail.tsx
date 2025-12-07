@@ -1,9 +1,10 @@
 "use client";
 
+import { createApplication } from "@/services/application-service";
 import type { JobPost } from "@prisma/client";
 import { useUser } from "@stackframe/stack";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createApplication } from "@/services/application-service";
 import JobPostFooter from "./job-post-footer";
 import JobPostWrapper from "./job-post-wrapper";
 import { Button } from "./ui/button";
@@ -56,6 +57,9 @@ export default function JobPostDetail({
 						variant={hasApplied ? "secondary" : "default"}
 					>
 						{!hasApplied ? "Invia candidatura" : "Candidatura già inviata"}
+					</Button>
+					<Button variant={"secondary"} asChild>
+						<Link href={"/"}>torna agli annunci</Link>
 					</Button>
 
 					<JobPostFooter jobPost={jobPost} />

@@ -1,12 +1,5 @@
 "use client";
 
-import { useUser } from "@stackframe/stack";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
-import { Users } from "lucide-react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useRef } from "react";
 import {
 	Carousel,
 	CarouselContent,
@@ -15,6 +8,12 @@ import {
 	CarouselPrevious,
 } from "@/components/ui/carousel";
 import { getJobPosts } from "@/services/job-post-service";
+import { useUser } from "@stackframe/stack";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useRef } from "react";
 import JobPostFooter from "./job-post-footer";
 import JobPostHeader from "./job-post-header";
 import JobPostWrapper from "./job-post-wrapper";
@@ -102,7 +101,7 @@ export default function JobPosts() {
 										href={user ? `/job-post/${job.id}` : "/register"}
 										prefetch={true}
 									>
-										Invia candidatura
+										Details
 									</Link>
 								</Button>
 								<div className="flex gap-x-3">
