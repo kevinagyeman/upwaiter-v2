@@ -4,9 +4,9 @@ export const locationFormSchema = z.object({
   isoCode: z.string(),
   country: z.string(),
 
-  canton: z.string().min(1),
-  district: z.string().min(1),
-  municipality: z.string().min(1),
+  canton: z.string(),
+  district: z.string(),
+  municipality: z.string(),
 
   region: z.string().optional(),
   province: z.string().optional(),

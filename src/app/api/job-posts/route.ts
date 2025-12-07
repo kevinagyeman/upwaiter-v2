@@ -16,6 +16,7 @@ export async function POST(req: Request) {
 
     const companyExists = await prisma.company.findUnique({
       where: { id: data.companyId },
+      include: { location: true },
     });
 
     if (!companyExists) {
@@ -52,9 +53,7 @@ export async function GET(req: Request) {
         where: { id: jobId },
         include: {
           company: { select: { name: true } },
-          location: {
-            select: { country: true, canton: true, municipality: true },
-          },
+          location: true,
         },
       });
 
@@ -97,9 +96,7 @@ export async function GET(req: Request) {
             waiter: true,
           },
         },
-        location: {
-          select: { country: true, canton: true, municipality: true },
-        }, // Includi location nei risultati
+        location: true, // Includi location nei risultati
       },
       skip,
       take: limit,

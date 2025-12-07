@@ -19,6 +19,8 @@ import JobPostHeader from './job-post-header';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
+import { Users } from 'lucide-react';
+import JobPostWrapper from './job-post-wrapper';
 
 export default function JobPosts() {
   const user = useUser();
@@ -70,7 +72,7 @@ export default function JobPosts() {
               data-id={job.id}
               ref={index === jobPosts.length - 1 ? lastJobRef : null} // Assegna il ref all'ultimo elemento
             >
-              <div className='h-full flex flex-col gap-y-4 p-4 bg-gradient-to-b dark:from-black dark:to-gray-950 from-white to-gray-100 rounded-2xl border'>
+              <JobPostWrapper>
                 <JobPostHeader />
                 <div className='flex-1 space-y-4 mt-4'>
                   <div className='flex flex-wrap gap-4'>
@@ -104,11 +106,13 @@ export default function JobPosts() {
                   </Link>
                 </Button>
                 <div className='flex gap-x-3'>
-                  <JobPostFooter />
+                  <div className='flex-1'>
+                    <JobPostFooter jobPost={job} />
+                  </div>
                   <CarouselPrevious />
                   <CarouselNext />
                 </div>
-              </div>
+              </JobPostWrapper>
             </CarouselItem>
           ))}
 
@@ -137,23 +141,27 @@ export default function JobPosts() {
 
 const SkeletonJobPosts = () => {
   return (
-    <CarouselItem className='flex flex-col gap-4 justify-between'>
-      <div className='flex gap-4'>
-        <Skeleton className='h-20 w-20 rounded-full' />
-        <div className='flex flex-col gap-4 flex-1'>
-          <Skeleton className='h-full w-full rounded-full' />
-          <Skeleton className='h-full w-full rounded-full' />
+    <CarouselItem>
+      <div className='h-full flex flex-col p-4 bg-gradient-to-b dark:from-black dark:to-gray-950 from-white to-gray-100 rounded-2xl border gap-4 justify-between text-center gap-y-6'>
+        <div className='flex gap-4'>
+          <Skeleton className='h-20 w-20 rounded-full' />
+          <div className='flex flex-col gap-4 flex-1'>
+            <Skeleton className='h-full w-full rounded-full' />
+            <Skeleton className='h-full w-full rounded-full' />
+          </div>
         </div>
-      </div>
-      <div className='flex flex-col gap-4'>
-        <Skeleton className='h-10 rounded-3xl' />
-        <Skeleton className='h-10 w-4/5 rounded-3xl' />
-        <Skeleton className='h-10 w-3/5 rounded-3xl' />
-        <Skeleton className='h-10 w-4/5 rounded-3xl' />
-        <Skeleton className='h-10 w-2/5 rounded-3xl' />
-      </div>
-      <div>
-        <Skeleton className='h-20 rounded-3xl' />
+        <div className='flex flex-col gap-4'>
+          <Skeleton className='h-10 rounded-3xl' />
+          <Skeleton className='h-10 w-4/5 rounded-3xl' />
+          <Skeleton className='h-10 w-3/5 rounded-3xl' />
+          <Skeleton className='h-10 w-4/5 rounded-3xl' />
+          <Skeleton className='h-10 w-5/5 rounded-3xl' />
+          <Skeleton className='h-10 w-4/5 rounded-3xl' />
+          <Skeleton className='h-10 w-3/5 rounded-3xl' />
+        </div>
+        <div>
+          <Skeleton className='h-14 rounded-3xl' />
+        </div>
       </div>
     </CarouselItem>
   );

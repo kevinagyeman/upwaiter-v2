@@ -16,11 +16,17 @@ async function handleApiCall<T>(
   }
 }
 
-export const getWaiters = () =>
-  handleApiCall(
-    axiosInstance.get(API_PATH),
+export const getWaiters = (
+  page: number = 1,
+  limit: number = 10,
+  filters?: { country?: string; canton?: string; municipality?: string }
+) => {
+  const params: any = { page, limit, ...filters };
+  return handleApiCall(
+    axiosInstance.get(API_PATH, { params }),
     'Errore nel recupero dei camerieri'
   );
+};
 
 export const getWaiterById = (id: string) =>
   handleApiCall(

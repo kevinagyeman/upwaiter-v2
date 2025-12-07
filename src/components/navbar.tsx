@@ -26,7 +26,7 @@ const Navbar = () => {
   } else if (user?.clientMetadata?.role === 'company') {
     navigation = [
       { name: `I miei annunci`, href: '/company/my-job-posts' },
-      { name: `Profilo azienda`, href: '/company/profile' },
+      { name: `Profilo azienda`, href: '/company/my-profile' },
       { name: `Crea un annuncio`, href: '/company/create-job-post' },
       { name: `elenco camerieri`, href: '/company/waiters' },
     ];

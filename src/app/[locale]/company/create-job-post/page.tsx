@@ -18,7 +18,7 @@ import {
 } from '@/schemas/job-post-schema';
 import { createJobPost } from '@/services/job-post-service';
 import { createLocation } from '@/services/location-service';
-import { isLocationValid, useLocationStore } from '@/store/location';
+import { useLocationStore } from '@/store/location';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useStackApp } from '@stackframe/stack';
 import { Loader2 } from 'lucide-react';
@@ -105,9 +105,9 @@ export default function CreateJobPost() {
             />
             <Button
               role='submit'
-              disabled={
-                form.formState.isSubmitting || !isLocationValid(location)
-              }
+              // disabled={
+              //   form.formState.isSubmitting || !isLocationValid(location)
+              // }
               className='w-full'
             >
               {form.formState.isSubmitting ? (

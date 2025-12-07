@@ -22,6 +22,11 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
+    const country = searchParams.get('country');
+    const canton = searchParams.get('canton');
+    const municipality = searchParams.get('municipality');
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
 
     if (id) {
       const waiter = await prisma.waiter.findUnique({
@@ -32,18 +37,45 @@ export async function GET(req: Request) {
       });
       return waiter
         ? NextResponse.json(waiter, { status: 200 })
-        : NextResponse.json({ error: 'waiter not found' }, { status: 404 });
+        : NextResponse.json({ error: 'Waiter not found' }, { status: 404 });
     }
 
-    const companies = await prisma.waiter.findMany({
+    const where: any = {};
+    if (country || canton || municipality) {
+      where.location = {};
+      if (country) where.location.country = country;
+      if (canton) where.location.canton = canton;
+      if (municipality) where.location.municipality = municipality;
+    }
+
+    const skip = (page - 1) * limit;
+    const totalCount = await prisma.waiter.count({ where });
+
+    let waiters = await prisma.waiter.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
       include: {
         location: true,
       },
+      skip,
+      take: limit,
     });
-    return NextResponse.json(companies, { status: 200 });
+
+    return NextResponse.json(
+      {
+        waiters,
+        totalPages: Math.ceil(totalCount / limit),
+        currentPage: page,
+        totalCount,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Errore nel database:', error);
-    return NextResponse.json({ error: error }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 

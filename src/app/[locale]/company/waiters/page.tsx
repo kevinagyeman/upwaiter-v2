@@ -6,7 +6,7 @@ export default async function Waiters() {
   const waiters = await getWaiters();
   return (
     <div className='mx-auto container'>
-      <WaitersList waitersList={waiters} />
+      <WaitersList />
     </div>
   );
 }

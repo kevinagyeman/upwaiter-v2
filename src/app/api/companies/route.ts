@@ -24,6 +24,7 @@ export async function GET(req: Request) {
     if (id) {
       const company = await prisma.company.findUnique({
         where: { id },
+        include: { location: true },
       });
       return company
         ? NextResponse.json(company, { status: 200 })
@@ -49,6 +50,7 @@ export async function PATCH(req: Request) {
 
     const company = await prisma.company.update({
       where: { id },
+      include: { location: true },
       data: updates,
     });
 

@@ -7,9 +7,10 @@ export async function POST(req: Request) {
   try {
     const data: Location = await req.json();
 
-    if (!data) {
+    // Validazione dei campi obbligatori
+    if (!data.country || !data.isoCode) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'Country and ISO Code are required' },
         { status: 400 }
       );
     }
@@ -41,6 +42,7 @@ export async function GET(req: Request) {
     if (locationId) {
       const location = await prisma.location.findUnique({
         where: { id: locationId },
+        include: { company: true, waiter: true, jobPost: true },
       });
 
       if (!location) {
@@ -54,7 +56,7 @@ export async function GET(req: Request) {
     }
 
     // Filtraggio delle locations
-    const where = {} as any;
+    const where: any = {};
     if (country) where.country = country;
     if (region) where.region = region;
     if (city) where.city = city;
@@ -67,6 +69,7 @@ export async function GET(req: Request) {
       where,
       skip,
       take: limit,
+      include: { company: true, waiter: true, jobPost: true }, // Considera di limitare i campi
     });
 
     return NextResponse.json(

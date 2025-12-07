@@ -7,7 +7,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   if (company?.id) {
     return (
-      <div className='mx-auto container'>
+      <div className='mx-auto container max-w-md'>
         <CompanyDetail company={company} />
       </div>
     );

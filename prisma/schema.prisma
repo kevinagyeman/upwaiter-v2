@@ -4,66 +4,64 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model Company {
-  id            String   @id @default(uuid())
-  name          String   @map("name")
-  email         String   @unique @map("email")
-  vatNumber     String   @unique @map("vat_number") 
-  locationId    String?   @map("location_id") @unique
+  id            String    @id @default(uuid())
+  name          String    @map("name")
+  email         String    @unique @map("email")
+  vatNumber     String    @unique @map("vat_number")
+  locationId    String?   @unique @map("location_id")
   location      Location? @relation(fields: [locationId], references: [id])
-  contactNumber String?  @map("contact_number")
-  streetAddress String?  @map("street_address")
-  website       String?  @map("website")
-  about         String?  @map("about")
+  contactNumber String?   @map("contact_number")
+  website       String?   @map("website")
+  about         String?   @map("about")
   jobs          JobPost[]
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @default(now()) @map("updated_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
 
   @@map("companies")
 }
 
 model Waiter {
-  id               String   @id @default(uuid())
-  firstName       String?  @map("first_name")
-  lastName        String?  @map("last_name")
-  email           String   @unique @map("email")
-  locationId      String?  @map("location_id")     // Aggiunto campo opzionale per collegare la location
-  location        Location? @relation(fields: [locationId], references: [id])  // Relazione con Location
-  streetAddress   String?  @map("street_address")
-  contactNumber   String?  @map("contact_number")
-  dateOfBirth     DateTime? @map("date_of_birth")
-  resume          String?  @map("resume")
-  about           String?  @map("about")
-  yearsOfExperience Int?   @map("years_of_experience")
-  firstLanguage   String?  @map("first_language")
-  secondLanguage  String?  @map("second_language")
-  thirdLanguage   String?  @map("third_language")
-  isAvailableToWork Boolean @default(true) @map("is_available_to_work")
-  applications    Application[]
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @default(now()) @map("updated_at")
+  id                String        @id @default(uuid())
+  firstName         String?       @map("first_name")
+  lastName          String?       @map("last_name")
+  email             String        @unique @map("email")
+  locationId        String?       @unique @map("location_id")
+  location          Location?     @relation(fields: [locationId], references: [id])
+  streetAddress     String?       @map("street_address")
+  contactNumber     String?       @map("contact_number")
+  dateOfBirth       DateTime?     @map("date_of_birth")
+  resume            String?       @map("resume")
+  about             String?       @map("about")
+  yearsOfExperience Int?          @map("years_of_experience")
+  firstLanguage     String?       @map("first_language")
+  secondLanguage    String?       @map("second_language")
+  thirdLanguage     String?       @map("third_language")
+  isAvailableToWork Boolean       @default(true) @map("is_available_to_work")
+  applications      Application[]
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @default(now()) @updatedAt @map("updated_at")
 
   @@map("waiters")
 }
 
 model JobPost {
-  id          String       @id @default(uuid())
-  title       String       @map("title")
-  description String       @map("description")
-  company     Company      @relation(fields: [companyId], references: [id])
-  companyId   String       @map("company_id")
+  id           String        @id @default(uuid())
+  title        String        @map("title")
+  description  String        @map("description")
+  company      Company       @relation(fields: [companyId], references: [id])
+  companyId    String        @map("company_id")
   applications Application[]
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @default(now()) @map("updated_at")
-  locationId  String?      @map("location_id")   // Aggiunto campo opzionale per collegare la location
-  location    Location?    @relation(fields: [locationId], references: [id])  // Relazione con Location
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  locationId   String?       @unique @map("location_id")
+  location     Location?     @relation(fields: [locationId], references: [id])
 
   @@map("job_posts")
 }
-
 
 model Application {
   id        String   @id @default(uuid())
@@ -73,32 +71,33 @@ model Application {
   jobPostId String   @map("job_post_id")
   status    String   @default("pending") @map("status")
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @default(now()) @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  @@map("applications")
   @@unique([waiterId, jobPostId])
+  @@map("applications")
 }
 
 model Location {
-  id            String   @id @default(uuid())
-  country       String   @map("country")
-  isoCode       String   @map("iso_code")
-  state         String?  @map("state")
-  region        String?  @map("region")
-  province      String?  @map("province")
-  county        String?  @map("county")
-  canton        String?  @map("canton")
-  district      String?  @map("district")
-  municipality  String?  @map("municipality")
-  city          String?  @map("city")
-  neighborhood  String?  @map("neighborhood")
-  postalCode    String?  @map("postal_code")
-  latitude      Float?   @map("latitude")
-  longitude     Float?   @map("longitude")
+  id            String  @id @default(uuid())
+  country       String  @map("country")
+  isoCode       String  @map("iso_code")
+  state         String? @map("state")
+  region        String? @map("region")
+  province      String? @map("province")
+  county        String? @map("county")
+  canton        String? @map("canton")
+  district      String? @map("district")
+  municipality  String? @map("municipality")
+  city          String? @map("city")
+  neighborhood  String? @map("neighborhood")
+  postalCode    String? @map("postal_code")
+  latitude      Float?  @map("latitude")
+  longitude     Float?  @map("longitude")
+  streetAddress String? @map("street_address")
 
-  companies     Company[]
-  waiters Waiter[]
-  job_posts JobPost[]
-  
+  company Company? @relation()
+  waiter  Waiter?  @relation()
+  jobPost JobPost? @relation()
+
   @@map("locations")
 }

@@ -56,8 +56,6 @@ export default function MyResume() {
 
   const updateWaiterData: SubmitHandler<WaiterFormSchema> = async (data) => {
     try {
-      console.log(data);
-
       if (user) {
         const parsedData = {
           ...data,
@@ -66,7 +64,7 @@ export default function MyResume() {
             : undefined,
         };
 
-        // await updateWaiter(user.id, parsedData);
+        await updateWaiter(user.id, parsedData);
       }
     } catch (error) {
       console.log('Errore durante la creazione del jobpost:', error);
