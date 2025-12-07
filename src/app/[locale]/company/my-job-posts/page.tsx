@@ -8,9 +8,11 @@ import {
 import type { ApplicationSchema } from "@/types/application-schema-type";
 import { useUser } from "@stackframe/stack";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export default function MyJobPosts() {
+	const t = useTranslations("company.myJobPosts");
 	const user = useUser();
 	const queryClient = useQueryClient();
 
@@ -30,15 +32,13 @@ export default function MyJobPosts() {
 	});
 
 	const handleDelete = (jobPostId: string, jobTitle: string) => {
-		if (
-			window.confirm(`Sei sicuro di voler eliminare l'annuncio "${jobTitle}"?`)
-		) {
+		if (window.confirm(t("confirmDelete", { jobTitle }))) {
 			deleteMutation.mutate(jobPostId);
 		}
 	};
 
 	if (isLoading) {
-		return "attendi";
+		return t("loading");
 	}
 
 	console.log(companyJobPosts);
@@ -49,15 +49,17 @@ export default function MyJobPosts() {
 				<div key={index}>
 					<h2>{job.title}</h2>
 					<p>{job.description}</p>
-					<p>numero candidature: {job.applicationsCount}</p>
-					<p>lista candidati:</p>
+					<p>
+						{t("applicationsCount")} {job.applicationsCount}
+					</p>
+					<p>{t("applicationsList")}</p>
 					<ul>
 						{job.applications.map(
 							(application: ApplicationSchema, index: number) => (
 								<div key={index}>
 									<p>{application.waiter.firstName}</p>
 									<a href={`/waiter/${application.waiterId}`}>
-										guarda il cameriere
+										{t("viewWaiter")}
 									</a>
 								</div>
 							),
@@ -65,7 +67,7 @@ export default function MyJobPosts() {
 					</ul>
 					<div className="flex gap-2 mt-2">
 						<Link href={`/job-post/${job.id}`} prefetch>
-							Guarda Annuncio di lavoro
+							{t("viewJobPost")}
 						</Link>
 						<Button
 							variant="destructive"
@@ -73,7 +75,7 @@ export default function MyJobPosts() {
 							onClick={() => handleDelete(job.id, job.title)}
 							disabled={deleteMutation.isPending}
 						>
-							{deleteMutation.isPending ? "Eliminazione..." : "Elimina"}
+							{deleteMutation.isPending ? t("deleting") : t("delete")}
 						</Button>
 					</div>
 				</div>

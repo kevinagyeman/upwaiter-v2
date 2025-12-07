@@ -1,12 +1,10 @@
 import { z } from "zod";
+import { locationFormSchema } from "./location-schema";
 
 export const jobPostFormSchema = z.object({
-	title: z
-		.string()
-		.min(3, { message: "Il titolo deve avere almeno 3 caratteri" }),
-	description: z
-		.string()
-		.min(1, { message: "La descrizione deve avere almeno 10 caratteri" }),
+	title: z.string().min(3),
+	description: z.string().min(10),
+	location: locationFormSchema,
 });
 
 export type JobPostFormSchema = z.infer<typeof jobPostFormSchema>;

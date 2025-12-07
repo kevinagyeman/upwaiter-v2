@@ -1,5 +1,6 @@
 "use client";
 
+import { DataLoading } from "@/components/data-loading";
 import { Button } from "@/components/ui/button";
 import {
 	deleteApplication,
@@ -39,7 +40,7 @@ export default function MyApplications() {
 	};
 
 	if (isLoading) {
-		return t("loading");
+		return <DataLoading />;
 	}
 
 	return (

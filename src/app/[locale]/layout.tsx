@@ -1,3 +1,4 @@
+import { DataLoading } from "@/components/data-loading";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Locale } from "@/i18n/routing";
@@ -36,7 +37,7 @@ export default async function LocaleLayout({
 					>
 						<StackProvider app={stackServerApp} lang={locale}>
 							<StackTheme>
-								<Suspense fallback={"caricamento"}>
+								<Suspense fallback={<DataLoading />}>
 									<ReactQueryProvider>
 										<Navbar />
 										{children}

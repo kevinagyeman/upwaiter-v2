@@ -21,10 +21,12 @@ import { createWaiter } from "@/services/waiter-service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useStackApp } from "@stackframe/stack";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
 export default function Register() {
+	const t = useTranslations("auth.register");
 	const app = useStackApp();
 	const router = useRouter();
 
@@ -101,17 +103,17 @@ export default function Register() {
 					className="space-y-2  max-w-sm w-full"
 				>
 					<div>
-						<h1 className=" text-2xl font-semibold">Register</h1>
-						<p className="text-muted-foreground">register</p>
+						<h1 className=" text-2xl font-semibold">{t("title")}</h1>
+						<p className="text-muted-foreground">{t("subtitle")}</p>
 					</div>
 					<FormField
 						control={form.control}
 						name="email"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("email")}</FormLabel>
 								<FormControl>
-									<Input placeholder={field.name} {...field} type="email" />
+									<Input placeholder={t("email")} {...field} type="email" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -122,9 +124,13 @@ export default function Register() {
 						name="password"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("password")}</FormLabel>
 								<FormControl>
-									<Input placeholder={field.name} {...field} type="password" />
+									<Input
+										placeholder={t("password")}
+										{...field}
+										type="password"
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -135,7 +141,7 @@ export default function Register() {
 						name="role"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("accountType")}</FormLabel>
 								<FormControl>
 									<div className="flex items-center space-x-2">
 										<Checkbox
@@ -151,7 +157,7 @@ export default function Register() {
 											htmlFor="isCompany"
 											className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 										>
-											Sono un'azienda
+											{t("companyCheckbox")}
 										</label>
 									</div>
 								</FormControl>
@@ -166,9 +172,9 @@ export default function Register() {
 								name="companyName"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>{field.name}</FormLabel>
+										<FormLabel>{t("name")}</FormLabel>
 										<FormControl>
-											<Input placeholder={field.name} {...field} />
+											<Input placeholder={t("name")} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -179,9 +185,9 @@ export default function Register() {
 								name="vatNumber"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>{field.name}</FormLabel>
+										<FormLabel>{t("vatNumber")}</FormLabel>
 										<FormControl>
-											<Input placeholder={field.name} {...field} />
+											<Input placeholder={t("vatNumber")} {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -197,11 +203,11 @@ export default function Register() {
 						{form.formState.isSubmitting ? (
 							<Loader2 className="animate-spin" />
 						) : (
-							"Register"
+							t("registerButton")
 						)}
 					</Button>
 					<Button variant="ghost" role="button" asChild className="w-full">
-						<Link href="/login">Login</Link>
+						<Link href="/login">{t("loginButton")}</Link>
 					</Button>
 				</form>
 			</Form>

@@ -33,6 +33,7 @@
 			"accountType": "Account Type",
 			"company": "Company",
 			"waiter": "Waiter",
+			"companyCheckbox": "I'm a company",
 			"name": "Name",
 			"vatNumber": "VAT Number",
 			"firstName": "First Name",
@@ -97,8 +98,14 @@
 			"title": "My Job Posts",
 			"createNew": "Create new job post",
 			"applications": "Applications",
+			"applicationsCount": "Number of applications:",
+			"applicationsList": "List of applicants:",
+			"viewWaiter": "View waiter",
+			"viewJobPost": "View job post",
 			"delete": "Delete",
-			"confirmDelete": "Are you sure you want to delete this job post?"
+			"deleting": "Deleting...",
+			"confirmDelete": "Are you sure you want to delete the job post \"{jobTitle}\"?",
+			"loading": "Loading..."
 		},
 		"createJobPost": {
 			"title": "Create Job Post",

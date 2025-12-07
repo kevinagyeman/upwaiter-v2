@@ -26,32 +26,21 @@ import type {
 } from "@/types/italian-location-type";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import type { UseFormReturn, FieldValues } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 
-// Generic type constraint to ensure form has a location field
-type FormWithLocation = FieldValues & {
-	location: {
-		country?: string;
-		isoCode?: string;
-		region?: string;
-		province?: string;
-		municipality?: string;
-	};
-};
-
-type LocationFormProps<T extends FormWithLocation = FormWithLocation> = {
-	form: UseFormReturn<T>;
+interface LocationFormProps {
+	form: UseFormReturn<any>;
 	isRequired?: boolean;
 	region?: string;
 	province?: string;
 	municipality?: string;
-};
+}
 
-export default function LocationForm<T extends FormWithLocation>({
+export default function LocationForm({
 	form,
 	region,
 	province,
-}: LocationFormProps<T>) {
+}: LocationFormProps) {
 	const t = useTranslations("location");
 	const [regions, setRegions] = useState<Region[]>([]);
 	const [provinces, setProvinces] = useState<Province[]>([]);
@@ -66,6 +55,41 @@ export default function LocationForm<T extends FormWithLocation>({
 		};
 		fetchData();
 	}, []);
+
+	// Load provinces when region prop is provided
+	useEffect(() => {
+		const loadProvinces = async () => {
+			if (region) {
+				try {
+					const data = await getProvincesInRegion(region);
+					setProvinces(data);
+				} catch (error) {
+					console.log("Error loading provinces:", error);
+				}
+			}
+		};
+		loadProvinces();
+	}, [region]);
+
+	// Load municipalities when province prop is provided
+	useEffect(() => {
+		const loadMunicipalities = async () => {
+			if (province && provinces.length > 0) {
+				const selectedProvince = provinces.find((p) => p.name === province);
+				if (selectedProvince) {
+					try {
+						const data = await getMunicipalitiesInProvince(
+							selectedProvince.code,
+						);
+						setMunicipalities(data);
+					} catch (error) {
+						console.log("Error loading municipalities:", error);
+					}
+				}
+			}
+		};
+		loadMunicipalities();
+	}, [province, provinces]);
 
 	const handleRegionChange = async (value: string) => {
 		const selectedRegion = regions.find((r) => r.name === value);
@@ -112,7 +136,7 @@ export default function LocationForm<T extends FormWithLocation>({
 					<FormItem>
 						<FormLabel>{t("country")}</FormLabel>
 						<FormControl>
-							<Input defaultValue="Italy" {...field} disabled />
+							<Input defaultValue="IT" {...field} disabled />
 						</FormControl>
 						<FormMessage />
 					</FormItem>
@@ -129,6 +153,7 @@ export default function LocationForm<T extends FormWithLocation>({
 								onValueChange={handleRegionChange}
 								defaultValue={field.value}
 								value={region}
+								required
 							>
 								<SelectTrigger>
 									<SelectValue placeholder={t("selectRegion")} />
@@ -160,6 +185,7 @@ export default function LocationForm<T extends FormWithLocation>({
 								defaultValue={field.value}
 								disabled={!form.getValues("location.region")}
 								value={province}
+								required
 							>
 								<SelectTrigger>
 									<SelectValue placeholder={t("selectProvince")} />
@@ -191,6 +217,7 @@ export default function LocationForm<T extends FormWithLocation>({
 								onValueChange={handleMunicipalityChange}
 								defaultValue={field.value}
 								disabled={!form.getValues("location.province")}
+								required
 							>
 								<SelectTrigger>
 									<SelectValue placeholder={t("selectMunicipality")} />

@@ -70,7 +70,9 @@ const Navbar = () => {
 										<div className="flex space-x-4">
 											{navigation.map((item) => (
 												<Button asChild variant={"ghost"} key={item.name}>
-													<Link href={item.href}>{item.name}</Link>
+													<Link href={item.href} prefetch={true}>
+														{item.name}
+													</Link>
 												</Button>
 											))}
 										</div>
@@ -104,6 +106,7 @@ const Navbar = () => {
 								{navigation.map((item, index: number) => (
 									<Link
 										href={item.href}
+										prefetch={true}
 										key={index}
 										className={
 											"text-light hover:text-light block rounded-md px-3 py-2 text-base font-medium"

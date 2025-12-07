@@ -33,6 +33,7 @@
 			"accountType": "Tipo di Account",
 			"company": "Azienda",
 			"waiter": "Cameriere",
+			"companyCheckbox": "Sono un'azienda",
 			"name": "Nome",
 			"vatNumber": "Partita IVA",
 			"firstName": "Nome",
@@ -97,8 +98,14 @@
 			"title": "I Miei Annunci",
 			"createNew": "Crea nuovo annuncio",
 			"applications": "Candidature",
+			"applicationsCount": "Numero di candidature:",
+			"applicationsList": "Lista candidati:",
+			"viewWaiter": "Guarda il cameriere",
+			"viewJobPost": "Guarda annuncio di lavoro",
 			"delete": "Elimina",
-			"confirmDelete": "Sei sicuro di voler eliminare questo annuncio?"
+			"deleting": "Eliminazione...",
+			"confirmDelete": "Sei sicuro di voler eliminare l'annuncio \"{jobTitle}\"?",
+			"loading": "Caricamento..."
 		},
 		"createJobPost": {
 			"title": "Crea Annuncio di Lavoro",

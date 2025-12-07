@@ -21,11 +21,13 @@ import { createLocation, updateLocation } from "@/services/location-service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useUser } from "@stackframe/stack";
 import { Eye, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
 export default function MyProfile() {
+	const t = useTranslations("company.myProfile");
 	const user = useUser();
 	const [companyDataState, setCompanyDataState] = useState();
 
@@ -130,21 +132,16 @@ export default function MyProfile() {
 					className="flex flex-col gap-2"
 				>
 					<div>
-						<h1 className=" text-2xl font-semibold">
-							Modifica profilo aziendale
-						</h1>
-						{/* <p className='text-muted-foreground'>
-              Modifica il tuo profilo affinche le aziende possano
-            </p> */}
+						<h1 className=" text-2xl font-semibold">{t("title")}</h1>
 					</div>
 					<FormField
 						control={form.control}
 						name="name"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("name")}</FormLabel>
 								<FormControl>
-									<Input placeholder={field.name} {...field} />
+									<Input placeholder={t("name")} {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -155,12 +152,12 @@ export default function MyProfile() {
 						name="email"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("email")}</FormLabel>
 								<FormControl>
-									<Input placeholder={field.name} {...field} disabled />
+									<Input placeholder={t("email")} {...field} disabled />
 								</FormControl>
 								<a href="/" className="text-xs float-right mt-2">
-									Cambia email
+									{t("changeEmail")}
 								</a>
 								<FormMessage />
 							</FormItem>
@@ -171,9 +168,9 @@ export default function MyProfile() {
 						name="vatNumber"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("vatNumber")}</FormLabel>
 								<FormControl>
-									<Input placeholder={field.name} {...field} disabled />
+									<Input placeholder={t("vatNumber")} {...field} disabled />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -184,9 +181,9 @@ export default function MyProfile() {
 						name="contactNumber"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("contactNumber")}</FormLabel>
 								<FormControl>
-									<Input placeholder={field.name} {...field} />
+									<Input placeholder={t("contactNumber")} {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -197,9 +194,9 @@ export default function MyProfile() {
 						name="website"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("website")}</FormLabel>
 								<FormControl>
-									<Input placeholder={field.name} {...field} />
+									<Input placeholder={t("website")} {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -210,15 +207,20 @@ export default function MyProfile() {
 						name="about"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("about")}</FormLabel>
 								<FormControl>
-									<Textarea placeholder={field.name} {...field} rows={5} />
+									<Textarea placeholder={t("about")} {...field} rows={5} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-					<LocationForm form={form} />
+					<LocationForm
+						form={form}
+						region={companyDataState?.location?.region}
+						province={companyDataState?.location?.province}
+						municipality={companyDataState?.location?.municipality}
+					/>
 					<Button
 						type="submit"
 						disabled={form.formState.isSubmitting}
@@ -227,12 +229,12 @@ export default function MyProfile() {
 						{form.formState.isSubmitting ? (
 							<Loader2 className="animate-spin" />
 						) : (
-							"Aggiorna il profilo"
+							t("updateProfile")
 						)}
 					</Button>
 					<Button asChild variant={"ghost"} className="w-full">
 						<Link href={`/company/${user?.id}`}>
-							Guarda il profilo <Eye />
+							{t("viewProfile")} <Eye />
 						</Link>
 					</Button>
 				</form>
