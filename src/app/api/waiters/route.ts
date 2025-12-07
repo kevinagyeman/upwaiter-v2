@@ -1,6 +1,6 @@
-import { Prisma, PrismaClient, type Waiter } from "@prisma/client";
+import type { Prisma, Waiter } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { create } from "zustand";
 
 const prisma = new PrismaClient();
 

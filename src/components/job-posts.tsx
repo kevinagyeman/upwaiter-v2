@@ -8,6 +8,7 @@ import {
 	CarouselPrevious,
 } from "@/components/ui/carousel";
 import { getJobPosts } from "@/services/job-post-service";
+import type { JobPostWithRelations } from "@/types/domain.types";
 import { useUser } from "@stackframe/stack";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
@@ -67,46 +68,46 @@ export default function JobPosts() {
 				plugins={[WheelGesturesPlugin()]}
 			>
 				<CarouselContent className="h-[calc(100dvh-4rem-1px)]">
-					{jobPosts.map((job: any, index: number) => (
+					{jobPosts.map((jobPost: JobPostWithRelations, index: number) => (
 						<CarouselItem
-							key={job.id}
-							className="job-card"
-							data-id={job.id}
+							key={jobPost.id}
+							className="jobPost-card"
+							data-id={jobPost.id}
 							ref={index === jobPosts.length - 1 ? lastJobRef : null} // Assegna il ref all'ultimo elemento
 						>
 							<JobPostWrapper>
 								<JobPostHeader />
 								<div className="flex-1 space-y-4 mt-4">
 									<div className="flex flex-wrap gap-4">
-										{job?.location?.country && (
+										{jobPost?.location?.country && (
 											<Badge className="w-fit" variant={"secondary"}>
-												{job.location.country}
+												{jobPost.location.country}
 											</Badge>
 										)}
-										{job?.location?.region && (
+										{jobPost?.location?.region && (
 											<Badge className="w-fit" variant={"secondary"}>
-												{job.location.region}
+												{jobPost.location.region}
 											</Badge>
 										)}
-										{job?.location?.province && (
+										{jobPost?.location?.province && (
 											<Badge className="w-fit" variant={"secondary"}>
-												{job.location.province}
+												{jobPost.location.province}
 											</Badge>
 										)}
-										{job?.location?.municipality && (
+										{jobPost?.location?.municipality && (
 											<Badge className="w-fit" variant={"secondary"}>
-												{job.location.municipality}
+												{jobPost.location.municipality}
 											</Badge>
 										)}
 									</div>
-									<h1 className="text-5xl font-bold">{job.title}</h1>
+									<h1 className="text-5xl font-bold">{jobPost.title}</h1>
 									<p className="text-muted-foreground text-2xl">
-										{job.description}
+										{jobPost.description}
 									</p>
 								</div>
 								<Button asChild className="text-2xl" size={"lg"}>
 									<Link
-										href={user ? `/job-post/${job.id}` : "/register"}
+										href={user ? `/jobPost-post/${jobPost.id}` : "/register"}
 										prefetch={true}
 									>
 										Details
@@ -114,7 +115,7 @@ export default function JobPosts() {
 								</Button>
 								<div className="flex gap-x-3">
 									<div className="flex-1">
-										<JobPostFooter jobPost={job} />
+										<JobPostFooter jobPost={jobPost} />
 									</div>
 									<CarouselPrevious />
 									<CarouselNext />

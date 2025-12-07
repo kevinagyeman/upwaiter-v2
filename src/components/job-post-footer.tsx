@@ -1,10 +1,14 @@
 "use client";
 
+import type { Application, JobPost } from "@prisma/client";
 import { LinkIcon, Send, Users } from "lucide-react";
 import { Button } from "./ui/button";
 
 type JobPostFooterProps = {
-	jobPost: any;
+	jobPost: JobPost & {
+		applications: Application[];
+		location: Location | null;
+	};
 };
 
 export default function JobPostFooter({ jobPost }: JobPostFooterProps) {
@@ -12,7 +16,7 @@ export default function JobPostFooter({ jobPost }: JobPostFooterProps) {
 		<div className="flex gap-x-3">
 			<div className="flex items-center gap-x-3 flex-1">
 				<Users />
-				<span className="text-xl">{jobPost.applicationsCount}</span>
+				<span className="text-xl">{jobPost.applications.length}</span>
 			</div>
 			<Button size="icon" variant={"outline"} className="rounded-full">
 				<Send />

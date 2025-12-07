@@ -43,7 +43,7 @@ const Navbar = () => {
 				as="nav"
 				className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm"
 			>
-				{({ open }: any) => (
+				{({ open }) => (
 					<>
 						<div className="mx-auto container">
 							<div className="relative flex h-16 items-center justify-between">

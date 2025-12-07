@@ -1,11 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useUser } from "@stackframe/stack";
-import { Eye, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { type SubmitHandler, useForm } from "react-hook-form";
 import LocationForm from "@/components/location-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,10 +18,16 @@ import {
 } from "@/schemas/company-schema";
 import { getCompanyById, updateCompany } from "@/services/company-service";
 import { createLocation, updateLocation } from "@/services/location-service";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useUser } from "@stackframe/stack";
+import { Eye, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
 
 export default function MyProfile() {
 	const user = useUser();
-	const [companyDataState, setCompanyDataState] = useState<any>();
+	const [companyDataState, setCompanyDataState] = useState();
 
 	useEffect(() => {
 		getCompanyData();
@@ -84,7 +84,7 @@ export default function MyProfile() {
 				let locationId = companyDataState.locationId;
 
 				if (!locationId) {
-					const newLocation: any = await createLocation(data.location);
+					const newLocation = await createLocation(data.location);
 
 					if (!newLocation || !newLocation.id) {
 						throw new Error("Errore nella creazione della location");

@@ -1,13 +1,14 @@
 "use client";
 
-import { useUser } from "@stackframe/stack";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
 	deleteJobPost,
 	getJobPostsByCompanyId,
 } from "@/services/job-post-service";
-import { Button } from "@/components/ui/button";
+import type { ApplicationSchema } from "@/types/application-schema-type";
+import { useUser } from "@stackframe/stack";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 
 export default function MyJobPosts() {
 	const user = useUser();
@@ -15,12 +16,12 @@ export default function MyJobPosts() {
 
 	const { data: companyJobPosts, isLoading } = useQuery({
 		queryKey: ["companyJobPosts", user?.id],
-		queryFn: () => getJobPostsByCompanyId(user!.id),
+		queryFn: () => getJobPostsByCompanyId(user?.id),
 		enabled: !!user?.id,
 	});
 
 	const deleteMutation = useMutation({
-		mutationFn: (jobPostId: string) => deleteJobPost(jobPostId, user!.id),
+		mutationFn: (jobPostId: string) => deleteJobPost(jobPostId, user?.id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["companyJobPosts", user?.id],
@@ -44,21 +45,23 @@ export default function MyJobPosts() {
 
 	return (
 		<div className="container mx-auto">
-			{companyJobPosts.jobPosts.map((job: any, index: number) => (
+			{companyJobPosts.jobPosts.map((job, index: number) => (
 				<div key={index}>
 					<h2>{job.title}</h2>
 					<p>{job.description}</p>
 					<p>numero candidature: {job.applicationsCount}</p>
 					<p>lista candidati:</p>
 					<ul>
-						{job.applications.map((application: any, index: number) => (
-							<div key={index}>
-								<p>{application.waiter.firstName}</p>
-								<a href={`/waiter/${application.waiterId}`}>
-									guarda il cameriere
-								</a>
-							</div>
-						))}
+						{job.applications.map(
+							(application: ApplicationSchema, index: number) => (
+								<div key={index}>
+									<p>{application.waiter.firstName}</p>
+									<a href={`/waiter/${application.waiterId}`}>
+										guarda il cameriere
+									</a>
+								</div>
+							),
+						)}
 					</ul>
 					<div className="flex gap-2 mt-2">
 						<Link href={`/job-post/${job.id}`} prefetch>

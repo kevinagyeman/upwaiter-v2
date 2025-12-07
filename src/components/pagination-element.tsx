@@ -10,11 +10,21 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 
+interface PaginationElementProps {
+	currentPage: number;
+	totalPages: number;
+	paginationUrls: {
+		pages: string[];
+		previous: string;
+		next: string;
+	};
+}
+
 export default function PaginationElement({
 	currentPage,
 	totalPages,
 	paginationUrls,
-}: any) {
+}: PaginationElementProps) {
 	return (
 		<Pagination>
 			<PaginationContent>
@@ -27,7 +37,7 @@ export default function PaginationElement({
 						}
 					/>
 				</PaginationItem>
-				{paginationUrls.pages.map((url: any, index: number) => (
+				{paginationUrls.pages.map((url: string, index: number) => (
 					<PaginationItem key={index}>
 						<PaginationLink href={url} isActive={currentPage === index + 1}>
 							{index + 1}

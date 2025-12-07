@@ -1,24 +1,25 @@
-import { StackProvider, StackTheme } from "@stackframe/stack";
-import { notFound } from "next/navigation";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import type { Locale } from "@/i18n/routing";
 import { routing } from "@/i18n/routing";
+import ReactQueryProvider from "@/utils/providers/react-query-provider";
+import { StackProvider, StackTheme } from "@stackframe/stack";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { stackServerApp } from "../../stack";
 import "../globals.css";
-import { Suspense } from "react";
-import ReactQueryProvider from "@/utils/providers/react-query-provider";
 
 export default async function LocaleLayout({
 	children,
 	params: { locale },
 }: {
 	children: React.ReactNode;
-	params: { locale: any };
+	params: { locale: Locale };
 }) {
 	// Ensure that the incoming `locale` is valid
-	if (!routing.locales.includes(locale as any)) {
+	if (!routing.locales.includes(locale as Locale)) {
 		notFound();
 	}
 	const messages = await getMessages();

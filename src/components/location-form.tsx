@@ -1,5 +1,19 @@
-import { useEffect, useState } from "react";
-import type { UseFormReturn } from "react-hook-form";
+import {
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import {
 	getMunicipalitiesInProvince,
 	getProvincesInRegion,
@@ -10,38 +24,33 @@ import type {
 	Province,
 	Region,
 } from "@/types/italian-location-type";
-import {
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
+import type { UseFormReturn, FieldValues } from "react-hook-form";
 
-type LocationFormProps = {
-	form: UseFormReturn<any>;
+// Generic type constraint to ensure form has a location field
+type FormWithLocation = FieldValues & {
+	location: {
+		country?: string;
+		isoCode?: string;
+		region?: string;
+		province?: string;
+		municipality?: string;
+	};
+};
+
+type LocationFormProps<T extends FormWithLocation = FormWithLocation> = {
+	form: UseFormReturn<T>;
 	isRequired?: boolean;
 	region?: string;
 	province?: string;
 	municipality?: string;
 };
 
-export default function LocationForm({
+export default function LocationForm<T extends FormWithLocation>({
 	form,
-	isRequired = false,
 	region,
 	province,
-	municipality,
-}: LocationFormProps) {
+}: LocationFormProps<T>) {
 	const [regions, setRegions] = useState<Region[]>([]);
 	const [provinces, setProvinces] = useState<Province[]>([]);
 	const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
@@ -57,7 +66,7 @@ export default function LocationForm({
 	}, []);
 
 	const handleRegionChange = async (value: string) => {
-		const selectedRegion = regions.find((r: Region) => r.name === value);
+		const selectedRegion = regions.find((r) => r.name === value);
 		if (!selectedRegion) return;
 
 		form.setValue("location.region", selectedRegion.name);
@@ -74,7 +83,7 @@ export default function LocationForm({
 	};
 
 	const handleProvinceChange = async (value: string) => {
-		const selectedProvince = provinces.find((p: Province) => p.name === value);
+		const selectedProvince = provinces.find((p) => p.name === value);
 		if (!selectedProvince) return;
 
 		form.setValue("location.province", selectedProvince.name);
@@ -124,7 +133,7 @@ export default function LocationForm({
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
-										{regions?.map((reg: Region) => (
+										{regions?.map((reg) => (
 											<SelectItem key={reg.name} value={reg.name}>
 												{reg.name}
 											</SelectItem>
@@ -155,7 +164,7 @@ export default function LocationForm({
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
-										{provinces?.map((prov: Province) => (
+										{provinces?.map((prov) => (
 											<SelectItem key={prov.code} value={prov.name}>
 												{prov.name}
 											</SelectItem>
@@ -186,7 +195,7 @@ export default function LocationForm({
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
-										{municipalities?.map((mun: Municipality) => (
+										{municipalities?.map((mun) => (
 											<SelectItem key={mun.code} value={mun.name}>
 												{mun.name}
 											</SelectItem>

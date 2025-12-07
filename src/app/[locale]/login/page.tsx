@@ -1,10 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useStackApp } from "@stackframe/stack";
-import { Loader2 } from "lucide-react";
-import { useState } from "react";
-import { type SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -17,11 +12,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "@/i18n/routing";
 import { type LoginFormSchema, loginFormSchema } from "@/schemas/login-schema";
-import { useUserStore } from "@/store/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useStackApp } from "@stackframe/stack";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
 
 export default function Login() {
 	const app = useStackApp();
-	const [loginError, setLoginError] = useState(null);
+	const [loginError, setLoginError] = useState<string | null>(null);
 
 	const form = useForm<LoginFormSchema>({
 		resolver: zodResolver(loginFormSchema),
@@ -33,7 +32,7 @@ export default function Login() {
 
 	const loginUser: SubmitHandler<LoginFormSchema> = async (data) => {
 		try {
-			const login: any = await app.signInWithCredential({
+			const login = await app.signInWithCredential({
 				email: data.email,
 				password: data.password,
 			});

@@ -1,4 +1,5 @@
-import { type JobPost, Prisma, PrismaClient } from "@prisma/client";
+import type { JobPost, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();

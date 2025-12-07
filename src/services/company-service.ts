@@ -1,9 +1,12 @@
-import type { Company } from "@prisma/client";
 import { axiosInstance } from "@/lib/axios-instance";
+import type { Company } from "@prisma/client";
 
 const API_PATH = "companies";
 
-async function handleApiCall(apiCall: Promise<any>, errorMessage: string) {
+async function handleApiCall<T>(
+	apiCall: Promise<{ data: T }>,
+	errorMessage: string,
+): Promise<T | undefined> {
 	try {
 		const { data } = await apiCall;
 		return data;

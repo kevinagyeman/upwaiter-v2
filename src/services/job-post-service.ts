@@ -1,4 +1,5 @@
 import type { JobPost } from "@prisma/client";
+import type { JobPostWithRelations } from "@/types/domain.types";
 import { axiosInstance } from "@/lib/axios-instance";
 
 const API_PATH = "job-posts";
@@ -27,7 +28,7 @@ export async function getJobPosts(
 		province?: string;
 		municipality?: string;
 	},
-): Promise<{ jobPosts: JobPost[] } | undefined> {
+): Promise<{ jobPosts: JobPostWithRelations[] } | undefined> {
 	const params: Record<string, string | number> = {
 		page,
 		limit,
@@ -42,7 +43,7 @@ export async function getJobPosts(
 // Ottieni i job posts per un'azienda specifica
 export async function getJobPostsByCompanyId(
 	companyId: string,
-): Promise<{ jobPosts: JobPost[] } | undefined> {
+): Promise<{ jobPosts: JobPostWithRelations[] } | undefined> {
 	return handleApiCall(
 		axiosInstance.get(API_PATH, { params: { companyId } }),
 		"Error retrieving job posts by company ID",
@@ -50,8 +51,10 @@ export async function getJobPostsByCompanyId(
 }
 
 // Ottieni un job post per ID
-export async function getJobPostById(id: string): Promise<JobPost> {
-	return handleApiCall(
+export async function getJobPostById(
+	id: string,
+): Promise<JobPostWithRelations | undefined> {
+	return handleApiCall<JobPostWithRelations>(
 		axiosInstance.get(API_PATH, { params: { id } }),
 		"Error retrieving job post by ID",
 	);
@@ -60,8 +63,8 @@ export async function getJobPostById(id: string): Promise<JobPost> {
 // Crea un nuovo job post
 export async function createJobPost(
 	jobPostData: Partial<JobPost>,
-): Promise<JobPost> {
-	return handleApiCall(
+): Promise<JobPost | undefined> {
+	return handleApiCall<JobPost>(
 		axiosInstance.post(API_PATH, jobPostData),
 		"Error creating job post",
 	);
@@ -71,8 +74,8 @@ export async function createJobPost(
 export async function updateJobPost(
 	id: string,
 	jobPostData: Partial<JobPost>,
-): Promise<JobPost> {
-	return handleApiCall(
+): Promise<JobPost | undefined> {
+	return handleApiCall<JobPost>(
 		axiosInstance.patch(`${API_PATH}?id=${id}`, jobPostData),
 		"Error updating job post",
 	);
@@ -82,8 +85,8 @@ export async function updateJobPost(
 export async function deleteJobPost(
 	id: string,
 	companyId: string,
-): Promise<void> {
-	return handleApiCall(
+): Promise<{ message: string } | undefined> {
+	return handleApiCall<{ message: string }>(
 		axiosInstance.delete(`${API_PATH}?id=${id}`, { params: { companyId } }),
 		"Error deleting job post",
 	);

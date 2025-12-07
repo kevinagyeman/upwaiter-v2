@@ -1,13 +1,14 @@
 "use client";
 
-import { useUser } from "@stackframe/stack";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
 	deleteApplication,
 	getApplicationsForWaiter,
 } from "@/services/application-service";
-import { Button } from "@/components/ui/button";
+import type { ApplicationSchema } from "@/types/application-schema-type";
+import { useUser } from "@stackframe/stack";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 
 export default function MyApplications() {
 	const user = useUser();
@@ -15,7 +16,10 @@ export default function MyApplications() {
 
 	const { data: applications, isLoading } = useQuery({
 		queryKey: ["applications", user?.id],
-		queryFn: () => getApplicationsForWaiter(user!.id),
+		queryFn: () => {
+			if (!user?.id) throw new Error("User ID is required");
+			return getApplicationsForWaiter(user.id);
+		},
 		enabled: !!user?.id,
 	});
 
@@ -44,8 +48,8 @@ export default function MyApplications() {
 		<div className="container mx-auto">
 			<h1 className="text-2xl font-bold mb-4">Applications</h1>
 			<div className="flex flex-col gap-4">
-				{applications?.map((application: any, index: number) => (
-					<div className="" key={index}>
+				{applications?.map((application: ApplicationSchema) => (
+					<div className="" key={application.id}>
 						<h1>{application.jobPost.title}</h1>
 						<p>{application.status}</p>
 						<div className="flex gap-2 mt-2">
