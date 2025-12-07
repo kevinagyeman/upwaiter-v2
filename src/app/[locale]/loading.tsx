@@ -1,3 +1,3 @@
 export default function Loading() {
-  return 'cariamento';
+	return "cariamento";
 }

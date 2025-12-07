@@ -1,9 +1,9 @@
 {
-  "navbar": {
-    "home": "Pagina principale",
-    "login": "Login",
-    "logout": "Logout",
-    "register": "Registrati",
-    "dashboard": "Pannello di controllo"
-  }
+	"navbar": {
+		"home": "Pagina principale",
+		"login": "Login",
+		"logout": "Logout",
+		"register": "Registrati",
+		"dashboard": "Pannello di controllo"
+	}
 }

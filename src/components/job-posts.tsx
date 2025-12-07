@@ -1,168 +1,168 @@
-'use client';
+"use client";
 
+import { useUser } from "@stackframe/stack";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+import { Users } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useRef } from "react";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
-import { getJobPosts } from '@/services/job-post-service';
-import { useUser } from '@stackframe/stack';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useRef } from 'react';
-import JobPostFooter from './job-post-footer';
-import JobPostHeader from './job-post-header';
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Skeleton } from './ui/skeleton';
-import { Users } from 'lucide-react';
-import JobPostWrapper from './job-post-wrapper';
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from "@/components/ui/carousel";
+import { getJobPosts } from "@/services/job-post-service";
+import JobPostFooter from "./job-post-footer";
+import JobPostHeader from "./job-post-header";
+import JobPostWrapper from "./job-post-wrapper";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Skeleton } from "./ui/skeleton";
 
 export default function JobPosts() {
-  const user = useUser();
-  const searchParams = useSearchParams();
-  const router = useRouter();
+	const user = useUser();
+	const searchParams = useSearchParams();
+	const router = useRouter();
 
-  const canton = searchParams.get('canton') ?? undefined;
-  const observer = useRef<IntersectionObserver | null>(null);
+	const canton = searchParams.get("canton") ?? undefined;
+	const observer = useRef<IntersectionObserver | null>(null);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery({
-      queryKey: ['jobPosts', canton],
-      queryFn: ({ pageParam = 1 }) => getJobPosts(pageParam, 10, { canton }),
-      getNextPageParam: (lastPage, allPages) =>
-        lastPage.jobPosts.length > 0 ? allPages.length + 1 : undefined,
-      initialPageParam: 1,
-    });
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+		useInfiniteQuery({
+			queryKey: ["jobPosts", canton],
+			queryFn: ({ pageParam = 1 }) => getJobPosts(pageParam, 10, { canton }),
+			getNextPageParam: (lastPage, allPages) =>
+				lastPage.jobPosts.length > 0 ? allPages.length + 1 : undefined,
+			initialPageParam: 1,
+		});
 
-  const jobPosts = data?.pages.flatMap((page) => page.jobPosts) || [];
+	const jobPosts = data?.pages.flatMap((page) => page.jobPosts) || [];
 
-  const lastJobRef = (node: HTMLDivElement | null) => {
-    if (isFetchingNextPage || !hasNextPage) return;
-    if (observer.current) observer.current.disconnect();
+	const lastJobRef = (node: HTMLDivElement | null) => {
+		if (isFetchingNextPage || !hasNextPage) return;
+		if (observer.current) observer.current.disconnect();
 
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) fetchNextPage();
-    });
+		observer.current = new IntersectionObserver((entries) => {
+			if (entries[0].isIntersecting) fetchNextPage();
+		});
 
-    if (node) observer.current.observe(node);
-  };
+		if (node) observer.current.observe(node);
+	};
 
-  const resetFilters = () => {
-    router.push('/');
-  };
+	const resetFilters = () => {
+		router.push("/");
+	};
 
-  // bg-gradient-to-b dark:from-black dark:to-gray-950 from-white to-gray-100
-  return (
-    <>
-      <Carousel
-        orientation='vertical'
-        className='w-full'
-        plugins={[WheelGesturesPlugin()]}
-      >
-        <CarouselContent className='h-[calc(100dvh-4rem-1px)]'>
-          {jobPosts.map((job: any, index: number) => (
-            <CarouselItem
-              key={job.id}
-              className='job-card'
-              data-id={job.id}
-              ref={index === jobPosts.length - 1 ? lastJobRef : null} // Assegna il ref all'ultimo elemento
-            >
-              <JobPostWrapper>
-                <JobPostHeader />
-                <div className='flex-1 space-y-4 mt-4'>
-                  <div className='flex flex-wrap gap-4'>
-                    {job?.location?.country && (
-                      <Badge className='w-fit' variant={'secondary'}>
-                        {job.location.country}
-                      </Badge>
-                    )}
-                    {job?.location?.canton && (
-                      <Badge className='w-fit' variant={'secondary'}>
-                        {job.location.canton}
-                      </Badge>
-                    )}
-                    {job?.location?.municipality && (
-                      <Badge className='w-fit' variant={'secondary'}>
-                        {job.location.municipality}
-                      </Badge>
-                    )}
-                  </div>
-                  <h1 className='text-5xl font-bold'>{job.title}</h1>
-                  <p className='text-muted-foreground text-2xl'>
-                    {job.description}
-                  </p>
-                </div>
-                <Button asChild className='text-2xl' size={'lg'}>
-                  <Link
-                    href={user ? `/job-post/${job.id}` : '/register'}
-                    prefetch={true}
-                  >
-                    Invia candidatura
-                  </Link>
-                </Button>
-                <div className='flex gap-x-3'>
-                  <div className='flex-1'>
-                    <JobPostFooter jobPost={job} />
-                  </div>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </div>
-              </JobPostWrapper>
-            </CarouselItem>
-          ))}
+	// bg-gradient-to-b dark:from-black dark:to-gray-950 from-white to-gray-100
+	return (
+		<>
+			<Carousel
+				orientation="vertical"
+				className="w-full"
+				plugins={[WheelGesturesPlugin()]}
+			>
+				<CarouselContent className="h-[calc(100dvh-4rem-1px)]">
+					{jobPosts.map((job: any, index: number) => (
+						<CarouselItem
+							key={job.id}
+							className="job-card"
+							data-id={job.id}
+							ref={index === jobPosts.length - 1 ? lastJobRef : null} // Assegna il ref all'ultimo elemento
+						>
+							<JobPostWrapper>
+								<JobPostHeader />
+								<div className="flex-1 space-y-4 mt-4">
+									<div className="flex flex-wrap gap-4">
+										{job?.location?.country && (
+											<Badge className="w-fit" variant={"secondary"}>
+												{job.location.country}
+											</Badge>
+										)}
+										{job?.location?.canton && (
+											<Badge className="w-fit" variant={"secondary"}>
+												{job.location.canton}
+											</Badge>
+										)}
+										{job?.location?.municipality && (
+											<Badge className="w-fit" variant={"secondary"}>
+												{job.location.municipality}
+											</Badge>
+										)}
+									</div>
+									<h1 className="text-5xl font-bold">{job.title}</h1>
+									<p className="text-muted-foreground text-2xl">
+										{job.description}
+									</p>
+								</div>
+								<Button asChild className="text-2xl" size={"lg"}>
+									<Link
+										href={user ? `/job-post/${job.id}` : "/register"}
+										prefetch={true}
+									>
+										Invia candidatura
+									</Link>
+								</Button>
+								<div className="flex gap-x-3">
+									<div className="flex-1">
+										<JobPostFooter jobPost={job} />
+									</div>
+									<CarouselPrevious />
+									<CarouselNext />
+								</div>
+							</JobPostWrapper>
+						</CarouselItem>
+					))}
 
-          {isLoading && <SkeletonJobPosts />}
+					{isLoading && <SkeletonJobPosts />}
 
-          {!hasNextPage && (
-            <CarouselItem className='flex flex-col items-center justify-center text-center gap-y-6'>
-              <h2 className='text-3xl font-bold'>
-                Gli annunci per questa ricerca sono finiti.
-              </h2>
-              <p className='text-muted-foreground text-lg'>
-                Prova a rimuovere i filtri per vedere più annunci.
-              </p>
-              <Button onClick={resetFilters} className='text-xl'>
-                Torna a tutti gli annunci
-              </Button>
-            </CarouselItem>
-          )}
-        </CarouselContent>
-      </Carousel>
+					{!hasNextPage && (
+						<CarouselItem className="flex flex-col items-center justify-center text-center gap-y-6">
+							<h2 className="text-3xl font-bold">
+								Gli annunci per questa ricerca sono finiti.
+							</h2>
+							<p className="text-muted-foreground text-lg">
+								Prova a rimuovere i filtri per vedere più annunci.
+							</p>
+							<Button onClick={resetFilters} className="text-xl">
+								Torna a tutti gli annunci
+							</Button>
+						</CarouselItem>
+					)}
+				</CarouselContent>
+			</Carousel>
 
-      {isFetchingNextPage && <p>Caricamento in corso...</p>}
-    </>
-  );
+			{isFetchingNextPage && <p>Caricamento in corso...</p>}
+		</>
+	);
 }
 
 const SkeletonJobPosts = () => {
-  return (
-    <CarouselItem>
-      <div className='h-full flex flex-col p-4 bg-gradient-to-b dark:from-black dark:to-gray-950 from-white to-gray-100 rounded-2xl border gap-4 justify-between text-center gap-y-6'>
-        <div className='flex gap-4'>
-          <Skeleton className='h-20 w-20 rounded-full' />
-          <div className='flex flex-col gap-4 flex-1'>
-            <Skeleton className='h-full w-full rounded-full' />
-            <Skeleton className='h-full w-full rounded-full' />
-          </div>
-        </div>
-        <div className='flex flex-col gap-4'>
-          <Skeleton className='h-10 rounded-3xl' />
-          <Skeleton className='h-10 w-4/5 rounded-3xl' />
-          <Skeleton className='h-10 w-3/5 rounded-3xl' />
-          <Skeleton className='h-10 w-4/5 rounded-3xl' />
-          <Skeleton className='h-10 w-5/5 rounded-3xl' />
-          <Skeleton className='h-10 w-4/5 rounded-3xl' />
-          <Skeleton className='h-10 w-3/5 rounded-3xl' />
-        </div>
-        <div>
-          <Skeleton className='h-14 rounded-3xl' />
-        </div>
-      </div>
-    </CarouselItem>
-  );
+	return (
+		<CarouselItem>
+			<div className="h-full flex flex-col p-4 bg-gradient-to-b dark:from-black dark:to-gray-950 from-white to-gray-100 rounded-2xl border gap-4 justify-between text-center gap-y-6">
+				<div className="flex gap-4">
+					<Skeleton className="h-20 w-20 rounded-full" />
+					<div className="flex flex-col gap-4 flex-1">
+						<Skeleton className="h-full w-full rounded-full" />
+						<Skeleton className="h-full w-full rounded-full" />
+					</div>
+				</div>
+				<div className="flex flex-col gap-4">
+					<Skeleton className="h-10 rounded-3xl" />
+					<Skeleton className="h-10 w-4/5 rounded-3xl" />
+					<Skeleton className="h-10 w-3/5 rounded-3xl" />
+					<Skeleton className="h-10 w-4/5 rounded-3xl" />
+					<Skeleton className="h-10 w-5/5 rounded-3xl" />
+					<Skeleton className="h-10 w-4/5 rounded-3xl" />
+					<Skeleton className="h-10 w-3/5 rounded-3xl" />
+				</div>
+				<div>
+					<Skeleton className="h-14 rounded-3xl" />
+				</div>
+			</div>
+		</CarouselItem>
+	);
 };

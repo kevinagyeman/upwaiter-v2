@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { createApplication } from '@/services/application-service';
-import { useStackApp } from '@stackframe/stack';
-import React from 'react';
+import { useStackApp } from "@stackframe/stack";
+import React from "react";
+import { createApplication } from "@/services/application-service";
 
 export default function Apply({
-  waiterId,
-  jobPostId,
+	waiterId,
+	jobPostId,
 }: {
-  waiterId: string;
-  jobPostId: string;
+	waiterId: string;
+	jobPostId: string;
 }) {
-  return (
-    <button onClick={async () => await createApplication(waiterId, jobPostId)}>
-      candidati
-    </button>
-  );
+	return (
+		<button onClick={async () => await createApplication(waiterId, jobPostId)}>
+			candidati
+		</button>
+	);
 }

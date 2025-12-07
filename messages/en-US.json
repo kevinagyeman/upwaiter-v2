@@ -1,9 +1,9 @@
 {
-  "navbar": {
-    "home": "Homepage",
-    "login": "Login",
-    "logout": "Logout",
-    "register": "Sign up",
-    "dashboard": "Dashboard"
-  }
+	"navbar": {
+		"home": "Homepage",
+		"login": "Login",
+		"logout": "Logout",
+		"register": "Sign up",
+		"dashboard": "Dashboard"
+	}
 }
