@@ -18,21 +18,21 @@ const Navbar = () => {
 
 	if (user?.clientMetadata?.role === "waiter") {
 		navigation = [
-			{ name: `Il mio curriculum`, href: "/waiter/my-resume" },
-			{ name: `Le mie candidature`, href: "/waiter/my-applications" },
+			{ name: t("waiter.myResume"), href: "/waiter/my-resume" },
+			{ name: t("waiter.myApplications"), href: "/waiter/my-applications" },
 		];
 	} else if (user?.clientMetadata?.role === "company") {
 		navigation = [
-			{ name: `I miei annunci`, href: "/company/my-job-posts" },
-			{ name: `Profilo azienda`, href: "/company/my-profile" },
-			{ name: `Crea un annuncio`, href: "/company/create-job-post" },
-			{ name: `elenco camerieri`, href: "/company/waiters" },
+			{ name: t("company.myJobPosts"), href: "/company/my-job-posts" },
+			{ name: t("company.myProfile"), href: "/company/my-profile" },
+			{ name: t("company.createJobPost"), href: "/company/create-job-post" },
+			{ name: t("company.waitersList"), href: "/company/waiters" },
 		];
 	} else {
 		navigation = [
-			{ name: `${t("home")}`, href: "/" },
-			{ name: `${t("login")}`, href: "/login" },
-			{ name: `${t("register")}`, href: "/register" },
+			{ name: t("home"), href: "/" },
+			{ name: t("login"), href: "/login" },
+			{ name: t("register"), href: "/register" },
 		];
 	}
 
@@ -84,7 +84,7 @@ const Navbar = () => {
 												size={"sm"}
 												variant={"link"}
 											>
-												verifica account
+												{t("verifyAccount")}
 											</Button>
 										)}
 										{user && <>{user.primaryEmail}</>}

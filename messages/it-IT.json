@@ -4,6 +4,128 @@
 		"login": "Login",
 		"logout": "Logout",
 		"register": "Registrati",
-		"dashboard": "Pannello di controllo"
+		"dashboard": "Pannello di controllo",
+		"waiter": {
+			"myResume": "Il mio curriculum",
+			"myApplications": "Le mie candidature"
+		},
+		"company": {
+			"myJobPosts": "I miei annunci",
+			"myProfile": "Profilo azienda",
+			"createJobPost": "Crea un annuncio",
+			"waitersList": "Elenco camerieri"
+		},
+		"verifyAccount": "Verifica account"
+	},
+	"auth": {
+		"login": {
+			"title": "Login",
+			"subtitle": "Accedi al tuo account",
+			"email": "Email",
+			"password": "Password",
+			"forgotPassword": "Password dimenticata",
+			"loginButton": "Login",
+			"registerButton": "Registrati"
+		},
+		"register": {
+			"title": "Registrati",
+			"subtitle": "Crea il tuo account",
+			"accountType": "Tipo di Account",
+			"company": "Azienda",
+			"waiter": "Cameriere",
+			"name": "Nome",
+			"vatNumber": "Partita IVA",
+			"firstName": "Nome",
+			"lastName": "Cognome",
+			"email": "Email",
+			"password": "Password",
+			"registerButton": "Registrati",
+			"loginButton": "Login"
+		}
+	},
+	"location": {
+		"country": "Paese",
+		"region": "Regione",
+		"province": "Provincia",
+		"municipality": "Comune",
+		"selectRegion": "Seleziona una regione",
+		"selectProvince": "Seleziona una provincia",
+		"selectMunicipality": "Seleziona un comune"
+	},
+	"waiter": {
+		"myApplications": {
+			"title": "Candidature",
+			"details": "Dettagli",
+			"remove": "Rimuovi",
+			"removing": "Rimozione...",
+			"confirmDelete": "Sei sicuro di voler rimuovere la candidatura per \"{jobTitle}\"?",
+			"loading": "Caricamento"
+		},
+		"myResume": {
+			"title": "Il Mio Curriculum",
+			"editProfile": "Modifica il tuo profilo",
+			"firstName": "Nome",
+			"lastName": "Cognome",
+			"email": "Email",
+			"changeEmail": "Cambia email",
+			"contactNumber": "Numero di Telefono",
+			"dateOfBirth": "Data di Nascita",
+			"about": "Chi sono",
+			"yearsOfExperience": "Anni di Esperienza",
+			"firstLanguage": "Prima Lingua",
+			"secondLanguage": "Seconda Lingua",
+			"thirdLanguage": "Terza Lingua",
+			"availableToWork": "Disponibile a lavorare",
+			"updateProfile": "Aggiorna il profilo",
+			"viewProfile": "Guarda il profilo"
+		}
+	},
+	"company": {
+		"myProfile": {
+			"title": "Modifica profilo aziendale",
+			"name": "Nome",
+			"email": "Email",
+			"changeEmail": "Cambia email",
+			"vatNumber": "Partita IVA",
+			"contactNumber": "Numero di Telefono",
+			"website": "Sito Web",
+			"about": "Chi siamo",
+			"updateProfile": "Aggiorna il profilo",
+			"viewProfile": "Guarda il profilo"
+		},
+		"myJobPosts": {
+			"title": "I Miei Annunci",
+			"createNew": "Crea nuovo annuncio",
+			"applications": "Candidature",
+			"delete": "Elimina",
+			"confirmDelete": "Sei sicuro di voler eliminare questo annuncio?"
+		},
+		"createJobPost": {
+			"title": "Crea Annuncio di Lavoro",
+			"jobTitle": "Titolo del Lavoro",
+			"description": "Descrizione",
+			"createButton": "Crea annuncio"
+		}
+	},
+	"jobPost": {
+		"details": "Dettagli",
+		"apply": "Candidati",
+		"applied": "Candidato",
+		"noMorePosts": "Gli annunci per questa ricerca sono finiti.",
+		"removeFilters": "Prova a rimuovere i filtri per vedere più annunci.",
+		"backToAll": "Torna a tutti gli annunci",
+		"loading": "Caricamento..."
+	},
+	"common": {
+		"loading": "Caricamento",
+		"error": "Errore",
+		"success": "Successo",
+		"cancel": "Annulla",
+		"confirm": "Conferma",
+		"save": "Salva",
+		"delete": "Elimina",
+		"edit": "Modifica",
+		"create": "Crea",
+		"update": "Aggiorna"
 	}
 }

@@ -15,10 +15,12 @@ import { type LoginFormSchema, loginFormSchema } from "@/schemas/login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useStackApp } from "@stackframe/stack";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
 export default function Login() {
+	const t = useTranslations("auth.login");
 	const app = useStackApp();
 	const [loginError, setLoginError] = useState<string | null>(null);
 
@@ -53,17 +55,17 @@ export default function Login() {
 					className="space-y-2  max-w-sm w-full"
 				>
 					<div>
-						<h1 className=" text-2xl font-semibold">Login</h1>
-						<p className="text-muted-foreground">Accedi al tuo account</p>
+						<h1 className=" text-2xl font-semibold">{t("title")}</h1>
+						<p className="text-muted-foreground">{t("subtitle")}</p>
 					</div>
 					<FormField
 						control={form.control}
 						name="email"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("email")}</FormLabel>
 								<FormControl>
-									<Input placeholder={field.name} {...field} type="email" />
+									<Input placeholder={t("email")} {...field} type="email" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -74,15 +76,19 @@ export default function Login() {
 						name="password"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>{field.name}</FormLabel>
+								<FormLabel>{t("password")}</FormLabel>
 								<FormControl>
-									<Input placeholder={field.name} {...field} type="password" />
+									<Input
+										placeholder={t("password")}
+										{...field}
+										type="password"
+									/>
 								</FormControl>
 								<a
 									href="/handler/forgot-password"
 									className="text-xs float-right mt-2"
 								>
-									Password dimenticata
+									{t("forgotPassword")}
 								</a>
 								<FormMessage />
 							</FormItem>
@@ -97,11 +103,11 @@ export default function Login() {
 						{form.formState.isSubmitting ? (
 							<Loader2 className="animate-spin" />
 						) : (
-							"Login"
+							t("loginButton")
 						)}
 					</Button>
 					<Button variant="outline" role="button" asChild className="w-full">
-						<Link href="/register">Register</Link>
+						<Link href="/register">{t("registerButton")}</Link>
 					</Button>
 				</form>
 			</Form>

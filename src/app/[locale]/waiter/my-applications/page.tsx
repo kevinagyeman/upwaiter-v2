@@ -8,9 +8,11 @@ import {
 import type { ApplicationSchema } from "@/types/application-schema-type";
 import { useUser } from "@stackframe/stack";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export default function MyApplications() {
+	const t = useTranslations("waiter.myApplications");
 	const user = useUser();
 	const queryClient = useQueryClient();
 
@@ -31,29 +33,27 @@ export default function MyApplications() {
 	});
 
 	const handleDelete = (applicationId: string, jobTitle: string) => {
-		if (
-			window.confirm(
-				`Sei sicuro di voler rimuovere la candidatura per "${jobTitle}"?`,
-			)
-		) {
+		if (window.confirm(t("confirmDelete", { jobTitle }))) {
 			deleteMutation.mutate(applicationId);
 		}
 	};
 
 	if (isLoading) {
-		return "attendi";
+		return t("loading");
 	}
 
 	return (
 		<div className="container mx-auto">
-			<h1 className="text-2xl font-bold mb-4">Applications</h1>
+			<h1 className="text-2xl font-bold mb-4">{t("title")}</h1>
 			<div className="flex flex-col gap-4">
 				{applications?.map((application: ApplicationSchema) => (
 					<div className="" key={application.id}>
 						<h1>{application.jobPost.title}</h1>
 						<p>{application.status}</p>
 						<div className="flex gap-2 mt-2">
-							<Link href={`/job-post/${application.jobPostId}`}>Dettagli</Link>
+							<Link href={`/job-post/${application.jobPostId}`}>
+								{t("details")}
+							</Link>
 							<Button
 								variant="destructive"
 								size="sm"
@@ -62,7 +62,7 @@ export default function MyApplications() {
 								}
 								disabled={deleteMutation.isPending}
 							>
-								{deleteMutation.isPending ? "Rimozione..." : "Rimuovi"}
+								{deleteMutation.isPending ? t("removing") : t("remove")}
 							</Button>
 						</div>
 					</div>

@@ -24,6 +24,7 @@ import type {
 	Province,
 	Region,
 } from "@/types/italian-location-type";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import type { UseFormReturn, FieldValues } from "react-hook-form";
 
@@ -51,6 +52,7 @@ export default function LocationForm<T extends FormWithLocation>({
 	region,
 	province,
 }: LocationFormProps<T>) {
+	const t = useTranslations("location");
 	const [regions, setRegions] = useState<Region[]>([]);
 	const [provinces, setProvinces] = useState<Province[]>([]);
 	const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
@@ -108,7 +110,7 @@ export default function LocationForm<T extends FormWithLocation>({
 				name="location.country"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Country</FormLabel>
+						<FormLabel>{t("country")}</FormLabel>
 						<FormControl>
 							<Input defaultValue="Italy" {...field} disabled />
 						</FormControl>
@@ -121,7 +123,7 @@ export default function LocationForm<T extends FormWithLocation>({
 				name="location.region"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Regione</FormLabel>
+						<FormLabel>{t("region")}</FormLabel>
 						<FormControl>
 							<Select
 								onValueChange={handleRegionChange}
@@ -129,7 +131,7 @@ export default function LocationForm<T extends FormWithLocation>({
 								value={region}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder="Seleziona una regione" />
+									<SelectValue placeholder={t("selectRegion")} />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
@@ -151,7 +153,7 @@ export default function LocationForm<T extends FormWithLocation>({
 				name="location.province"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Provincia</FormLabel>
+						<FormLabel>{t("province")}</FormLabel>
 						<FormControl>
 							<Select
 								onValueChange={handleProvinceChange}
@@ -160,7 +162,7 @@ export default function LocationForm<T extends FormWithLocation>({
 								value={province}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder="Seleziona una provincia" />
+									<SelectValue placeholder={t("selectProvince")} />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
@@ -183,7 +185,7 @@ export default function LocationForm<T extends FormWithLocation>({
 				name="location.municipality"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Comune</FormLabel>
+						<FormLabel>{t("municipality")}</FormLabel>
 						<FormControl>
 							<Select
 								onValueChange={handleMunicipalityChange}
@@ -191,7 +193,7 @@ export default function LocationForm<T extends FormWithLocation>({
 								disabled={!form.getValues("location.province")}
 							>
 								<SelectTrigger>
-									<SelectValue placeholder="Seleziona un comune" />
+									<SelectValue placeholder={t("selectMunicipality")} />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>

@@ -4,6 +4,128 @@
 		"login": "Login",
 		"logout": "Logout",
 		"register": "Sign up",
-		"dashboard": "Dashboard"
+		"dashboard": "Dashboard",
+		"waiter": {
+			"myResume": "My Resume",
+			"myApplications": "My Applications"
+		},
+		"company": {
+			"myJobPosts": "My Job Posts",
+			"myProfile": "Company Profile",
+			"createJobPost": "Create Job Post",
+			"waitersList": "Waiters List"
+		},
+		"verifyAccount": "Verify account"
+	},
+	"auth": {
+		"login": {
+			"title": "Login",
+			"subtitle": "Access your account",
+			"email": "Email",
+			"password": "Password",
+			"forgotPassword": "Forgot password",
+			"loginButton": "Login",
+			"registerButton": "Register"
+		},
+		"register": {
+			"title": "Register",
+			"subtitle": "Create your account",
+			"accountType": "Account Type",
+			"company": "Company",
+			"waiter": "Waiter",
+			"name": "Name",
+			"vatNumber": "VAT Number",
+			"firstName": "First Name",
+			"lastName": "Last Name",
+			"email": "Email",
+			"password": "Password",
+			"registerButton": "Register",
+			"loginButton": "Login"
+		}
+	},
+	"location": {
+		"country": "Country",
+		"region": "Region",
+		"province": "Province",
+		"municipality": "Municipality",
+		"selectRegion": "Select a region",
+		"selectProvince": "Select a province",
+		"selectMunicipality": "Select a municipality"
+	},
+	"waiter": {
+		"myApplications": {
+			"title": "Applications",
+			"details": "Details",
+			"remove": "Remove",
+			"removing": "Removing...",
+			"confirmDelete": "Are you sure you want to remove the application for \"{jobTitle}\"?",
+			"loading": "Loading"
+		},
+		"myResume": {
+			"title": "My Resume",
+			"editProfile": "Edit your profile",
+			"firstName": "First Name",
+			"lastName": "Last Name",
+			"email": "Email",
+			"changeEmail": "Change email",
+			"contactNumber": "Contact Number",
+			"dateOfBirth": "Date of Birth",
+			"about": "About",
+			"yearsOfExperience": "Years of Experience",
+			"firstLanguage": "First Language",
+			"secondLanguage": "Second Language",
+			"thirdLanguage": "Third Language",
+			"availableToWork": "Available to work",
+			"updateProfile": "Update profile",
+			"viewProfile": "View profile"
+		}
+	},
+	"company": {
+		"myProfile": {
+			"title": "Edit company profile",
+			"name": "Name",
+			"email": "Email",
+			"changeEmail": "Change email",
+			"vatNumber": "VAT Number",
+			"contactNumber": "Contact Number",
+			"website": "Website",
+			"about": "About",
+			"updateProfile": "Update profile",
+			"viewProfile": "View profile"
+		},
+		"myJobPosts": {
+			"title": "My Job Posts",
+			"createNew": "Create new job post",
+			"applications": "Applications",
+			"delete": "Delete",
+			"confirmDelete": "Are you sure you want to delete this job post?"
+		},
+		"createJobPost": {
+			"title": "Create Job Post",
+			"jobTitle": "Job Title",
+			"description": "Description",
+			"createButton": "Create job post"
+		}
+	},
+	"jobPost": {
+		"details": "Details",
+		"apply": "Apply",
+		"applied": "Applied",
+		"noMorePosts": "No more job posts for this search.",
+		"removeFilters": "Try removing filters to see more posts.",
+		"backToAll": "Back to all posts",
+		"loading": "Loading..."
+	},
+	"common": {
+		"loading": "Loading",
+		"error": "Error",
+		"success": "Success",
+		"cancel": "Cancel",
+		"confirm": "Confirm",
+		"save": "Save",
+		"delete": "Delete",
+		"edit": "Edit",
+		"create": "Create",
+		"update": "Update"
 	}
 }
