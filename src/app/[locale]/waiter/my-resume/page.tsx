@@ -158,7 +158,7 @@ export default function MyResume() {
 						)}
 					/>
 					<Button
-						role="submit"
+						type="submit"
 						disabled={form.formState.isSubmitting || !form.formState.isValid}
 						className="w-full"
 					>

@@ -1,4 +1,4 @@
-import { type JobPost, PrismaClient } from "@prisma/client";
+import { type JobPost, Prisma, PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -43,7 +43,8 @@ export async function GET(req: Request) {
 		const jobId = searchParams.get("id");
 		const companyId = searchParams.get("companyId");
 		const country = searchParams.get("country");
-		const canton = searchParams.get("canton");
+		const region = searchParams.get("region");
+		const province = searchParams.get("province");
 		const municipality = searchParams.get("municipality");
 		const page = parseInt(searchParams.get("page") || "1", 10);
 		const limit = parseInt(searchParams.get("limit") || "10", 10);
@@ -74,12 +75,13 @@ export async function GET(req: Request) {
 			);
 		}
 
-		const where: any = {};
+		const where: Prisma.JobPostWhereInput = {};
 		if (companyId) where.companyId = companyId;
-		if (country || canton || municipality) {
+		if (country || region || province || municipality) {
 			where.location = {};
 			if (country) where.location.country = country;
-			if (canton) where.location.canton = canton;
+			if (region) where.location.region = region;
+			if (province) where.location.province = province;
 			if (municipality) where.location.municipality = municipality;
 		}
 

@@ -6,7 +6,12 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"includes": ["**", "!!**/dist", "!src/components/ui"]
+		"includes": [
+			"**",
+			"!!**/dist",
+			"!src/components/ui",
+			"!src/app/globals.css"
+		]
 	},
 	"formatter": {
 		"enabled": true,

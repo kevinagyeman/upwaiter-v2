@@ -1,5 +1,6 @@
 import { SlidersHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,9 +20,19 @@ import LocationForm from "./location-form";
 export function JobPostsFilter() {
 	const { location } = useLocationStore();
 	const router = useRouter();
+	const form = useForm({
+		defaultValues: {
+			location: {
+				country: "Italy",
+				region: "",
+				province: "",
+				municipality: "",
+			},
+		},
+	});
 	const filter = () => {
 		router.push(
-			`?canton=${location?.canton}&?district=${location?.district}&municipality=${location?.municipality}`,
+			`?region=${location?.region}&province=${location?.province}&municipality=${location?.municipality}`,
 		);
 	};
 
@@ -37,7 +48,7 @@ export function JobPostsFilter() {
 					<SheetTitle>Filrta gli annunci</SheetTitle>
 					<SheetDescription>Filtra gli annunci</SheetDescription>
 				</SheetHeader>
-				<LocationForm />
+				<LocationForm form={form} />
 				<div className="flex gap-4">
 					<Button onClick={filter} className="flex-1">
 						Cerca annunci

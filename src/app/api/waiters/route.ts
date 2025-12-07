@@ -1,4 +1,4 @@
-import { PrismaClient, type Waiter } from "@prisma/client";
+import { Prisma, PrismaClient, type Waiter } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { create } from "zustand";
 
@@ -23,7 +23,8 @@ export async function GET(req: Request) {
 		const { searchParams } = new URL(req.url);
 		const id = searchParams.get("id");
 		const country = searchParams.get("country");
-		const canton = searchParams.get("canton");
+		const region = searchParams.get("region");
+		const province = searchParams.get("province");
 		const municipality = searchParams.get("municipality");
 		const page = parseInt(searchParams.get("page") || "1", 10);
 		const limit = parseInt(searchParams.get("limit") || "10", 10);
@@ -40,11 +41,12 @@ export async function GET(req: Request) {
 				: NextResponse.json({ error: "Waiter not found" }, { status: 404 });
 		}
 
-		const where: any = {};
-		if (country || canton || municipality) {
+		const where: Prisma.WaiterWhereInput = {};
+		if (country || region || province || municipality) {
 			where.location = {};
 			if (country) where.location.country = country;
-			if (canton) where.location.canton = canton;
+			if (region) where.location.region = region;
+			if (province) where.location.province = province;
 			if (municipality) where.location.municipality = municipality;
 		}
 

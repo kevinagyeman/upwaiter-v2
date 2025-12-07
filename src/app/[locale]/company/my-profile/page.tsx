@@ -47,11 +47,11 @@ export default function MyProfile() {
 				website: company.website || undefined,
 				about: company.about || undefined,
 				location: {
-					country: "Switzerland",
-					isoCode: "CH",
-					canton: company?.location?.canton || undefined,
-					district: company?.location?.district || undefined,
-					municipality: company?.location?.district || undefined,
+					country: "Italy",
+					isoCode: "IT",
+					region: company?.location?.region || undefined,
+					province: company?.location?.province || undefined,
+					municipality: company?.location?.municipality || undefined,
 				},
 			});
 		}
@@ -67,10 +67,10 @@ export default function MyProfile() {
 			website: "",
 			about: "",
 			location: {
-				country: "Switzerland",
-				isoCode: "CH",
-				canton: undefined,
-				district: undefined,
+				country: "Italy",
+				isoCode: "IT",
+				region: undefined,
+				province: undefined,
 				municipality: undefined,
 			},
 		},
@@ -220,7 +220,7 @@ export default function MyProfile() {
 					/>
 					<LocationForm form={form} />
 					<Button
-						role="submit"
+						type="submit"
 						disabled={form.formState.isSubmitting}
 						className="w-full"
 					>

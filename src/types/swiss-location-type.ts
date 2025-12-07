@@ -18,3 +18,8 @@ export interface Commune {
 	district: District;
 	canton: Canton;
 }
+
+// Array types for better type safety
+export type Cantons = Canton[];
+export type Districts = District[];
+export type Communes = Commune[];

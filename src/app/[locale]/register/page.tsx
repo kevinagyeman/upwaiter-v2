@@ -198,7 +198,7 @@ export default function Register() {
 							</>
 						)}
 						<Button
-							role="submit"
+							type="submit"
 							disabled={form.formState.isSubmitting}
 							className="w-full"
 						>

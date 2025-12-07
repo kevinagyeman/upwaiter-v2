@@ -16,6 +16,7 @@ export default function DeleteJobPost({
 	const router = useRouter();
 	return (
 		<button
+			type="button"
 			onClick={async () => {
 				await deleteJobPost(jobPostId, companyId);
 				router.push("/company/my-jobposts");

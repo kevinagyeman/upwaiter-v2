@@ -12,7 +12,10 @@ export default function Apply({
 	jobPostId: string;
 }) {
 	return (
-		<button onClick={async () => await createApplication(waiterId, jobPostId)}>
+		<button
+			type="button"
+			onClick={async () => await createApplication(waiterId, jobPostId)}
+		>
 			candidati
 		</button>
 	);

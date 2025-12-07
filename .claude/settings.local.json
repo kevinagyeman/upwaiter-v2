@@ -1,0 +1,13 @@
+{
+	"permissions": {
+		"allow": [
+			"Bash(grep:*)",
+			"Bash(npm run lint:*)",
+			"Bash(cat:*)",
+			"Bash(npm run lint:error:*)",
+			"WebFetch(domain:axqvoqvbfjpaamphztgd.functions.supabase.co)"
+		],
+		"deny": [],
+		"ask": []
+	}
+}

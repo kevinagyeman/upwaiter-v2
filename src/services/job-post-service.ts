@@ -4,13 +4,16 @@ import { axiosInstance } from "@/lib/axios-instance";
 const API_PATH = "job-posts";
 
 // Funzione per gestire le chiamate API
-async function handleApiCall(apiCall: Promise<any>, errorMessage: string) {
+async function handleApiCall<T>(
+	apiCall: Promise<{ data: T }>,
+	errorMessage: string,
+): Promise<T | undefined> {
 	try {
 		const { data } = await apiCall;
 		return data;
 	} catch (error) {
 		console.error(`${errorMessage}:`, error);
-		return undefined; // O lanciare un errore se necessario
+		return undefined;
 	}
 }
 
@@ -18,9 +21,18 @@ async function handleApiCall(apiCall: Promise<any>, errorMessage: string) {
 export async function getJobPosts(
 	page: number = 1,
 	limit: number = 10,
-	filters?: { country?: string; canton?: string; municipality?: string },
-): Promise<{ jobPosts: JobPost[] }> {
-	const params: any = { page, limit, ...filters };
+	filters?: {
+		country?: string;
+		region?: string;
+		province?: string;
+		municipality?: string;
+	},
+): Promise<{ jobPosts: JobPost[] } | undefined> {
+	const params: Record<string, string | number> = {
+		page,
+		limit,
+		...filters,
+	};
 	return handleApiCall(
 		axiosInstance.get(API_PATH, { params }),
 		"Error retrieving job posts",
@@ -28,7 +40,9 @@ export async function getJobPosts(
 }
 
 // Ottieni i job posts per un'azienda specifica
-export async function getJobPostsByCompanyId(companyId: string): Promise<any> {
+export async function getJobPostsByCompanyId(
+	companyId: string,
+): Promise<{ jobPosts: JobPost[] } | undefined> {
 	return handleApiCall(
 		axiosInstance.get(API_PATH, { params: { companyId } }),
 		"Error retrieving job posts by company ID",

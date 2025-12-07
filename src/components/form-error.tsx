@@ -1,7 +1,10 @@
-import React from "react";
-import { FieldError } from "react-hook-form";
+import type { ReactNode } from "react";
 
-export default function FormError({ children }: any) {
+interface FormErrorProps {
+	children: ReactNode;
+}
+
+export default function FormError({ children }: FormErrorProps) {
 	return (
 		<>{children && <span className="text-red-500 text-sm">{children}</span>}</>
 	);

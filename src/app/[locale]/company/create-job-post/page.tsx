@@ -89,7 +89,7 @@ export default function CreateJobPost() {
 								</FormItem>
 							)}
 						/>
-						<LocationForm />
+						<LocationForm form={form} />
 						<FormField
 							control={form.control}
 							name="description"
@@ -104,7 +104,7 @@ export default function CreateJobPost() {
 							)}
 						/>
 						<Button
-							role="submit"
+							type="submit"
 							// disabled={
 							//   form.formState.isSubmitting || !isLocationValid(location)
 							// }

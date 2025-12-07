@@ -1,16 +1,19 @@
 import { z } from "zod";
 
 export const locationFormSchema = z.object({
-	isoCode: z.string(),
-	country: z.string(),
+	isoCode: z.string().default("IT"),
+	country: z.string().default("Italy"),
 
-	canton: z.string(),
-	district: z.string(),
+	// Italian location fields (required)
+	region: z.string(),
+	province: z.string(),
 	municipality: z.string(),
 
-	region: z.string().optional(),
-	province: z.string().optional(),
+	// Swiss location fields (optional for backwards compatibility)
+	canton: z.string().optional(),
+	district: z.string().optional(),
 
+	// Other optional fields
 	state: z.string().optional(),
 	county: z.string().optional(),
 	city: z.string().optional(),

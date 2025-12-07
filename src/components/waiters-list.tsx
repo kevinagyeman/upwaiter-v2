@@ -14,13 +14,16 @@ import { Button } from "./ui/button";
 export default function WaitersList() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
-	const canton = searchParams.get("canton") ?? undefined;
+	const region = searchParams.get("region") ?? undefined;
+	const province = searchParams.get("province") ?? undefined;
+	const municipality = searchParams.get("municipality") ?? undefined;
 	const observer = useRef<IntersectionObserver | null>(null);
 
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
 		useInfiniteQuery({
-			queryKey: ["waiters", canton],
-			queryFn: ({ pageParam = 1 }) => getWaiters(pageParam, 10, { canton }),
+			queryKey: ["waiters", region, province, municipality],
+			queryFn: ({ pageParam = 1 }) =>
+				getWaiters(pageParam, 10, { region, province, municipality }),
 			getNextPageParam: (lastPage, allPages) =>
 				lastPage.waiters.length > 0 ? allPages.length + 1 : undefined,
 			initialPageParam: 1,

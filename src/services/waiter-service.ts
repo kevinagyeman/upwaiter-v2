@@ -6,7 +6,7 @@ const API_PATH = "waiters";
 async function handleApiCall<T>(
 	apiCall: Promise<{ data: T }>,
 	errorMessage: string,
-): Promise<any> {
+): Promise<T | undefined> {
 	try {
 		const { data } = await apiCall;
 		return data;
@@ -19,9 +19,18 @@ async function handleApiCall<T>(
 export const getWaiters = (
 	page: number = 1,
 	limit: number = 10,
-	filters?: { country?: string; canton?: string; municipality?: string },
+	filters?: {
+		country?: string;
+		region?: string;
+		province?: string;
+		municipality?: string;
+	},
 ) => {
-	const params: any = { page, limit, ...filters };
+	const params: Record<string, string | number> = {
+		page,
+		limit,
+		...filters,
+	};
 	return handleApiCall(
 		axiosInstance.get(API_PATH, { params }),
 		"Errore nel recupero dei camerieri",

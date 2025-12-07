@@ -1,4 +1,4 @@
-import { type Location, PrismaClient } from "@prisma/client";
+import { type Location, Prisma, PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -56,7 +56,7 @@ export async function GET(req: Request) {
 		}
 
 		// Filtraggio delle locations
-		const where: any = {};
+		const where: Prisma.LocationWhereInput = {};
 		if (country) where.country = country;
 		if (region) where.region = region;
 		if (city) where.city = city;

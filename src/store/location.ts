@@ -2,7 +2,7 @@ import type { Location } from "@prisma/client";
 import { create } from "zustand";
 
 interface LocationState {
-	location: any | null;
+	location: Location | null;
 	setLocation: (location: Location) => void;
 	clearLocation: () => void;
 }
@@ -22,5 +22,14 @@ export const useLocationStore = create<LocationState>()((set) => ({
 export const isLocationValid = (location: Location | null): boolean => {
 	if (!location) return false;
 
-	return Object.values(location).every((value: any) => value.trim() !== "");
+	const requiredFields: Array<keyof Location> = [
+		"country",
+		"canton",
+		"municipality",
+	];
+
+	return requiredFields.every((field) => {
+		const value = location[field];
+		return typeof value === "string" && value.trim() !== "";
+	});
 };

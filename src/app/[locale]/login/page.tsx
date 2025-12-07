@@ -91,7 +91,7 @@ export default function Login() {
 					/>
 					{loginError && <p className="text-red-500">{loginError}</p>}
 					<Button
-						role="submit"
+						type="submit"
 						disabled={form.formState.isSubmitting}
 						className="w-full"
 					>

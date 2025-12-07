@@ -26,13 +26,16 @@ export default function JobPosts() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 
-	const canton = searchParams.get("canton") ?? undefined;
+	const region = searchParams.get("region") ?? undefined;
+	const province = searchParams.get("province") ?? undefined;
+	const municipality = searchParams.get("municipality") ?? undefined;
 	const observer = useRef<IntersectionObserver | null>(null);
 
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
 		useInfiniteQuery({
-			queryKey: ["jobPosts", canton],
-			queryFn: ({ pageParam = 1 }) => getJobPosts(pageParam, 10, { canton }),
+			queryKey: ["jobPosts", region, province, municipality],
+			queryFn: ({ pageParam = 1 }) =>
+				getJobPosts(pageParam, 10, { region, province, municipality }),
 			getNextPageParam: (lastPage, allPages) =>
 				lastPage.jobPosts.length > 0 ? allPages.length + 1 : undefined,
 			initialPageParam: 1,
@@ -80,9 +83,14 @@ export default function JobPosts() {
 												{job.location.country}
 											</Badge>
 										)}
-										{job?.location?.canton && (
+										{job?.location?.region && (
 											<Badge className="w-fit" variant={"secondary"}>
-												{job.location.canton}
+												{job.location.region}
+											</Badge>
+										)}
+										{job?.location?.province && (
+											<Badge className="w-fit" variant={"secondary"}>
+												{job.location.province}
 											</Badge>
 										)}
 										{job?.location?.municipality && (

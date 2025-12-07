@@ -1,67 +1,87 @@
 import { useEffect, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import {
-	getCantons,
-	getDistrictsInCanton,
-	getMunicipalitiesInDistrict,
-} from "@/services/swiss-service";
-import type { Canton } from "@/types/swiss-location-type";
+	getMunicipalitiesInProvince,
+	getProvincesInRegion,
+	getRegions,
+} from "@/services/italy-service";
+import type {
+	Municipality,
+	Province,
+	Region,
+} from "@/types/italian-location-type";
+import {
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 type LocationFormProps = {
-	form: UseFormReturn<any>; // Usa il tipo corretto se possibile
+	form: UseFormReturn<any>;
 	isRequired?: boolean;
-	canton?: string;
-	district?: string;
+	region?: string;
+	province?: string;
 	municipality?: string;
 };
 
 export default function LocationForm({
 	form,
 	isRequired = false,
-	canton,
+	region,
+	province,
 	municipality,
-	district,
 }: LocationFormProps) {
-	const [cantons, setCantons] = useState<Canton[]>([]);
-	const [districts, setDistricts] = useState<any>([]);
-	const [municipalities, setMunicipalities] = useState<any>([]);
+	const [regions, setRegions] = useState<Region[]>([]);
+	const [provinces, setProvinces] = useState<Province[]>([]);
+	const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const data = await getCantons();
+			const data = await getRegions();
 			if (data) {
-				setCantons(data);
+				setRegions(data);
 			}
 		};
 		fetchData();
 	}, []);
 
-	const handleCantonChange = async (value: string) => {
-		const canton = cantons.find((canton: Canton) => canton.name === value);
-		if (!canton) return;
+	const handleRegionChange = async (value: string) => {
+		const selectedRegion = regions.find((r: Region) => r.name === value);
+		if (!selectedRegion) return;
 
-		form.setValue("location.canton", canton.name);
-		form.setValue("location.district", undefined);
+		form.setValue("location.region", selectedRegion.name);
+		form.setValue("location.province", undefined);
 		form.setValue("location.municipality", undefined);
 
 		try {
-			const data = await getDistrictsInCanton(canton.key);
-			setDistricts(data);
+			const data = await getProvincesInRegion(selectedRegion.name);
+			setProvinces(data);
 			setMunicipalities([]);
 		} catch (error) {
-			console.log("Errore nel caricamento dei distretti:", error);
+			console.log("Errore nel caricamento delle province:", error);
 		}
 	};
 
-	const handleDistrictChange = async (value: string) => {
-		const district = districts.find((d: any) => d.name === value);
-		if (!district) return;
+	const handleProvinceChange = async (value: string) => {
+		const selectedProvince = provinces.find((p: Province) => p.name === value);
+		if (!selectedProvince) return;
 
-		form.setValue("location.district", value);
+		form.setValue("location.province", selectedProvince.name);
 		form.setValue("location.municipality", undefined);
 
 		try {
-			const data = await getMunicipalitiesInDistrict(district.key);
+			const data = await getMunicipalitiesInProvince(selectedProvince.code);
 			setMunicipalities(data);
 		} catch (error) {
 			console.log("Errore nel caricamento dei comuni:", error);
@@ -73,116 +93,112 @@ export default function LocationForm({
 	};
 
 	return (
-		<>dd</>
-		// <Form {...form}>
-		//   <FormField
-		//     control={form.control}
-		//     name='location.country'
-		//     render={({ field }) => (
-		//       <FormItem>
-		//         <FormLabel>Country</FormLabel>
-		//         <FormControl>
-		//           <Input placeholder={field.name} {...field} disabled />
-		//         </FormControl>
-		//         <FormMessage />
-		//       </FormItem>
-		//     )}
-		//   />
-		//   <FormField
-		//     control={form.control}
-		//     name='location.canton'
-		//     render={({ field }) => (
-		//       <FormItem>
-		//         <FormLabel>Cantone</FormLabel>
-		//         <FormControl>
-		//           <Select
-		//             onValueChange={handleCantonChange}
-		//             defaultValue={field.value}
-		//             required={isRequired}
-		//             value={canton}
-		//           >
-		//             <SelectTrigger>
-		//               <SelectValue placeholder='Seleziona un cantone' />
-		//             </SelectTrigger>
-		//             <SelectContent>
-		//               <SelectGroup>
-		//                 {cantons?.map((canton: Canton, index: number) => (
-		//                   <SelectItem key={index} value={canton.name}>
-		//                     {canton.name}
-		//                   </SelectItem>
-		//                 ))}
-		//               </SelectGroup>
-		//             </SelectContent>
-		//           </Select>
-		//         </FormControl>
-		//         <FormMessage />
-		//       </FormItem>
-		//     )}
-		//   />
-		//   <FormField
-		//     control={form.control}
-		//     name='location.district'
-		//     render={({ field }) => (
-		//       <FormItem>
-		//         <FormLabel>Distretto</FormLabel>
-		//         <FormControl>
-		//           <Select
-		//             onValueChange={handleDistrictChange}
-		//             defaultValue={field.value}
-		//             disabled={!form.getValues('location.canton')}
-		//             required={isRequired}
-		//             value={district}
-		//           >
-		//             <SelectTrigger>
-		//               <SelectValue placeholder='Seleziona un distretto' />
-		//             </SelectTrigger>
-		//             <SelectContent>
-		//               <SelectGroup>
-		//                 {districts?.map((district: any, index: number) => (
-		//                   <SelectItem key={index} value={district.name}>
-		//                     {district.name}
-		//                   </SelectItem>
-		//                 ))}
-		//               </SelectGroup>
-		//             </SelectContent>
-		//           </Select>
-		//         </FormControl>
-		//         <FormMessage />
-		//       </FormItem>
-		//     )}
-		//   />
+		<>
+			<FormField
+				control={form.control}
+				name="location.country"
+				render={({ field }) => (
+					<FormItem>
+						<FormLabel>Country</FormLabel>
+						<FormControl>
+							<Input defaultValue="Italy" {...field} disabled />
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+			<FormField
+				control={form.control}
+				name="location.region"
+				render={({ field }) => (
+					<FormItem>
+						<FormLabel>Regione</FormLabel>
+						<FormControl>
+							<Select
+								onValueChange={handleRegionChange}
+								defaultValue={field.value}
+								value={region}
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Seleziona una regione" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										{regions?.map((reg: Region) => (
+											<SelectItem key={reg.name} value={reg.name}>
+												{reg.name}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+			<FormField
+				control={form.control}
+				name="location.province"
+				render={({ field }) => (
+					<FormItem>
+						<FormLabel>Provincia</FormLabel>
+						<FormControl>
+							<Select
+								onValueChange={handleProvinceChange}
+								defaultValue={field.value}
+								disabled={!form.getValues("location.region")}
+								value={province}
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Seleziona una provincia" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										{provinces?.map((prov: Province) => (
+											<SelectItem key={prov.code} value={prov.name}>
+												{prov.name}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
 
-		//   <FormField
-		//     control={form.control}
-		//     name='location.municipality'
-		//     render={({ field }) => (
-		//       <FormItem>
-		//         <FormLabel>Comune</FormLabel>
-		//         <FormControl>
-		//           <Select
-		//             onValueChange={handleMunicipalityChange}
-		//             defaultValue={field.value}
-		//             disabled={!form.getValues('location.district')}
-		//             required={isRequired}
-		//           >
-		//             <SelectTrigger>
-		//               <SelectValue placeholder='Seleziona un comune' />
-		//             </SelectTrigger>
-		//             <SelectContent>
-		//               <SelectGroup>
-		//                 {municipalities?.map((municipality: any, index: number) => (
-		//                   <SelectItem key={index} value={municipality.name}>
-		//                     {municipality.name}
-		//                   </SelectItem>
-		//                 ))}
-		//               </SelectGroup>
-		//             </SelectContent>
-		//           </Select>
-		//         </FormControl>
-		//         <FormMessage />
-		//       </FormItem>
-		//     )}
-		//   />
-		// </Form>
+			<FormField
+				control={form.control}
+				name="location.municipality"
+				render={({ field }) => (
+					<FormItem>
+						<FormLabel>Comune</FormLabel>
+						<FormControl>
+							<Select
+								onValueChange={handleMunicipalityChange}
+								defaultValue={field.value}
+								disabled={!form.getValues("location.province")}
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Seleziona un comune" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										{municipalities?.map((mun: Municipality) => (
+											<SelectItem key={mun.code} value={mun.name}>
+												{mun.name}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+		</>
 	);
 }
