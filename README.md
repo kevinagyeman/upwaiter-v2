@@ -155,4 +155,4 @@ This project is private and proprietary.
 
 ## Contact
 
-For questions or support, please contact the development team.
+For questions or support, please contact the development team
