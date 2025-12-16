@@ -1,4 +1,4 @@
-# UpWaiter
+# Upwaiter
 
 A modern job platform connecting hospitality professionals with restaurants and hospitality businesses across Italy.
 
@@ -155,4 +155,4 @@ This project is private and proprietary.
 
 ## Contact
 
-For questions or support, please contact the development team.
+For questions or support, please contact the development team
