@@ -2,23 +2,18 @@ import { SlidersHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Form } from "@/components/ui/form";
 import {
 	Sheet,
-	SheetClose,
 	SheetContent,
 	SheetDescription,
-	SheetFooter,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { useLocationStore } from "@/store/location";
 import LocationForm from "./location-form";
 
 export function JobPostsFilter() {
-	const { location } = useLocationStore();
 	const router = useRouter();
 	const form = useForm({
 		defaultValues: {
@@ -31,8 +26,13 @@ export function JobPostsFilter() {
 		},
 	});
 	const filter = () => {
+		const formData = form.getValues();
+		const region = formData.location?.region || "";
+		const province = formData.location?.province || "";
+		const municipality = formData.location?.municipality || "";
+
 		router.push(
-			`?region=${location?.region}&province=${location?.province}&municipality=${location?.municipality}`,
+			`?region=${region}&province=${province}&municipality=${municipality}`,
 		);
 	};
 
@@ -48,15 +48,17 @@ export function JobPostsFilter() {
 					<SheetTitle>Filrta gli annunci</SheetTitle>
 					<SheetDescription>Filtra gli annunci</SheetDescription>
 				</SheetHeader>
-				<LocationForm form={form} />
-				<div className="flex gap-4">
-					<Button onClick={filter} className="flex-1">
-						Cerca annunci
-					</Button>
-					<Button onClick={() => router.push("/")} variant={"secondary"}>
-						Cancella filtri
-					</Button>
-				</div>
+				<Form {...form}>
+					<LocationForm form={form} />
+					<div className="flex gap-4">
+						<Button onClick={filter} className="flex-1">
+							Cerca annunci
+						</Button>
+						<Button onClick={() => router.push("/")} variant={"secondary"}>
+							Cancella filtri
+						</Button>
+					</div>
+				</Form>
 			</SheetContent>
 		</Sheet>
 	);
