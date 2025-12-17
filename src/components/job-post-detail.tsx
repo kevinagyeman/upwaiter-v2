@@ -3,6 +3,7 @@
 import { createApplication } from "@/services/application-service";
 import type { JobPost } from "@prisma/client";
 import { useUser } from "@stackframe/stack";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import JobPostFooter from "./job-post-footer";
@@ -18,6 +19,8 @@ export default function JobPostDetail({
 	jobPost,
 	hasApplied,
 }: JobPostDetailProps) {
+	const t = useTranslations("jobPost");
+	const tNav = useTranslations("navbar.company");
 	const user = useUser();
 	const router = useRouter();
 
@@ -49,18 +52,26 @@ export default function JobPostDetail({
 					</p>
 				</div>
 				<div className="flex-shrink-0">
-					<Button
-						className="text-2xl w-full mb-2"
-						size={"lg"}
-						onClick={handleApply}
-						disabled={hasApplied}
-						variant={hasApplied ? "secondary" : "default"}
-					>
-						{!hasApplied ? "Invia candidatura" : "Candidatura già inviata"}
-					</Button>
-					<Button variant={"secondary"} asChild>
-						<Link href={"/"}>torna agli annunci</Link>
-					</Button>
+					{user?.clientMetadata?.role === "company" ? (
+						<Button className="text-2xl w-full mb-2" size={"lg"} asChild>
+							<Link href="/company/my-job-posts">{tNav("myJobPosts")}</Link>
+						</Button>
+					) : (
+						<>
+							<Button
+								className="text-2xl w-full mb-2"
+								size={"lg"}
+								onClick={handleApply}
+								disabled={hasApplied}
+								variant={hasApplied ? "secondary" : "default"}
+							>
+								{!hasApplied ? t("apply") : t("applied")}
+							</Button>
+							<Button variant={"secondary"} asChild className="w-full">
+								<Link href={"/"}>{t("backToAll")}</Link>
+							</Button>
+						</>
+					)}
 
 					<JobPostFooter jobPost={jobPost} />
 				</div>

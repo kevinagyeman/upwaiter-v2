@@ -82,6 +82,26 @@
 		}
 	},
 	"company": {
+		"dashboard": {
+			"title": "Dashboard",
+			"subtitle": "Panoramica dei tuoi annunci e candidature",
+			"createJobPost": "Crea Annuncio",
+			"totalJobPosts": "Annunci Totali",
+			"totalApplications": "Candidature Totali",
+			"averagePerPost": "Media per Annuncio",
+			"withApplications": "con candidature",
+			"acrossAllPosts": "su tutti gli annunci",
+			"applicationsPerPost": "candidature per annuncio",
+			"recentApplications": "Candidature Recenti",
+			"latestCandidates": "Ultimi candidati che hanno fatto domanda",
+			"noApplicationsYet": "Nessuna candidatura ancora",
+			"topJobPosts": "Annunci Top",
+			"mostPopularPosts": "Annunci con più candidature",
+			"noJobPostsYet": "Nessun annuncio ancora. Crea il tuo primo!",
+			"quickActions": "Azioni Rapide",
+			"manageJobPosts": "Gestisci Annunci",
+			"editProfile": "Modifica Profilo"
+		},
 		"myProfile": {
 			"title": "Modifica profilo aziendale",
 			"name": "Nome",
@@ -93,6 +113,16 @@
 			"about": "Chi siamo",
 			"updateProfile": "Aggiorna il profilo",
 			"viewProfile": "Guarda il profilo"
+		},
+		"profile": {
+			"contactInfo": "Informazioni di Contatto",
+			"location": "Posizione",
+			"activeJobPosts": "Annunci Attivi",
+			"noJobPosts": "Nessun annuncio attivo al momento",
+			"viewJobPost": "Guarda Annuncio",
+			"applicants": "candidati",
+			"notFound": "Azienda Non Trovata",
+			"notFoundDescription": "Non siamo riusciti a trovare questo profilo aziendale"
 		},
 		"myJobPosts": {
 			"title": "I Miei Annunci",
@@ -129,6 +159,28 @@
 			"jobTitle": "Titolo del Lavoro",
 			"description": "Descrizione",
 			"createButton": "Crea annuncio"
+		},
+		"waiters": {
+			"title": "Trova Camerieri",
+			"subtitle": "Cerca professionisti qualificati nel settore ristorazione",
+			"filters": "Filtri",
+			"applyFilters": "Applica Filtri",
+			"clearFilters": "Rimuovi Filtri",
+			"yearsOfExperience": "Anni di Esperienza",
+			"anyExperience": "Qualsiasi esperienza",
+			"languages": "Lingue",
+			"anyLanguage": "Qualsiasi lingua",
+			"availability": "Disponibilità",
+			"availableOnly": "Solo disponibili a lavorare",
+			"viewProfile": "Guarda Profilo",
+			"noWaitersFound": "Nessun cameriere trovato",
+			"tryDifferentFilters": "Prova a modificare i filtri per vedere più risultati",
+			"loading": "Caricamento...",
+			"loadingMore": "Caricamento altri...",
+			"experience": "Esperienza",
+			"years": "anni",
+			"available": "Disponibile",
+			"notAvailable": "Non disponibile"
 		}
 	},
 	"jobPost": {

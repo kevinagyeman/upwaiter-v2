@@ -1,7 +1,19 @@
 import { axiosInstance } from "@/lib/axios-instance";
-import type { Company } from "@prisma/client";
+import type { Company, JobPost, Location } from "@prisma/client";
 
 const API_PATH = "companies";
+
+type JobPostWithCount = JobPost & {
+	location: Location | null;
+	_count: {
+		applications: number;
+	};
+};
+
+type CompanyWithRelations = Company & {
+	location: Location | null;
+	jobs: JobPostWithCount[];
+};
 
 async function handleApiCall<T>(
 	apiCall: Promise<{ data: T }>,
@@ -16,15 +28,17 @@ async function handleApiCall<T>(
 	}
 }
 
-export async function getCompanies() {
-	return handleApiCall(
+export async function getCompanies(): Promise<Company[] | undefined> {
+	return handleApiCall<Company[]>(
 		axiosInstance.get(API_PATH),
 		"Error retrieving companies",
 	);
 }
 
-export async function getCompanyById(id: string) {
-	return handleApiCall(
+export async function getCompanyById(
+	id: string,
+): Promise<CompanyWithRelations | undefined> {
+	return handleApiCall<CompanyWithRelations>(
 		axiosInstance.get(API_PATH, { params: { id } }),
 		"Error retrieving the company",
 	);

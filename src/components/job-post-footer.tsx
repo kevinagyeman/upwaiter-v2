@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 
 type JobPostFooterProps = {
 	jobPost: JobPost & {
-		applications: Application[];
+		applications?: Application[];
 		location: Location | null;
 	};
 };
@@ -16,7 +16,7 @@ export default function JobPostFooter({ jobPost }: JobPostFooterProps) {
 		<div className="flex gap-x-3">
 			<div className="flex items-center gap-x-3 flex-1">
 				<Users />
-				<span className="text-xl">{jobPost.applications.length}</span>
+				<span className="text-xl">{jobPost.applications?.length || 0}</span>
 			</div>
 			<Button size="icon" variant={"outline"} className="rounded-full">
 				<Send />

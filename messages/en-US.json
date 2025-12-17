@@ -82,6 +82,26 @@
 		}
 	},
 	"company": {
+		"dashboard": {
+			"title": "Dashboard",
+			"subtitle": "Overview of your job posts and applications",
+			"createJobPost": "Create Job Post",
+			"totalJobPosts": "Total Job Posts",
+			"totalApplications": "Total Applications",
+			"averagePerPost": "Average per Post",
+			"withApplications": "with applications",
+			"acrossAllPosts": "across all posts",
+			"applicationsPerPost": "applications per post",
+			"recentApplications": "Recent Applications",
+			"latestCandidates": "Latest candidates who applied",
+			"noApplicationsYet": "No applications yet",
+			"topJobPosts": "Top Job Posts",
+			"mostPopularPosts": "Posts with most applications",
+			"noJobPostsYet": "No job posts yet. Create your first one!",
+			"quickActions": "Quick Actions",
+			"manageJobPosts": "Manage Job Posts",
+			"editProfile": "Edit Profile"
+		},
 		"myProfile": {
 			"title": "Edit company profile",
 			"name": "Name",
@@ -93,6 +113,16 @@
 			"about": "About",
 			"updateProfile": "Update profile",
 			"viewProfile": "View profile"
+		},
+		"profile": {
+			"contactInfo": "Contact Information",
+			"location": "Location",
+			"activeJobPosts": "Active Job Posts",
+			"noJobPosts": "No active job posts at the moment",
+			"viewJobPost": "View Job Post",
+			"applicants": "applicants",
+			"notFound": "Company Not Found",
+			"notFoundDescription": "We couldn't find this company profile"
 		},
 		"myJobPosts": {
 			"title": "My Job Posts",
@@ -129,6 +159,28 @@
 			"jobTitle": "Job Title",
 			"description": "Description",
 			"createButton": "Create job post"
+		},
+		"waiters": {
+			"title": "Find Waiters",
+			"subtitle": "Search for qualified hospitality professionals",
+			"filters": "Filters",
+			"applyFilters": "Apply Filters",
+			"clearFilters": "Clear Filters",
+			"yearsOfExperience": "Years of Experience",
+			"anyExperience": "Any experience",
+			"languages": "Languages",
+			"anyLanguage": "Any language",
+			"availability": "Availability",
+			"availableOnly": "Available to work only",
+			"viewProfile": "View Profile",
+			"noWaitersFound": "No waiters found",
+			"tryDifferentFilters": "Try adjusting your filters to see more results",
+			"loading": "Loading...",
+			"loadingMore": "Loading more...",
+			"experience": "Experience",
+			"years": "years",
+			"available": "Available",
+			"notAvailable": "Not available"
 		}
 	},
 	"jobPost": {

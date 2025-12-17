@@ -25,7 +25,20 @@ export async function GET(req: Request) {
 		if (id) {
 			const company = await prisma.company.findUnique({
 				where: { id },
-				include: { location: true },
+				include: {
+					location: true,
+					jobs: {
+						include: {
+							location: true,
+							_count: {
+								select: { applications: true },
+							},
+						},
+						orderBy: {
+							createdAt: "desc",
+						},
+					},
+				},
 			});
 			return company
 				? NextResponse.json(company, { status: 200 })

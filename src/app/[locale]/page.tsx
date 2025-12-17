@@ -1,3 +1,4 @@
+import CompanyDashboard from "@/components/company-dashboard";
 import JobPosts from "@/components/job-posts";
 import { Button } from "@/components/ui/button";
 import { stackServerApp } from "@/stack";
@@ -7,7 +8,7 @@ export default async function Page() {
 	const user = await app.getUser();
 
 	if (user?.clientMetadata.role === "company") {
-		return "sei una company la tua home è diversa";
+		return <CompanyDashboard />;
 	}
 
 	return (
