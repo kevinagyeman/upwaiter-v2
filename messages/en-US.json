@@ -79,6 +79,21 @@
 			"availableToWork": "Available to work",
 			"updateProfile": "Update profile",
 			"viewProfile": "View profile"
+		},
+		"profile": {
+			"contactInfo": "Contact Information",
+			"location": "Location",
+			"address": "Address",
+			"professionalInfo": "Professional Information",
+			"yearsOfExperience": "Experience",
+			"languages": "Languages",
+			"available": "Available",
+			"notAvailable": "Not Available",
+			"yearsOld": "years old",
+			"year": "year",
+			"years": "years",
+			"notFound": "Waiter Not Found",
+			"notFoundDescription": "We couldn't find this waiter profile"
 		}
 	},
 	"company": {

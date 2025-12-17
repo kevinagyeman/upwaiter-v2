@@ -1,7 +1,11 @@
-import type { Waiter } from "@prisma/client";
+import type { Location, Waiter } from "@prisma/client";
 import { axiosInstance } from "@/lib/axios-instance";
 
 const API_PATH = "waiters";
+
+type WaiterWithLocation = Waiter & {
+	location: Location | null;
+};
 
 async function handleApiCall<T>(
 	apiCall: Promise<{ data: T }>,
@@ -25,20 +29,22 @@ export const getWaiters = (
 		province?: string;
 		municipality?: string;
 	},
-) => {
+): Promise<{ waiters: Waiter[] } | undefined> => {
 	const params: Record<string, string | number> = {
 		page,
 		limit,
 		...filters,
 	};
-	return handleApiCall(
+	return handleApiCall<{ waiters: Waiter[] }>(
 		axiosInstance.get(API_PATH, { params }),
 		"Errore nel recupero dei camerieri",
 	);
 };
 
-export const getWaiterById = (id: string) =>
-	handleApiCall(
+export const getWaiterById = (
+	id: string,
+): Promise<WaiterWithLocation | undefined> =>
+	handleApiCall<WaiterWithLocation>(
 		axiosInstance.get(API_PATH, { params: { id } }),
 		"Errore nel recupero del cameriere",
 	);

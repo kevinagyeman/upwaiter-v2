@@ -79,6 +79,21 @@
 			"availableToWork": "Disponibile a lavorare",
 			"updateProfile": "Aggiorna il profilo",
 			"viewProfile": "Guarda il profilo"
+		},
+		"profile": {
+			"contactInfo": "Informazioni di Contatto",
+			"location": "Posizione",
+			"address": "Indirizzo",
+			"professionalInfo": "Informazioni Professionali",
+			"yearsOfExperience": "Esperienza",
+			"languages": "Lingue",
+			"available": "Disponibile",
+			"notAvailable": "Non Disponibile",
+			"yearsOld": "anni",
+			"year": "anno",
+			"years": "anni",
+			"notFound": "Cameriere Non Trovato",
+			"notFoundDescription": "Non siamo riusciti a trovare questo profilo"
 		}
 	},
 	"company": {
