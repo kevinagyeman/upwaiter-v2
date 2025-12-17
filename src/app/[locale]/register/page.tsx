@@ -52,46 +52,55 @@ export default function Register() {
 			});
 
 			const user = await app.getUser();
-			if (user) {
-				if (data.role === "company" && data.companyName && data.vatNumber) {
-					await user.update({
-						clientMetadata: {
-							role: data.role,
-							companyTableId: user.id,
-						},
-					});
-					await createCompany({
-						id: user.id,
-						name: data.companyName,
-						email: data.email,
-						vatNumber: data.vatNumber,
-					});
+			if (!user) {
+				throw new Error("Failed to get user after signup");
+			}
+
+			if (data.role === "company") {
+				if (!data.companyName || !data.vatNumber) {
+					throw new Error("Company name and VAT number are required");
 				}
 
-				if (data.role === "waiter") {
-					await user.update({
-						clientMetadata: {
-							role: data.role,
-							waiterTableId: user.id,
-						},
-					});
-					await createWaiter({
-						id: user.id,
-						email: data.email,
-					});
-				}
-				router.push("/");
+				await user.update({
+					clientMetadata: {
+						role: data.role,
+						companyTableId: user.id,
+					},
+				});
+				await createCompany({
+					id: user.id,
+					name: data.companyName,
+					email: data.email,
+					vatNumber: data.vatNumber,
+				});
+			} else if (data.role === "waiter") {
+				await user.update({
+					clientMetadata: {
+						role: data.role,
+						waiterTableId: user.id,
+					},
+				});
+				await createWaiter({
+					id: user.id,
+					email: data.email,
+				});
+			} else {
+				throw new Error("Invalid role");
 			}
+
+			router.push("/");
 		} catch (error) {
+			console.log("Error during registration:", error);
+
+			// Clean up: delete the Stack Auth user if database creation failed
 			const user = await app.getUser();
 			if (user) {
-				console.log(
-					"Errore durante la registrazione, eliminazione dell'utente:",
-					error,
-				);
+				console.log("Deleting user due to registration error");
 				await user.delete();
 			}
-			console.log("Errore durante la registrazione:", error);
+
+			// Show error to user (you should add proper error state)
+			alert("Registration failed. Please try again.");
 		}
 	};
 
