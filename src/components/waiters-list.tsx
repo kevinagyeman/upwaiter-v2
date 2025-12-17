@@ -18,12 +18,7 @@ import { useRef, useState } from "react";
 import { getWaiters } from "@/services/waiter-service";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-} from "./ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -74,14 +69,19 @@ export default function WaitersList() {
 
 	// Client-side filtering
 	const filteredWaiters = waitersList.filter((waiter: Waiter) => {
-		if (minExperience && (waiter.yearsOfExperience || 0) < Number.parseInt(minExperience)) {
+		if (
+			minExperience &&
+			(waiter.yearsOfExperience || 0) < Number.parseInt(minExperience)
+		) {
 			return false;
 		}
 		if (
 			language &&
-			![waiter.firstLanguage, waiter.secondLanguage, waiter.thirdLanguage].includes(
-				language,
-			)
+			![
+				waiter.firstLanguage,
+				waiter.secondLanguage,
+				waiter.thirdLanguage,
+			].includes(language)
 		) {
 			return false;
 		}
@@ -237,7 +237,9 @@ export default function WaitersList() {
 								<p className="text-muted-foreground mb-4">
 									{t("tryDifferentFilters")}
 								</p>
-								<Button onClick={handleClearFilters}>{t("clearFilters")}</Button>
+								<Button onClick={handleClearFilters}>
+									{t("clearFilters")}
+								</Button>
 							</div>
 						</div>
 					</CardContent>

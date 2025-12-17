@@ -49,9 +49,7 @@ export default function CompanyDetail({ company }: CompanyDetailProps) {
 						<div className="flex-1">
 							<CardTitle className="text-3xl mb-2">{company.name}</CardTitle>
 							{company.about && (
-								<p className="text-muted-foreground text-lg">
-									{company.about}
-								</p>
+								<p className="text-muted-foreground text-lg">{company.about}</p>
 							)}
 						</div>
 					</div>
@@ -163,7 +161,10 @@ export default function CompanyDetail({ company }: CompanyDetailProps) {
 					) : (
 						<div className="space-y-4">
 							{company.jobs.map((job) => (
-								<Card key={job.id} className="hover:shadow-md transition-shadow">
+								<Card
+									key={job.id}
+									className="hover:shadow-md transition-shadow"
+								>
 									<CardContent className="pt-6">
 										<div className="flex justify-between items-start mb-3">
 											<div className="flex-1">

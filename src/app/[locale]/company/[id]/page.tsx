@@ -23,9 +23,7 @@ export default async function Page({
 								<Building2 className="h-8 w-8 text-muted-foreground" />
 							</div>
 							<div>
-								<h2 className="text-xl font-semibold mb-2">
-									{t("notFound")}
-								</h2>
+								<h2 className="text-xl font-semibold mb-2">{t("notFound")}</h2>
 								<p className="text-muted-foreground">
 									{t("notFoundDescription")}
 								</p>

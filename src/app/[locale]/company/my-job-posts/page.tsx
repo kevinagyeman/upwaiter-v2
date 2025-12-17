@@ -63,7 +63,11 @@ export default function MyJobPosts() {
 	};
 
 	if (isLoading) {
-		return <div className="flex justify-center items-center min-h-[50vh]">{t("loading")}</div>;
+		return (
+			<div className="flex justify-center items-center min-h-[50vh]">
+				{t("loading")}
+			</div>
+		);
 	}
 
 	return (
@@ -113,14 +117,12 @@ export default function MyJobPosts() {
 										{t("applicationsList")}
 									</p>
 									<div className="grid gap-2">
-										{job.applications.map(
-											(application: ApplicationSchema) => (
-												<WaiterDetails
-													key={application.id}
-													application={application}
-												/>
-											),
-										)}
+										{job.applications.map((application: ApplicationSchema) => (
+											<WaiterDetails
+												key={application.id}
+												application={application}
+											/>
+										))}
 									</div>
 								</div>
 							)}
@@ -345,9 +347,7 @@ const WaiterDetails = ({ application }: WaiterDetailsProps) => {
 						disabled={rejectMutation.isPending}
 					>
 						<Trash2 className="h-4 w-4 mr-2" />
-						{rejectMutation.isPending
-							? t("rejecting")
-							: t("rejectApplication")}
+						{rejectMutation.isPending ? t("rejecting") : t("rejectApplication")}
 					</Button>
 				</DialogFooter>
 			</DialogContent>

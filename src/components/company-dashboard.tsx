@@ -4,13 +4,7 @@ import { getJobPostsByCompanyId } from "@/services/job-post-service";
 import type { ApplicationSchema } from "@/types/application-schema-type";
 import { useUser } from "@stackframe/stack";
 import { useQuery } from "@tanstack/react-query";
-import {
-	Briefcase,
-	Eye,
-	Plus,
-	TrendingUp,
-	Users,
-} from "lucide-react";
+import { Briefcase, Eye, Plus, TrendingUp, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -139,8 +133,9 @@ export default function CompanyDashboard() {
 					<CardContent>
 						<div className="text-2xl font-bold">
 							{stats.totalPosts > 0
-								? Math.round((stats.totalApplications / stats.totalPosts) * 10) /
-									10
+								? Math.round(
+										(stats.totalApplications / stats.totalPosts) * 10,
+									) / 10
 								: 0}
 						</div>
 						<p className="text-xs text-muted-foreground mt-1">

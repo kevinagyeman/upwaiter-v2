@@ -74,9 +74,7 @@ export default function WaiterDetail({ waiter }: WaiterDetailProps) {
 								)}
 							</div>
 							{waiter.about && (
-								<p className="text-muted-foreground text-lg">
-									{waiter.about}
-								</p>
+								<p className="text-muted-foreground text-lg">{waiter.about}</p>
 							)}
 						</div>
 					</div>
