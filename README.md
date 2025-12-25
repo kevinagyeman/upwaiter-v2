@@ -1,6 +1,6 @@
 # Upwaiter
 
-A modern job platform connecting hospitality professionals with restaurants and hospitality businesses across Italy.
+A modern job platform connecting hospitality professionals with restaurants and hospitality businesses.
 
 ## Overview
 
